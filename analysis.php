@@ -168,7 +168,7 @@ try {
             'temperature' => 0.3, // کاهش دما برای دقت بیشتر و پیروی از قالب HTML
             'topK' => 1,
             'topP' => 1,
-            'maxOutputTokens' => 4096, // حداکثر سقف ممکن برای خروجی HTML سنگین
+            'maxOutputTokens' => 8192, // حداکثر سقف ممکن برای خروجی HTML سنگین
         ],
     ];
     $jsonData = json_encode($data);
