@@ -13,7 +13,7 @@ $apiKey = 'AIzaSyCxesa1bNiz9FE0HA0qMXECwPczu4DOz94'; // <--- کلید API خود
 // ==================================
 
 // آدرس API شما (طبق خواسته شما دستکاری نشده)
-$url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=' . $apiKey;
+$url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . $apiKey;
 
 try {
     // مرحله 1: بررسی پیش‌نیازهای سرور
