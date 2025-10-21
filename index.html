@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحلیلگر هوشمند سپینود</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .form-wrapper {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+            border: 1px solid #e9ecef;
+        }
+        .form-wrapper h1 {
+            color: #1a237e; /* Deep indigo */
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 15px;
+            font-family: 'Vazirmatn', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3f51b5; /* Indigo */
+            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+        }
+        .form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .submit-btn {
+            grid-column: 1 / -1;
+            padding: 16px;
+            background: linear-gradient(135deg, #3f51b5, #1a237e);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .submit-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 6px 20px rgba(63, 81, 181, 0.3);
+        }
+        .submit-btn:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        /* Loader */
+        #loader {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #e9ecef;
+            border-top: 5px solid #3f51b5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* AI Result Container */
+        #resultContainer {
+            display: none;
+            background: linear-gradient(135deg, #ffffff, #fdfdff);
+            border: 1px solid #e9ecef;
+            margin-top: 30px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+            animation: fadeIn 0.5s ease-in-out;
+            overflow: hidden; /* To contain the header */
+        }
+        #resultContainer-header {
+            background-color: #1a237e;
+            color: white;
+            padding: 20px 25px;
+            border-bottom: 4px solid #3f51b5;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        #resultContainer-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+        #resultContainer-content {
+            padding: 30px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* AI Output Styles */
+        #resultContainer-content h3 {
+            color: #3f51b5;
+            margin-top: 25px;
+            border-right: 4px solid #3f51b5;
+            padding-right: 12px;
+            font-size: 18px;
+        }
+        #resultContainer-content p {
+            line-height: 1.8;
+            color: #495057;
+        }
+        #resultContainer-content ul {
+            padding-right: 20px;
+            list-style-type: '✅ ';
+        }
+        #resultContainer-content li {
+            margin-bottom: 12px;
+            padding-right: 8px;
+            line-height: 1.7;
+        }
+        #resultContainer-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        #resultContainer-content th, 
+        #resultContainer-content td {
+            border: 1px solid #dee2e6;
+            padding: 14px;
+            text-align: right;
+        }
+        #resultContainer-content th {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-weight: 700;
+        }
+        #resultContainer-content td {
+            background-color: #fff;
+        }
+        .bar-chart {
+            font-family: monospace;
+            font-size: 16px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            color: #3f51b5;
+            text-align: left;
+            direction: ltr;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .ai-cta {
+            background-color: #e8eaf6; /* Light indigo */
+            border: 2px solid #c5cae9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            text-align: center;
+        }
+        .ai-cta p {
+            font-weight: 600;
+            color: #1a237e;
+            margin: 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-wrapper">
+            <h1><span style="font-size: 30px;">🤖</span><br>تحلیلگر هوشمند طرح توجیهی فنی - اقتصادی سپینود</h1>
+            <p style="text-align: center; margin-top: -20px; margin-bottom: 30px; color: #555;">اطلاعات اولیه طرح خود را وارد کنید و یک ارزیابی آنی مبتنی بر هوش مصنوعی دریافت نمایید.</p>
+            
+            <form id="aiForm" class="form-grid">
+                <div class="form-group">
+                    <label for="FirstName">نام</label>
+                    <input type="text" id="FirstName" name="FirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="LastName">نام خانوادگی</label>
+                    <input type="text" id="LastName" name="LastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="Mobile">تلفن همراه *</label>
+                    <input type="tel" id="Mobile" name="Mobile" required>
+                </div>
+                <div class="form-group">
+                    <label for="Email">پست الکترونیک *</label>
+                    <input type="email" id="Email" name="Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="City">شهر</label>
+                    <input type="text" id="City" name="City">
+                </div>
+                <div class="form-group">
+                    <label for="Province">استان</label>
+                    <input type="text" id="Province" name="Province">
+                </div>
+
+                <hr style="grid-column: 1 / -1; border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+
+                <div class="form-group full-width">
+                    <label for="What">به چه چیزی نیاز دارید؟</label>
+                    <select class="form-control" name="What" id="What">
+                        <option value="طرح امکان سنجی ( توجیهی فنی اقتصادی )">طرح امکان سنجی ( توجیهی فنی اقتصادی )</option>
+                        <option value="مطالعه بازار">مطالعه بازار</option>
+                        <option value="مشاور جهت اخذ تسهیلات">مشاور جهت اخذ تسهیلات</option>
+                        <option value="استراتژی بازار">استراتژی بازار</option>
+                        <option value="اجرای پروژه از ایده تا اجرا">اجرای پروژه از ایده تا اجرا</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label for="WhichPlace">کدام گزینه موقعیت شما را بهتر توصیف می کند؟</label>
+                    <select class="form-control" name="WhichPlace" id="WhichPlace">
+                        <option value="در حال ایجاد یک کسب و کار جدید هستم">در حال ایجاد یک کسب و کار جدید هستم</option>
+                        <option value="در حال سرمایه گذاری در یک کسب و کار جدید هستم">در حال سرمایه گذاری در یک کسب و کار جدید هستم</option>
+                        <option value="در حال خرید یا سرمایه گذاری در یک کسب و کار موجود هستم">در حال خرید یا سرمایه گذاری در یک کسب و کار موجود هستم</option>
+                        <option value="بدنبال مدیریت یا ارتقاء یک کسب و کار موجود هستم">بدنبال مدیریت یا ارتقاء یک کسب و کار موجود هستم</option>
+                        <option value="Merger/Acquisition">Merger/Acquisition</option>
+                        <option value="دیگر">دیگر</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label for="Description">میزان سرمایه گذاری و سایر موارد *</label>
+                    <textarea id="Description" name="Description" placeholder="لطفاً ایده خود، میزان سرمایه‌گذاری تخمینی و هر جزئیات دیگری که فکر می‌کنید مهم است را اینجا بنویسید..." required></textarea>
+                </div>
+
+                <button type="submit" id="submitButton" class="submit-btn">
+                    <span>🚀</span>
+                    <span>دریافت ارزیابی هوشمند</span>
+                </button>
+            </form>
+        </div>
+
+        <div id="loader">
+            <div class="spinner"></div>
+            <p style="color: #444; font-size: 16px; font-weight: 600;">تحلیلگر هوشمند سپینود در حال بررسی طرح شما براساس داده‌های واقعی و تجارب پیشین است...<br>این فرآیند ممکن است تا ۳۰ ثانیه طول بکشد.</p>
+        </div>
+
+        <div id="resultContainer">
+            <div id="resultContainer-header">
+                <h2>🤖</h2>
+                <h2>تحلیل اولیه هوشمند سپینود (براساس داده‌های واقعی و تجارب پیشین)</h2>
+            </div>
+            <div id="resultContainer-content">
+                </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('aiForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+
+            const submitButton = document.getElementById('submitButton');
+            const loader = document.getElementById('loader');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultContent = document.getElementById('resultContainer-content');
+            const form = e.target;
+
+            // نمایش لودر و غیرفعال کردن دکمه
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span>در حال پردازش...</span>';
+            loader.style.display = 'block';
+            resultContainer.style.display = 'none';
+            resultContent.innerHTML = ''; // پاک کردن نتایج قبلی
+
+            try {
+                const formData = new FormData(form);
+
+                // ارسال اطلاعات به فایل PHP در سرور
+                // مطمئن شوید این آدرس دقیقاً درست است
+                const response = await fetch('analysis.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // بررسی پاسخ سرور
+                if (!response.ok) {
+                    // اگر سرور خطایی مثل 500 برگرداند، سعی می‌کنیم متن خطا را بخوانیم
+                    const errorText = await response.text();
+                    throw new Error(`خطای سرور (${response.status}): ${errorText}`);
+                }
+
+                const data = await response.json();
+
+// بررسی خطای منطقی که از PHP ارسال شده
+if (data.error) {
+    throw new Error(data.error);
+}
+
+// --- تغییر اصلی اینجاست ---
+// دیگر نیازی به marked.parse() نداریم چون پاسخ خودش HTML است
+const rawHtmlOutput = data.analysis_text; 
+
+// مستقیماً HTML دریافتی را در صفحه قرار می‌دهیم
+resultContent.innerHTML = rawHtmlOutput; 
+resultContainer.style.display = 'block';
+// --- پایان تغییر ---
+
+                // اسکرول به سمت نتایج
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (error) {
+                console.error('جزئیات خطا:', error); // نمایش خطای کامل در کنسول
+                let errorMessage = error.message;
+
+                // تمیز کردن پیام خطا برای نمایش به کاربر
+                if (errorMessage.includes('Failed to fetch')) {
+                    errorMessage = 'ارتباط با سرور تحلیلگر برقرار نشد. لطفاً از اتصال اینترنت خود مطمئن شوید و مجدداً تلاش کنید. (اگر مشکل ادامه داشت، با پشتیبانی تماس بگیرید).';
+                } else if (errorMessage.includes('خطای سرور (500)')) {
+                     errorMessage = 'سرور تحلیلگر با یک خطای داخلی مواجه شد. لطفاً چند دقیقه دیگر تلاش کنید یا با پشتیبانی تماس بگیرید.';
+                }
+
+                resultContent.innerHTML = `<p style="color: #d93025; text-align: center; font-weight: 600; font-size: 16px;"><b>خطا:</b> ${errorMessage}</p>`;
+                resultContainer.style.display = 'block';
+            } finally {
+                // بازگرداندن دکمه به حالت اولیه و مخفی کردن لودر
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<span>🚀</span><span>دریافت ارزیابی هوشمند</span>';
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
