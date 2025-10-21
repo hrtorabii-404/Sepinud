@@ -8,12 +8,12 @@ error_reporting(E_ALL);
 header('Content-Type: application/json; charset=utf-8');
 
 // ========== تنظیمات مهم ==========
-// !! توکن Hugging Face خودت رو اینجا قرار بده !!
-$hfToken = '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'; // <--- توکن Hugging Face شما
+// کلید API شما (طبق خواسته شما دستکاری نشده)
+$apiKey = 'AIzaSyCxesa1bNiz9FE0HA0qMXECwPczu4DOz94'; // <--- کلید API خودتان را اینجا جایگزین کنید
 // ==================================
 
-// آدرس API مدل Llama 3 8B Instruct در Hugging Face
-$modelUrl = 'https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct';
+// آدرس API شما (طبق خواسته شما دستکاری نشده)
+$url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . $apiKey;
 
 try {
     // مرحله 1: بررسی پیش‌نیازهای سرور
@@ -25,26 +25,24 @@ try {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         throw new Exception('درخواست نامعتبر است. (POST expected)');
     }
-
-    // مرحله 3: دریافت و پاکسازی اطلاعات فرم (بدون تغییر)
+    
+    // مرحله 3: دریافت و پاکسازی اطلاعات فرم
     $firstName = htmlspecialchars($_POST['FirstName'] ?? 'کاربر');
-    $lastName = htmlspecialchars($_POST['LastName'] ?? '');
+    $lastName = htmlspecialchars($_POST['LastName'] ?? ''); 
     $mobile = htmlspecialchars($_POST['Mobile'] ?? 'ارسال نشده');
-    // ... (سایر متغیرهای فرم) ...
+    $email = htmlspecialchars($_POST['Email'] ?? 'ارسال نشده');
+    $city = htmlspecialchars($_POST['City'] ?? 'ارسال نشده');
+    $province = htmlspecialchars($_POST['Province'] ?? 'ارسال نشده');
     $what = htmlspecialchars($_POST['What'] ?? 'مشخص نشده');
     $whichPlace = htmlspecialchars($_POST['WhichPlace'] ?? 'مشخص نشده');
-    $description = htmlspecialchars($_POST['Description'] ?? '');
+    $description = htmlspecialchars($_POST['Description'] ?? 'توضیحات ارائه نشده');
 
-    if (empty($description)) {
+    if (empty($description) || $description === 'توضیحات ارائه نشده') {
         throw new Exception('فیلد "میزان سرمایه گذاری و سایر موارد" الزامی است.');
     }
-    if (strpos($hfToken, 'hf_') !== 0 || strlen($hfToken) < 30) {
-         throw new Exception('توکن Hugging Face در فایل analysis.php به درستی تنظیم نشده است.');
-    }
 
-
-    // ========== مرحله 4: طراحی پرامپت داشبورد HTML (بدون تغییر) ==========
-    // از همان پرامپت عالی قبلی که داشبورد HTML می‌ساخت استفاده می‌کنیم
+// ========== مرحله 4: طراحی پرامپت داشبورد (با CTA جذاب و خوانا) ==========
+    
     $prompt = "
     **نقش:** شما 'طراح رابط کاربری و تحلیلگر هوشمند سپینود' هستید.
     **لحن:** حرفه‌ای، مثبت، جذاب بصری، دقیق و کاربرپسند.
@@ -64,7 +62,7 @@ try {
     <div style='font-family: Vazirmatn, sans-serif; border: 1px solid #e0e0e0; border-radius: 12px; background: #fdfdfd; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);'>
 
         <h3 style='color: #1a237e; border-bottom: 3px solid #3f51b5; padding-bottom: 12px; text-align: center; font-size: 20px;'>
-            📊 تحلیل اولیه هوشمند سپینود (براساس داده‌های واقعی و تجارب پیشین) برای جناب/سرکار {$lastName}
+            📊 تحلیل اولیه هوشمند سپینود برای جناب/سرکار {$lastName}
         </h3>
         <p style='font-size: 15px; color: #555; text-align: center; margin-bottom: 25px;'>ارزیابی طرح «{$what}» شما:</p>
 
@@ -139,10 +137,24 @@ try {
             </ul>
         </div>
 
-        <div style='background-color: #e3f2fd; color: #1a237e; border: 1px solid #bbdefb; border-radius: 10px; padding: 30px; margin-top: 30px; text-align: center; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); animation: subtlePulse 6s infinite ease-in-out;'>
-            <style> @keyframes subtlePulse { 0% { background-color: #e3f2fd; } 50% { background-color: #e8eaf6; } 100% { background-color: #e3f2fd; } } </style>
-            <h4 style='margin-top: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; color: #0d47a1;'><span style='font-size: 24px;'>🚀</span> توصیه تخصصی سپینود</h4>
-            <p style='font-size: 16px; line-height: 1.7; color: #333;'>طرح شما ارزشمند است و نیازمند بررسی دقیق‌تر. تخصص ما در سپینود، ارائه راهکارهای عملی برای <strong>'{$what}'</strong> و تحقق اهداف سرمایه‌گذاری شماست. کارشناسان ما آماده‌اند تا در یک <strong style='color: #0d47a1; font-weight: bold;'>جلسه مشاوره رایگان</strong>، جزئیات بیشتری را با شما در میان بگذارند. به زودی با شماره {$mobile} با شما تماس خواهیم گرفت.</p>
+        <style>
+            @keyframes subtlePulse {
+                0% { background-color: #e3f2fd; } /* Lightest Blue */
+                50% { background-color: #e8eaf6; } /* Slightly darker Light Blue */
+                100% { background-color: #e3f2fd; } /* Back to Lightest */
+            }
+        </style>
+        <div style='background-color: #e3f2fd; /* Light Blue Background */
+                    color: #1a237e; /* Dark Blue Text (Readable) */
+                    border: 1px solid #bbdefb;
+                    border-radius: 10px;
+                    padding: 30px;
+                    margin-top: 30px;
+                    text-align: center;
+                    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+                    animation: subtlePulse 6s infinite ease-in-out;'>
+            <h4 style='margin-top: 0; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; color: #0d47a1; /* Darker Blue Title */'><span style='font-size: 24px;'>🚀</span> توصیه تخصصی سپینود</h4>
+            <p style='font-size: 16px; line-height: 1.7; color: #333;'>طرح شما ارزشمند است و نیازمند بررسی دقیق‌تر. تخصص ما در سپینود، ارائه راهکارهای عملی برای <strong>'$what'</strong> و تحقق اهداف سرمایه‌گذاری شماست. کارشناسان ما آماده‌اند تا در یک <strong style='color: #0d47a1; /* Darker Blue Highlight */ font-weight: bold;'>جلسه مشاوره رایگان</strong>، جزئیات بیشتری را با شما در میان بگذارند. به زودی با شماره {$mobile} با شما تماس خواهیم گرفت.</p>
         </div>
 
     </div>
@@ -150,33 +162,31 @@ try {
     // ================================================================
 
 
-    // ========== مرحله 5: آماده‌سازی و ارسال درخواست به Hugging Face API ==========
-    $data = [
-        'inputs' => $prompt, // پرامپت به عنوان ورودی اصلی
-        'parameters' => [   // پارامترهای تولید متن
-            'temperature' => 0.3, // دما کمتر برای دقت HTML
-            'max_new_tokens' => 4096, // حداکثر توکن‌های *جدید* تولیدی
-            'return_full_text' => false, // فقط متن تولید شده را برگردان، نه پرامپت ورودی
-            'repetition_penalty' => 1.1, // کمی جریمه برای تکرار
-        ],
-        'options' => [
-            'wait_for_model' => true // اگر مدل در حال بارگذاری بود، صبر کن
-        ]
-    ];
-    $jsonData = json-encode($data);
 
-    $ch = curl_init($modelUrl); // از URL مدل Hugging Face استفاده می‌کنیم
+
+    // مرحله 5: آماده‌سازی و ارسال درخواست به API گوگل
+    $data = [
+        'contents' => [['parts' => [['text' => $prompt]]]],
+        'generationConfig' => [
+            'temperature' => 0.3, // کاهش دما برای دقت بیشتر و پیروی از قالب HTML
+            'topK' => 1,
+            'topP' => 1,
+            'maxOutputTokens' => 8192, // حداکثر سقف ممکن برای خروجی HTML سنگین
+        ],
+    ];
+    $jsonData = json_encode($data);
+
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // ========== تغییر هدرها برای Hugging Face ==========
+    // هدرها را ساده نگه می‌داریم چون کلید در URL است
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'Authorization: Bearer ' . $hfToken // استفاده از توکن Hugging Face
+        'Accept: application/json'
     ]);
-    // =================================================
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 120); // زمان انتظار
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+    curl_setopt($ch, CURLOPT_TIMEOUT, 120); // زمان انتظار را به 120 ثانیه افزایش دادیم
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -186,41 +196,38 @@ try {
     }
     curl_close($ch);
 
-    // ========== مرحله 6: پردازش پاسخ از Hugging Face ==========
+    // مرحله 6: پردازش پاسخ
     $responseData = json_decode($response, true);
 
-    // بررسی خطاهای رایج Hugging Face
     if ($httpCode !== 200 || isset($responseData['error'])) {
-        $errorMessage = 'خطای ناشناخته از Hugging Face API';
         if (isset($responseData['error'])) {
-            $errorMessage = $responseData['error'];
-            if(isset($responseData['estimated_time'])) {
-                $errorMessage .= ' - مدل در حال بارگذاری است، لطفاً ' . ceil($responseData['estimated_time']) . ' ثانیه دیگر تلاش کنید.';
-            }
+            $errorMessage = $responseData['error']['message'] ?? 'خطای ناشناخته از API گوگل';
         } else {
-            $errorMessage = "سرور Hugging Face پاسخی با کد $httpCode برگرداند.";
+            $errorMessage = "سرور گوگل پاسخی با کد $httpCode برگرداند.";
         }
-        // خطایابی ساده‌تر برای توکن نامعتبر
-        if ($httpCode === 401) {
-             $errorMessage = 'توکن Hugging Face نامعتبر است. لطفاً توکن خود را در خط ۱۱ بررسی کنید.';
+        if (strpos($errorMessage, 'API key not valid') !== false) {
+             throw new Exception('کلید API نامعتبر است یا باطل شده. لطفاً یک کلید جدید از AI Studio بسازید.');
         }
+        if (strpos($errorMessage, 'permission') !== false || strpos($errorMessage, 'API has not been used') !== false) {
+            throw new Exception('API فعال نشده. (در Google Cloud Console، سرویس Generative Language API را ENABLE کنید).');
+        }
+        // ========== خطای نحوی قبلی اینجا اصلاح شده است ==========
         throw new Exception('خطا در ارتباط با هوش مصنوعی: ' . $errorMessage);
+        // =====================================================
     }
 
-    // استخراج متن اصلی پاسخ از ساختار JSON Hugging Face
-    // مسیر پاسخ معمولا: [0]['generated_text']
-    $aiHtmlOutput = $responseData[0]['generated_text'] ?? null;
+    // استخراج متن اصلی پاسخ
+    $aiHtmlOutput = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? null;
 
-    if ($aiHtmlOutput === null || empty(trim($aiHtmlOutput))) {
-        throw new Exception('پاسخ معتبری از هوش مصنوعی Hugging Face دریافت نشد. Response: ' . $response);
+    if ($aiHtmlOutput === null) {
+        throw new Exception('پاسخ معتبری از هوش مصنوعی دریافت نشد. (AI Safety Block)');
     }
 
-    // ========== مرحله 7: ارسال پاسخ موفقیت‌آمیز به جاوا اسکریپت ==========
+    // مرحله 7: ارسال پاسخ موفقیت‌آمیز به جاوا اسکریپت
     echo json_encode(['analysis_text' => $aiHtmlOutput]);
 
 } catch (Exception $e) {
     // ارسال هرگونه خطا به صورت JSON
-    error_log("AI Analysis Error (HF): " . $e->getMessage()); // Log خطا
     echo json_encode(['error' => $e->getMessage()]);
 }
 ?>
