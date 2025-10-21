@@ -13,7 +13,7 @@ $apiKey = 'AIzaSyCxesa1bNiz9FE0HA0qMXECwPczu4DOz94'; // <--- کلید API خود
 // ==================================
 
 // آدرس API شما (طبق خواسته شما دستکاری نشده)
-$url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' . $apiKey;
+$url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=' . $apiKey;
 
 try {
     // مرحله 1: بررسی پیش‌نیازهای سرور
@@ -161,9 +161,6 @@ try {
     ";
     // ================================================================
 
-
-
-
     // مرحله 5: آماده‌سازی و ارسال درخواست به API گوگل
     $data = [
         'contents' => [['parts' => [['text' => $prompt]]]],
@@ -171,7 +168,7 @@ try {
             'temperature' => 0.3, // کاهش دما برای دقت بیشتر و پیروی از قالب HTML
             'topK' => 1,
             'topP' => 1,
-            'maxOutputTokens' => 8192, // حداکثر سقف ممکن برای خروجی HTML سنگین
+            'maxOutputTokens' => 4096, // حداکثر سقف ممکن برای خروجی HTML سنگین
         ],
     ];
     $jsonData = json_encode($data);
