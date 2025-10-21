@@ -62,7 +62,7 @@ try {
     <div style='font-family: Vazirmatn, sans-serif; border: 1px solid #e0e0e0; border-radius: 12px; background: #fdfdfd; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);'>
 
         <h3 style='color: #1a237e; border-bottom: 3px solid #3f51b5; padding-bottom: 12px; text-align: center; font-size: 20px;'>
-            📊 تحلیل اولیه هوشمند سپینود (براساس داده‌های واقعی و تجارب پیشین) برای جناب/سرکار {$lastName}
+            📊 تحلیل اولیه هوشمند سپینود برای جناب/سرکار {$lastName}
         </h3>
         <p style='font-size: 15px; color: #555; text-align: center; margin-bottom: 25px;'>ارزیابی طرح «{$what}» شما:</p>
 
