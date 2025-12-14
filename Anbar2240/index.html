@@ -241,10 +241,13 @@
     .btn-reset:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-1px); }
 
     .ctrl-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+      display: grid; 
+      /* Updated to 4 columns to fit the new Period slider */
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 20px;
     }
-    @media (max-width: 1200px) { .ctrl-grid { gap: 30px; } }
-    @media (max-width: 900px) { .ctrl-grid { grid-template-columns: 1fr; gap: 20px; } }
+    @media (max-width: 1200px) { .ctrl-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+    @media (max-width: 768px) { .ctrl-grid { grid-template-columns: 1fr; gap: 16px; } }
 
     .ctrl-item {
         position: relative; padding: 20px; border-radius: 20px; 
@@ -266,9 +269,11 @@
       display: flex; justify-content: space-between; font-weight: 700; font-size: 0.95rem; margin-bottom: 16px; color: var(--dark);
       position: relative; z-index: 2;
     }
+    /* Updated .val-tag to be minimal and clean without box */
     .val-tag { 
-        font-family: monospace; font-size: 1.1rem; direction: ltr; 
-        background: var(--bg-body); padding: 2px 10px; border-radius: 8px; border: 1px solid var(--border); color: var(--dark);
+        font-family: var(--font-main); font-size: 0.95rem; direction: ltr; 
+        background: transparent; border: none; padding: 0; 
+        color: var(--dark); font-weight: 800;
     }
 
     /* --- COMPACT (STICKY) MODE --- */
@@ -278,46 +283,47 @@
     }
     .controls-wrapper.compact .controls {
         width: auto;
-        max-width: 95%; 
+        max-width: 98%; 
         min-width: 600px;
-        padding: 12px 30px;
-        background: rgba(255, 255, 255, 0.7);
+        padding: 12px 24px;
+        background: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.5);
         border-radius: 99px; 
         box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
-        display: flex; align-items: center; gap: 30px;
+        display: flex; align-items: center; gap: 20px;
     }
     [data-theme="dark"] .controls-wrapper.compact .controls {
-        background: rgba(30, 41, 59, 0.7);
+        background: rgba(30, 41, 59, 0.8);
         border-color: rgba(255, 255, 255, 0.1);
     }
     
-    .controls-wrapper.compact .ctrl-header { margin: 0; width: auto; margin-bottom: 0; }
+    .controls-wrapper.compact .ctrl-header { margin: 0; width: auto; margin-bottom: 0; flex: 0 0 auto;}
     .controls-wrapper.compact .ctrl-title span { display: none; } 
     .controls-wrapper.compact .ctrl-title i { font-size: 1.4rem; color: var(--primary); }
-    .controls-wrapper.compact .btn-reset { padding: 6px 12px; font-size: 0.8rem; white-space: nowrap; border-radius: 99px; background: transparent; }
+    .controls-wrapper.compact .btn-reset { padding: 6px 10px; font-size: 0.8rem; white-space: nowrap; border-radius: 99px; background: transparent; }
     .controls-wrapper.compact .btn-reset span { display: none; }
     .controls-wrapper.compact .btn-reset i { margin: 0; }
     
     .controls-wrapper.compact .ctrl-grid {
-        display: flex; flex: 1; gap: 20px; align-items: center;
+        display: flex; flex: 1; gap: 16px; align-items: center;
     }
     .controls-wrapper.compact .ctrl-item {
         background: transparent; padding: 0; margin: 0; border: none; box-shadow: none;
-        flex-direction: row; align-items: center; gap: 12px;
+        flex-direction: row; align-items: center; gap: 10px; flex: 1;
     }
     .controls-wrapper.compact .ctrl-item:hover { transform: none; }
     .controls-wrapper.compact .ctrl-bg-icon { display: none; }
     .controls-wrapper.compact .ctrl-label { margin: 0; width: auto; white-space: nowrap; font-size: 0.85rem; margin-bottom: 0; }
-    .controls-wrapper.compact .val-tag { background: transparent; border:none; padding:0; font-size: 0.95rem; font-weight: 800; }
-    .controls-wrapper.compact input[type="range"] { margin: 0; flex: 1; height: 4px; min-width: 80px; }
+    .controls-wrapper.compact .val-tag { background: transparent; border:none; padding:0; font-size: 0.95rem; font-weight: 800; margin-left: 8px;}
+    .controls-wrapper.compact input[type="range"] { margin: 0; flex: 1; height: 4px; min-width: 60px; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
         .controls-wrapper.compact .controls { min-width: 90%; flex-direction: column; border-radius: 20px; padding: 16px; background: var(--bg-card); }
-        .controls-wrapper.compact .ctrl-grid { display: grid; grid-template-columns: 1fr; width: 100%; gap: 12px; }
+        .controls-wrapper.compact .ctrl-grid { display: grid; grid-template-columns: repeat(2, 1fr); width: 100%; gap: 12px; }
         .controls-wrapper.compact input[type="range"] { height: 6px; }
+        .controls-wrapper.compact .ctrl-header { width: 100%; margin-bottom: 12px; }
     }
 
     /* Colors */
@@ -342,6 +348,7 @@
     #revRange::-webkit-slider-thumb { border-color: var(--success); }
     #costRange::-webkit-slider-thumb { border-color: var(--danger); }
     #discRange::-webkit-slider-thumb { border-color: var(--warning); }
+    #periodRange::-webkit-slider-thumb { border-color: var(--primary); }
 
     /* --- KPI CARDS --- */
     .kpi-grid {
@@ -423,6 +430,8 @@
     .chart-box {
         background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border);
         box-shadow: 0 4px 6px var(--shadow-color);
+        /* Critical fix for Grid overflow issues */
+        min-width: 0; 
     }
     .chart-header { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
     .chart-title { font-size: 1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; }
@@ -497,9 +506,10 @@
         </div>
         <div class="info-tags">
             <div class="tag"><i class="fa-solid fa-clock"></i> دوران ساخت: <b>۶ ماه</b></div>
-            <div class="tag"><i class="fa-solid fa-calendar-check"></i> دوران بهره‌برداری: <b>۱۰ سال</b></div>
+            <!-- Updated dynamic label hint -->
+            <div class="tag"><i class="fa-solid fa-calendar-check"></i> دوران بهره‌برداری: <b>متغیر</b></div>
             <div class="tag"><i class="fa-solid fa-percent"></i> نرخ تنزیل پایه: <b>۴۲٪</b></div>
-            <div class="tag" style="border-color:var(--success); color:var(--success);"><i class="fa-solid fa-wrench"></i> با «گیره‌ها» می‌توانید درآمد و هزینه را تا <b>±۵۰٪</b> تغییر دهید.</div>
+            <div class="tag" style="border-color:var(--success); color:var(--success);"><i class="fa-solid fa-wrench"></i> با «گیره‌ها» می‌توانید درآمد، هزینه و دوران طرح را تغییر دهید.</div>
             
             <button class="theme-toggle" onclick="toggleTheme()">
                 <i class="fa-solid fa-circle-half-stroke"></i> تغییر تم روشن و تاریک
@@ -518,7 +528,7 @@
         </div>
         <div class="layout-content" id="layoutContent">
             <div class="layout-inner">
-                <img src="https://uploadkon.ir/uploads/08f614_25anba2240m.jpeg" alt="جانمایی انبار" class="layout-img">
+                <img src="https://uploadkon.ir/uploads/74fb14_25Anbar22400.jpeg" alt="جانمایی انبار" class="layout-img">
             </div>
         </div>
     </div>
@@ -559,6 +569,15 @@
                </div>
                <input type="range" id="discRange" min="0" max="100" step="1" value="42">
              </div>
+             <!-- NEW ITEM: Operation Period -->
+             <div class="ctrl-item">
+               <i class="fa-solid fa-hourglass-half ctrl-bg-icon"></i>
+               <div class="ctrl-label">
+                 <span>دوران بهره‌برداری</span>
+                 <span class="val-tag val-neu" id="periodVal">10 سال</span>
+               </div>
+               <input type="range" id="periodRange" min="2" max="10" step="1" value="10">
+             </div>
           </div>
 
           <button class="btn-reset" onclick="resetDefaults()">
@@ -585,7 +604,8 @@
             <div class="chart-header">
                 <div class="chart-title"><i class="fa-solid fa-chart-pie" style="color:var(--warning)"></i> ساختار هزینه ثابت</div>
             </div>
-            <div class="chart-body" style="display:flex;justify-content:center"><canvas id="costChart"></canvas></div>
+            <!-- Removed flex inline style to prevent layout break -->
+            <div class="chart-body"><canvas id="costChart"></canvas></div>
         </div>
     </div>
 
@@ -666,7 +686,7 @@
     });
 
     // --- MATH ---
-    function calcMetrics(rPct, cPct, dRate) {
+    function calcMetrics(rPct, cPct, dRate, limit = 10) {
         const rMult = 1 + rPct/100;
         const cMult = 1 + cPct/100;
         const rate = dRate/100;
@@ -674,7 +694,7 @@
         let annualNet = [], cumCash = [], cumDisc = [], fcfArr = [], annualRev = [], annualExp = [];
         let tRev = 0, tExp = 0, runCum = 0, runDisc = 0, pvRev = 0, pvExp = 0;
 
-        for(let i=0; i<10; i++) {
+        for(let i=0; i < limit; i++) {
             const r = BASE.revenue[i] * rMult;
             const c = BASE.expense[i] * cMult;
             const net = r - c;
@@ -702,7 +722,7 @@
         const bc = pvRev / pvExp;
         const irr = getIRR(fcfArr);
         const pp = getPayback(fcfArr);
-        const pbp = pp ? pp + 0.6 : null;
+        const pbp = pp ? pp + 0.6 : null; 
         const bep = 2 * ((1+cPct/100) / (1+rPct/100));
 
         return { npv, irr, bc, pp, pbp, bep, tRev, tExp, annualNet, cumCash, cumDisc, annualRev, annualExp };
@@ -734,23 +754,24 @@
     }
 
     // --- RENDERERS ---
-    function renderKPIs(m, dRate) {
-        const diff = (m.irr*100) - dRate;
+    function renderKPIs(m, dRate, limit) {
+        const irrVal = m.irr !== null ? (m.irr*100) : -100;
+        const diff = irrVal - dRate;
         
-        // --- NEW IRR ANIMATION COLOR LOGIC ---
-        // > 20: Green, 10-20: Yellow, 0-10: Orange, <= 0: Red
-        let irrAnimColor = '#ef4444'; // Red default
-        if(diff > 20) irrAnimColor = '#10b981'; // Green
-        else if(diff > 10) irrAnimColor = '#f59e0b'; // Yellow
-        else if(diff > 0) irrAnimColor = '#f97316'; // Orange
+        let irrAnimColor = '#ef4444'; 
+        if(diff > 20) irrAnimColor = '#10b981'; 
+        else if(diff > 10) irrAnimColor = '#f59e0b'; 
+        else if(diff > 0) irrAnimColor = '#f97316'; 
 
-        // Textual logic (kept similar to before but slightly adjusted range names)
         let irrTxt = "ریسک بالا", irrC = "var(--danger)";
         if(diff > 15) { irrTxt = "بسیار جذاب"; irrC = "var(--success)"; }
         else if(diff >= 0) { irrTxt = "قابل قبول"; irrC = "var(--warning)"; }
 
         let npvTxt = "زیان‌ده", npvC = "var(--danger)";
         if(m.npv > 0) { npvTxt = "سودآور"; npvC = "var(--secondary)"; }
+
+        const ppDisplay = (m.pp && m.pp <= limit) ? m.pp.toFixed(1) : `>${limit}`;
+        const pbpDisplay = (m.pbp && m.pbp <= limit) ? m.pbp.toFixed(1) : `>${limit}`;
 
         const r1 = [
             { t: "هزینه سرمایه‌گذاری ثابت", v: fmt.format(BASE.capex), s: "میلیون ریال", c: "var(--muted)", i: "fa-warehouse" },
@@ -759,12 +780,11 @@
             { t: "نسبت درآمد به هزینه (B/C)", v: m.bc.toFixed(2), s: "شاخص کارایی", c: "var(--primary)", i: "fa-scale-balanced" }
         ];
 
-        // R2 ITEMS
-        const irrItem = { t: "نرخ بازده داخلی (IRR)", v: (m.irr*100).toFixed(1)+"%", s: irrTxt, c: irrC, i: "fa-chart-pie", isIRR: true };
+        const irrItem = { t: "نرخ بازده داخلی (IRR)", v: m.irr!==null ? (m.irr*100).toFixed(1)+"%" : "N/A", s: irrTxt, c: irrC, i: "fa-chart-pie", isIRR: true };
         const otherR2 = [
             { t: "خالص ارزش فعلی (NPV)", v: fmt.format(Math.round(m.npv)), s: npvTxt, c: npvC, i: "fa-sack-dollar" },
-            { t: "دوره بازگشت سرمایه (PP)", v: m.pp?m.pp.toFixed(1):">10", s: "سال (از شروع)", c: "var(--warning)", i: "fa-hourglass-half" },
-            { t: "دوره بازگشت سود (PBP)", v: m.pbp?m.pbp.toFixed(1):">10", s: "سال (بهره‌برداری)", c: "var(--warning)", i: "fa-hourglass-end" },
+            { t: "دوره بازگشت سرمایه (PP)", v: ppDisplay, s: "سال (از شروع)", c: "var(--warning)", i: "fa-hourglass-half" },
+            { t: "دوره بازگشت سود (PBP)", v: pbpDisplay, s: "سال (بهره‌برداری)", c: "var(--warning)", i: "fa-hourglass-end" },
             { t: "نقطه سربه‌سر (B.P)", v: m.bep.toFixed(1)+"%", s: "ریسک عملیاتی", c: "#0ea5e9", i: "fa-crosshairs" }
         ];
 
@@ -778,7 +798,6 @@
                 <div class="kpi-sub">${d.s}</div>
             </div>`;
 
-        // Special renderer for IRR
         const cardIRR = (d) => `
             <div class="kpi-card irr-anim-card" style="--color:${d.c}; --anim-color:${irrAnimColor}">
                 <i class="fa-solid ${d.i} kpi-bg-icon"></i>
@@ -819,8 +838,8 @@
             options: { 
                 responsive: true, maintainAspectRatio: false, 
                 plugins: { 
-                    legend: { position: 'right', labels: { usePointStyle: true } }, 
-                    // UPDATED: Show Percentage
+                    // Changed legend to bottom to prevent overflow in smaller grid columns
+                    legend: { position: 'bottom', labels: { usePointStyle: true } }, 
                     datalabels: { 
                         color: '#fff', 
                         font: { weight: 'bold' },
@@ -854,25 +873,26 @@
     function updateChartsTheme() {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const colorText = isDark ? '#f1f5f9' : '#1e293b';
-        const colorGrid = isDark ? '#334155' : '#e2e8f0'; // Light Gray for light mode
+        const colorGrid = isDark ? '#334155' : '#e2e8f0'; 
         
         [cCash, cCost, cBe].forEach(c => {
             if(c.options.scales?.y) {
                 c.options.scales.y.grid.color = colorGrid;
-                // Also update x if needed, though usually display:false in main chart
             }
             if(c.options.plugins?.legend?.labels) c.options.plugins.legend.labels.color = colorText;
             c.update();
         });
     }
 
-    function updateCharts(m) {
-        // Theme Colors
+    function updateCharts(m, limit) {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const colLine = isDark ? '#a78bfa' : '#4f46e5';
         const colBarG = isDark ? '#34d399' : '#10b981';
         const colBarR = isDark ? '#f87171' : '#ef4444';
         
+        const slicedLabels = BASE.years.slice(0, limit);
+
+        cCash.data.labels = slicedLabels;
         cCash.data.datasets = [
             { 
                 type: 'line', label: 'جریان نقد خالص', data: m.annualNet,
@@ -895,17 +915,17 @@
             : ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444'];
         cCost.update();
 
+        cBe.data.labels = slicedLabels;
         cBe.data.datasets = [
             { label: 'PP', data: m.cumCash, borderColor: isDark ? '#fbbf24' : '#f59e0b', borderWidth: 3, fill: false },
             { label: 'DPBP', data: m.cumDisc, borderColor: isDark ? '#38bdf8' : '#0ea5e9', borderDash: [5,5], borderWidth: 2, fill: false },
-            { label: 'صفر', data: Array(10).fill(0), borderColor: isDark ? '#f87171' : '#ef4444', borderWidth: 1 }
+            { label: 'صفر', data: Array(limit).fill(0), borderColor: isDark ? '#f87171' : '#ef4444', borderWidth: 1 }
         ];
         cBe.update();
     }
 
     // --- MATRIX LOGIC ---
-    function renderMatrix(rVal, cVal) {
-        // -20% to +20% with 5% steps
+    function renderMatrix(rVal, cVal, limit) {
         const steps = [-0.20, -0.15, -0.10, -0.05, 0, 0.05, 0.10, 0.15, 0.20];
         const currentD = parseInt(el('discRange').value);
         
@@ -918,13 +938,9 @@
             steps.forEach(cs => {
                 const tr = rVal + (rs*100);
                 const tc = cVal + (cs*100);
-                const m = calcMetrics(tr, tc, currentD);
+                const m = calcMetrics(tr, tc, currentD, limit);
                 const val = m.irr ? Math.round(m.irr*100) : 0;
                 
-                // Color Logic based on Current Discount Rate (D)
-                // Red: < D+3%
-                // Orange: D+3% <= val < D+18%
-                // Green: >= D+18%
                 let cls = '';
                 if(val < currentD + 3) cls = 'bg-red';
                 else if(val < currentD + 18) cls = 'bg-orange';
@@ -944,6 +960,7 @@
         const r = parseInt(el('revRange').value);
         const c = parseInt(el('costRange').value);
         const d = parseInt(el('discRange').value);
+        const p = parseInt(el('periodRange').value);
 
         const rvEl = el('revVal');
         rvEl.innerText = (r>0?'+':'')+r+'%';
@@ -954,24 +971,26 @@
         cvEl.className = 'val-tag ' + (c>0 ? 'val-neg' : c<0 ? 'val-pos' : 'val-neu'); 
 
         el('discVal').innerText = d+'%';
+        el('periodVal').innerText = p + ' سال';
 
-        const m = calcMetrics(r, c, d);
-        renderKPIs(m, d);
-        updateCharts(m);
-        renderMatrix(r, c);
+        const m = calcMetrics(r, c, d, p);
+        renderKPIs(m, d, p);
+        updateCharts(m, p);
+        renderMatrix(r, c, p);
     }
 
     function resetDefaults() {
         el('revRange').value = 0;
         el('costRange').value = 0;
         el('discRange').value = 42;
+        el('periodRange').value = 10;
         update();
     }
 
-    ['revRange','costRange','discRange'].forEach(id => el(id).addEventListener('input', update));
+    ['revRange','costRange','discRange','periodRange'].forEach(id => el(id).addEventListener('input', update));
     initCharts();
     update();
-    updateChartsTheme(); // Ensure initial theme colors are set
+    updateChartsTheme();
   </script>
 </body>
 </html>
