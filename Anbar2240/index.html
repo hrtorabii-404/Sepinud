@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>داشبورد امکان‌سنجی فنی-اقتصادی | انبار 2240 متری</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+  <style>
+    :root {
+      /* Light Theme Variables */
+      --primary: #4f46e5;
+      --primary-rgb: 79, 70, 229;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --dark: #0f172a;
+      --muted: #64748b;
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --border: #e2e8f0;
+      --chart-grid: #e2e8f0; /* Explicit Light Gray */
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      
+      --neon-green-glow: 0 0 5px rgba(16, 185, 129, 0.3);
+      --neon-red-glow: 0 0 5px rgba(239, 68, 68, 0.3);
+      
+      --font-main: "Vazirmatn", system-ui, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      /* Dark Theme Variables */
+      --primary: #6366f1;
+      --primary-rgb: 99, 102, 241;
+      --secondary: #38bdf8;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --dark: #f1f5f9; /* Text becomes light */
+      --muted: #94a3b8;
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --border: #334155;
+      --chart-grid: #334155;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      
+      --neon-green-glow: 0 0 15px rgba(52, 211, 153, 0.6);
+      --neon-red-glow: 0 0 15px rgba(248, 113, 113, 0.6);
+    }
+
+    * { box-sizing: border-box; outline: none; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background-color: var(--bg-body);
+      color: var(--dark);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1440px; 
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* --- HEADER --- */
+    header {
+      background: var(--bg-card);
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .header-inner {
+        display: flex; justify-content: space-between; align-items: center;
+        max-width: 1440px; margin: 0 auto; padding: 0 24px;
+    }
+    .logo-box {
+        width: 80px; height: 80px; /* Increased size slightly for logos */
+        display: flex; align-items: center; justify-content: center;
+        background: transparent;
+    }
+    .logo-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+    .header-titles { text-align: center; }
+    h1 {
+      font-size: 1.6rem; font-weight: 900; margin: 0; color: var(--dark);
+      letter-spacing: -0.5px;
+    }
+    h2 {
+      font-size: 0.9rem; font-weight: 500; color: var(--muted); margin: 4px 0 0;
+    }
+
+    /* --- PROJECT INFO BOX --- */
+    .project-info {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 24px;
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px var(--shadow-color);
+        display: flex; flex-direction: column; gap: 16px;
+        position: relative; overflow: hidden;
+    }
+    .project-info::before {
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+        background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+    .info-header-row {
+        display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .info-text { font-size: 0.95rem; color: var(--dark); text-align: justify; line-height: 1.8; flex: 1; margin-left: 20px; }
+    
+    .info-tags {
+        display: flex; flex-wrap: wrap; gap: 12px; padding-top: 8px; align-items: center;
+    }
+    .tag {
+        display: flex; align-items: center; gap: 6px;
+        background: var(--bg-body); padding: 6px 12px; border-radius: 8px;
+        font-size: 0.85rem; font-weight: 600; color: var(--muted);
+        border: 1px solid transparent;
+    }
+    [data-theme="dark"] .tag { border-color: var(--border); }
+    .tag i { color: var(--primary); }
+    .tag b { color: var(--dark); margin-right: 4px; }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+        background: var(--bg-body); border: 1px solid var(--border);
+        color: var(--primary); padding: 6px 14px; border-radius: 8px;
+        cursor: pointer; display: flex; align-items: center; gap: 8px;
+        font-family: var(--font-main); font-weight: 600; font-size: 0.85rem;
+        box-shadow: 0 2px 4px var(--shadow-color); transition: all 0.2s;
+        margin-right: auto; /* Push to left */
+    }
+    .theme-toggle:hover { background: var(--border); transform: translateY(-1px); }
+
+    /* --- LAYOUT ACCORDION --- */
+    .layout-accordion {
+        background: var(--bg-card);
+        border-radius: 16px;
+        margin-bottom: 24px;
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px var(--shadow-color);
+        overflow: hidden;
+        transition: border-color 0.3s;
+    }
+    .layout-accordion:hover {
+        border-color: var(--primary);
+    }
+    .layout-header {
+        padding: 16px 20px;
+        display: flex; justify-content: space-between; align-items: center;
+        cursor: pointer;
+        background: var(--bg-card);
+        transition: background-color 0.2s;
+        user-select: none;
+    }
+    .layout-header:hover {
+        background-color: var(--bg-body);
+    }
+    .layout-title {
+        font-weight: 800; color: var(--dark); font-size: 1.05rem; display: flex; align-items: center; gap: 10px;
+    }
+    .layout-arrow {
+        color: var(--muted); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 1.1rem;
+    }
+    .layout-arrow.open {
+        transform: rotate(180deg);
+        color: var(--primary);
+    }
+    .layout-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        background: var(--bg-body);
+        border-top: 1px solid transparent;
+    }
+    .layout-content.open {
+        border-top-color: var(--border);
+    }
+    .layout-inner {
+        padding: 20px;
+        display: flex; justify-content: center;
+        align-items: center;
+    }
+    .layout-img {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: 1px solid var(--border);
+        max-height: 600px;
+        object-fit: contain;
+        background: #fff;
+    }
+
+    /* --- RESPONSIVE & STICKY CONTROLS --- */
+    .controls-wrapper {
+      position: sticky; top: 10px; z-index: 100;
+      margin-bottom: 40px;
+      width: 100%;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .controls {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 24px;
+      padding: 10px 0;
+      box-shadow: none;
+      transition: all 0.3s ease;
+      position: relative; overflow: visible;
+      width: 100%;
+    }
+
+    .ctrl-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+    }
+    .ctrl-title { font-weight: 800; color: var(--dark); display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+    
+    .btn-reset {
+      font-family: var(--font-main);
+      background: var(--bg-card); color: var(--muted); border: 1px solid var(--border);
+      padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s;
+      box-shadow: 0 2px 5px var(--shadow-color);
+    }
+    .btn-reset:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-1px); }
+
+    .ctrl-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+    }
+    @media (max-width: 1200px) { .ctrl-grid { gap: 30px; } }
+    @media (max-width: 900px) { .ctrl-grid { grid-template-columns: 1fr; gap: 20px; } }
+
+    .ctrl-item {
+        position: relative; padding: 20px; border-radius: 20px; 
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px var(--shadow-color);
+        transition: 0.3s;
+        display: flex; flex-direction: column; justify-content: center;
+        flex: 1; 
+    }
+    .ctrl-item:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px var(--shadow-color); border-color: var(--primary); }
+    
+    .ctrl-bg-icon {
+        position: absolute; left: 16px; bottom: 8px; font-size: 4rem; 
+        opacity: 0.08; pointer-events: none; transition: 0.3s; color: var(--dark);
+    }
+    
+    .ctrl-label {
+      display: flex; justify-content: space-between; font-weight: 700; font-size: 0.95rem; margin-bottom: 16px; color: var(--dark);
+      position: relative; z-index: 2;
+    }
+    .val-tag { 
+        font-family: monospace; font-size: 1.1rem; direction: ltr; 
+        background: var(--bg-body); padding: 2px 10px; border-radius: 8px; border: 1px solid var(--border); color: var(--dark);
+    }
+
+    /* --- COMPACT (STICKY) MODE --- */
+    .controls-wrapper.compact { 
+        top: 20px; 
+        display: flex; justify-content: center; 
+    }
+    .controls-wrapper.compact .controls {
+        width: auto;
+        max-width: 95%; 
+        min-width: 600px;
+        padding: 12px 30px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 99px; 
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
+        display: flex; align-items: center; gap: 30px;
+    }
+    [data-theme="dark"] .controls-wrapper.compact .controls {
+        background: rgba(30, 41, 59, 0.7);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .controls-wrapper.compact .ctrl-header { margin: 0; width: auto; margin-bottom: 0; }
+    .controls-wrapper.compact .ctrl-title span { display: none; } 
+    .controls-wrapper.compact .ctrl-title i { font-size: 1.4rem; color: var(--primary); }
+    .controls-wrapper.compact .btn-reset { padding: 6px 12px; font-size: 0.8rem; white-space: nowrap; border-radius: 99px; background: transparent; }
+    .controls-wrapper.compact .btn-reset span { display: none; }
+    .controls-wrapper.compact .btn-reset i { margin: 0; }
+    
+    .controls-wrapper.compact .ctrl-grid {
+        display: flex; flex: 1; gap: 20px; align-items: center;
+    }
+    .controls-wrapper.compact .ctrl-item {
+        background: transparent; padding: 0; margin: 0; border: none; box-shadow: none;
+        flex-direction: row; align-items: center; gap: 12px;
+    }
+    .controls-wrapper.compact .ctrl-item:hover { transform: none; }
+    .controls-wrapper.compact .ctrl-bg-icon { display: none; }
+    .controls-wrapper.compact .ctrl-label { margin: 0; width: auto; white-space: nowrap; font-size: 0.85rem; margin-bottom: 0; }
+    .controls-wrapper.compact .val-tag { background: transparent; border:none; padding:0; font-size: 0.95rem; font-weight: 800; }
+    .controls-wrapper.compact input[type="range"] { margin: 0; flex: 1; height: 4px; min-width: 80px; }
+
+    @media (max-width: 768px) {
+        .controls-wrapper.compact .controls { min-width: 90%; flex-direction: column; border-radius: 20px; padding: 16px; background: var(--bg-card); }
+        .controls-wrapper.compact .ctrl-grid { display: grid; grid-template-columns: 1fr; width: 100%; gap: 12px; }
+        .controls-wrapper.compact input[type="range"] { height: 6px; }
+    }
+
+    /* Colors */
+    .val-pos { color: var(--success); }
+    .val-neg { color: var(--danger); }
+    .val-neu { color: var(--warning); }
+
+    /* Sliders */
+    input[type=range] {
+      -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%; height: 6px; background: var(--border); border-radius: 99px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%;
+      background: var(--bg-card); border: 4px solid var(--muted); margin-top: -7px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: transform 0.1s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    
+    #revRange::-webkit-slider-thumb { border-color: var(--success); }
+    #costRange::-webkit-slider-thumb { border-color: var(--danger); }
+    #discRange::-webkit-slider-thumb { border-color: var(--warning); }
+
+    /* --- KPI CARDS --- */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 16px;
+      position: relative;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      border: 1px solid var(--border);
+      transition: transform 0.2s;
+      overflow: hidden;
+      min-height: 110px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px var(--shadow-color); }
+    /* Default top stripe for normal cards */
+    .kpi-card:not(.irr-anim-card)::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        background: var(--color);
+    }
+    
+    /* --- NEW ANIMATED IRR CARD --- */
+    .irr-anim-card {
+        z-index: 1;
+        border: none !important; /* Remove default border */
+        overflow: hidden; /* Ensure glow stays inside corners */
+    }
+    /* The spinning gradient container */
+    .irr-anim-card::before {
+        content: '';
+        position: absolute;
+        z-index: -2;
+        left: -50%; top: -50%; width: 200%; height: 200%;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-color: transparent;
+        /* Conic gradient for the spinning tail */
+        background-image: conic-gradient(transparent, transparent, transparent, var(--anim-color));
+        animation: rotate 3s linear infinite;
+    }
+    /* The inner card background (to hide the center of gradient) */
+    .irr-anim-card::after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        inset: 4px; /* Thickness of the neon border */
+        background: var(--bg-card);
+        border-radius: 10px; /* Slightly less than card radius (14px) */
+    }
+
+    @keyframes rotate {
+        100% { transform: rotate(360deg); }
+    }
+    
+    .kpi-top { display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; }
+    .kpi-title { font-size: 0.8rem; color: var(--muted); font-weight: 700; }
+    .kpi-val { font-size: 1.4rem; font-weight: 800; color: var(--dark); margin-top: 6px; line-height: 1.2; z-index: 2; }
+    .kpi-sub { font-size: 0.75rem; color: var(--color); margin-top: 6px; font-weight: 600; z-index: 2; display: flex; align-items: center; gap: 4px; }
+    
+    .kpi-bg-icon {
+        position: absolute; bottom: -12px; left: -8px; font-size: 4.5rem;
+        opacity: 0.15; /* More visible */
+        color: var(--color); transform: rotate(10deg); z-index: 1; pointer-events: none;
+    }
+
+    /* --- CHARTS --- */
+    .charts-wrapper {
+        display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px;
+    }
+    @media (max-width: 1024px) { .charts-wrapper { grid-template-columns: 1fr; } }
+
+    .chart-box {
+        background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border);
+        box-shadow: 0 4px 6px var(--shadow-color);
+    }
+    .chart-header { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
+    .chart-title { font-size: 1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; }
+    
+    .chart-body { position: relative; height: 320px; width: 100%; }
+    .chart-body-sm { position: relative; height: 280px; width: 100%; }
+
+    /* --- MATRIX --- */
+    .matrix-container {
+        width: 100%; margin-top: 30px;
+        background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border);
+        box-shadow: 0 4px 6px var(--shadow-color);
+    }
+    .matrix-scroll { overflow-x: auto; padding-bottom: 10px; }
+    
+    table { width: 100%; min-width: 800px; border-collapse: separate; border-spacing: 6px; }
+    th { font-size: 0.85rem; color: var(--muted); padding: 12px; font-weight: 600; background: var(--bg-body); border-radius: 8px; border: 1px solid var(--border); }
+    td { 
+        padding: 14px; text-align: center; border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+        cursor: default; transition: 0.1s; color: var(--dark); border: 2px solid transparent;
+    }
+    td:hover { transform: scale(1.1); box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 10; border-color: var(--dark); }
+
+    /* Matrix Colors (Dynamic) */
+    .bg-green { background-color: rgba(16, 185, 129, 0.15); color: var(--success); box-shadow: var(--neon-green-glow); }
+    .bg-orange { background-color: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .bg-red { background-color: rgba(239, 68, 68, 0.15); color: var(--danger); box-shadow: var(--neon-red-glow); }
+
+    /* Footer Hover */
+    footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 50px; opacity: 0.9; padding-bottom: 20px; }
+    .sep-link {
+        color: var(--primary); font-weight: 700; text-decoration: none; position: relative; cursor: pointer; border-bottom: 1px dashed var(--primary);
+    }
+    .sep-link:hover::after {
+        content: attr(data-hover);
+        position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
+        background: var(--dark); color: #fff; padding: 8px 12px; border-radius: 8px;
+        font-size: 0.8rem; white-space: pre-wrap; width: max-content; text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2); pointer-events: none;
+        z-index: 100;
+    }
+    
+    .dir-ltr { direction: ltr; display: inline-block; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+        <div class="logo-box">
+            <img src="https://uploadkon.ir/uploads/3cf714_25AnbarLlogo.png" alt="کارفرما" class="logo-img">
+        </div>
+        <div class="header-titles">
+            <h1>داشبورد امکان‌سنجی فنی-اقتصادی</h1>
+            <h2>انبار 2240 متری | پهنه لجستیک منطقه آزاد شهر فرودگاهی امام خمینی (ره)</h2>
+        </div>
+        <div class="logo-box">
+            <img src="https://uploadkon.ir/uploads/70c214_25sepiLogoo.png" alt="مشاور" class="logo-img">
+        </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- PROJECT INFO -->
+    <div class="project-info">
+        <div class="info-header-row">
+            <div class="info-text">
+                پروژه احداث انبار ۲۲۴۰ مترمربعی در اراضی پهنه لجستیک هسته پیشران منطقه آزاد شهر فرودگاهی امام خمینی (ره)، یک طرح توسعه‌ای «زودبازده» و «استراتژیک» جهت پاسخگویی فوری به تقاضای انباشته بازار برای انبارش کالاهای سنگین و صنعتی است. این طرح با بهره‌گیری هوشمندانه از زیرساخت موجود و اجرای سازه‌ای مهندسی‌شده (بدون ستون و با ارتفاع ۹ متر)، ضمن کاهش چشمگیر هزینه‌های ساخت (CAPEX) و دوره اجرا (۶ ماه)، گلوگاه عملیاتی فعلی در انبارش کالاهای رسوبی را رفع نموده و با تبدیل دارایی‌های راکد به یک ترمینال لجستیک استاندارد، جریان درآمدی پایدار و حاشیه سود جذابی را برای شرکت ایجاد می‌نماید.
+            </div>
+        </div>
+        <div class="info-tags">
+            <div class="tag"><i class="fa-solid fa-clock"></i> دوران ساخت: <b>۶ ماه</b></div>
+            <div class="tag"><i class="fa-solid fa-calendar-check"></i> دوران بهره‌برداری: <b>۱۰ سال</b></div>
+            <div class="tag"><i class="fa-solid fa-percent"></i> نرخ تنزیل پایه: <b>۴۲٪</b></div>
+            <div class="tag" style="border-color:var(--success); color:var(--success);"><i class="fa-solid fa-wrench"></i> با «گیره‌ها» می‌توانید درآمد و هزینه را تا <b>±۵۰٪</b> تغییر دهید.</div>
+            
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fa-solid fa-circle-half-stroke"></i> تغییر تم روشن و تاریک
+            </button>
+        </div>
+    </div>
+
+    <!-- LAYOUT ACCORDION -->
+    <div class="layout-accordion">
+        <div class="layout-header" onclick="toggleLayout()">
+            <span class="layout-title">
+                <i class="fa-solid fa-map-location-dot" style="color:var(--secondary)"></i> 
+                جانمایی انبار سوله 2240 مترمربعی
+            </span>
+            <i class="fa-solid fa-chevron-down layout-arrow" id="layoutArrow"></i>
+        </div>
+        <div class="layout-content" id="layoutContent">
+            <div class="layout-inner">
+                <img src="https://uploadkon.ir/uploads/08f614_25anba2240m.jpeg" alt="جانمایی انبار" class="layout-img">
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTROLS PANEL -->
+    <div class="controls-wrapper" id="controlPanel">
+      <div class="controls">
+        <div class="ctrl-header">
+          <div class="ctrl-title">
+            <i class="fa-solid fa-sliders" style="color:var(--primary)"></i> <span>تنظیمات داشبورد</span>
+          </div>
+          
+          <div class="ctrl-grid">
+             <!-- Revenue -->
+             <div class="ctrl-item">
+               <i class="fa-solid fa-coins ctrl-bg-icon"></i>
+               <div class="ctrl-label">
+                 <span>تغییر درآمدها</span>
+                 <span class="val-tag" id="revVal">0%</span>
+               </div>
+               <input type="range" id="revRange" min="-50" max="50" step="1" value="0">
+             </div>
+             <!-- Cost -->
+             <div class="ctrl-item">
+               <i class="fa-solid fa-receipt ctrl-bg-icon"></i>
+               <div class="ctrl-label">
+                 <span>تغییر هزینه‌ها</span>
+                 <span class="val-tag" id="costVal">0%</span>
+               </div>
+               <input type="range" id="costRange" min="-50" max="50" step="1" value="0">
+             </div>
+             <!-- Discount -->
+             <div class="ctrl-item">
+               <i class="fa-solid fa-percent ctrl-bg-icon"></i>
+               <div class="ctrl-label">
+                 <span>نرخ تنزیل</span>
+                 <span class="val-tag val-neu" id="discVal">42%</span>
+               </div>
+               <input type="range" id="discRange" min="0" max="100" step="1" value="42">
+             </div>
+          </div>
+
+          <button class="btn-reset" onclick="resetDefaults()">
+            <i class="fa-solid fa-rotate-right"></i> <span>بازنشانی</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIS ROW 1 -->
+    <div class="kpi-grid" id="kpiRow1"></div>
+    <!-- KPIS ROW 2 -->
+    <div class="kpi-grid" id="kpiRow2"></div>
+
+    <!-- CHARTS ROW 1 (Cash + Cost) -->
+    <div class="charts-wrapper">
+        <div class="chart-box">
+            <div class="chart-header">
+                <div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--secondary)"></i> جریان نقدینگی (Cash Flow)</div>
+            </div>
+            <div class="chart-body"><canvas id="cashChart"></canvas></div>
+        </div>
+        <div class="chart-box">
+            <div class="chart-header">
+                <div class="chart-title"><i class="fa-solid fa-chart-pie" style="color:var(--warning)"></i> ساختار هزینه ثابت</div>
+            </div>
+            <div class="chart-body" style="display:flex;justify-content:center"><canvas id="costChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- CHARTS ROW 2 (Break Even) -->
+    <div class="charts-wrapper" style="grid-template-columns: 1fr;">
+        <div class="chart-box">
+            <div class="chart-header">
+                <div class="chart-title"><i class="fa-solid fa-crosshairs" style="color:var(--danger)"></i> تحلیل نقطه سربه‌سر (بازگشت سرمایه)</div>
+            </div>
+            <div class="chart-body-sm"><canvas id="beChart"></canvas></div>
+        </div>
+    </div>
+    
+    <!-- MATRIX -->
+    <div class="matrix-container">
+        <div class="chart-header">
+            <div class="chart-title"><i class="fa-solid fa-table-cells" style="color:var(--primary)"></i> ماتریس تحلیل حساسیت (IRR)</div>
+            <div style="font-size:0.85rem; color:var(--muted)">رنگ‌بندی بر اساس نرخ تنزیل انتخابی (قرمز < نرخ+۳٪ | سبز > نرخ+۱۸٪)</div>
+        </div>
+        <div class="matrix-scroll">
+            <table id="matrixTable"></table>
+        </div>
+    </div>
+
+    <footer>
+        <p>تهیه شده در <span class="sep-link" data-hover="تحلیل و طراحی: حمیدرضا ترابی&#10;hr.torabii@gmail.com">موسسه سپینود تدبیر</span> - پاییز 1404</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // --- THEME TOGGLE ---
+    function toggleTheme() {
+        const html = document.documentElement;
+        if(html.getAttribute('data-theme') === 'dark') {
+            html.setAttribute('data-theme', 'light');
+        } else {
+            html.setAttribute('data-theme', 'dark');
+        }
+        updateChartsTheme();
+    }
+
+    // --- TOGGLE LAYOUT ACCORDION ---
+    function toggleLayout() {
+        const content = document.getElementById('layoutContent');
+        const arrow = document.getElementById('layoutArrow');
+        
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            content.classList.remove('open');
+            arrow.classList.remove('open');
+        } else {
+            content.classList.add('open');
+            content.style.maxHeight = content.scrollHeight + "px";
+            arrow.classList.add('open');
+        }
+    }
+
+    // --- DATA ---
+    const BASE = {
+        years: ["سال 1", "سال 2", "سال 3", "سال 4", "سال 5", "سال 6", "سال 7", "سال 8", "سال 9", "سال 10"],
+        revenue: [78475, 223591, 557423, 1134436, 1616118, 2302322, 3279888, 4672528, 6656483, 9482826], 
+        expense: [391865, 92151, 145657, 227988, 324791, 462698, 659159, 939039, 1337754, 1905765],
+        depreciation: [0, 8973, 12783, 18211, 25943, 36958, 52650, 75006, 106853, 152223],
+        capex: 359523,
+        capexParts: [282609, 32650, 23740, 3403, 17120],
+        capexLabels: ['ابنیه', 'تأسیسات', 'تجهیزات', 'مجوزها', 'پیش‌بینی نشده']
+    };
+
+    const fmt = new Intl.NumberFormat('fa-IR');
+    const el = id => document.getElementById(id);
+
+    // --- STICKY LOGIC ---
+    window.addEventListener('scroll', () => {
+        const p = el('controlPanel');
+        if(window.scrollY > 150) p.classList.add('compact');
+        else p.classList.remove('compact');
+    });
+
+    // --- MATH ---
+    function calcMetrics(rPct, cPct, dRate) {
+        const rMult = 1 + rPct/100;
+        const cMult = 1 + cPct/100;
+        const rate = dRate/100;
+
+        let annualNet = [], cumCash = [], cumDisc = [], fcfArr = [], annualRev = [], annualExp = [];
+        let tRev = 0, tExp = 0, runCum = 0, runDisc = 0, pvRev = 0, pvExp = 0;
+
+        for(let i=0; i<10; i++) {
+            const r = BASE.revenue[i] * rMult;
+            const c = BASE.expense[i] * cMult;
+            const net = r - c;
+            const fcf = net + BASE.depreciation[i];
+            
+            annualRev.push(r);
+            annualExp.push(c);
+            annualNet.push(fcf); 
+            fcfArr.push(fcf);
+            
+            tRev += r; tExp += c;
+            
+            runCum += fcf;
+            cumCash.push(runCum);
+
+            const df = Math.pow(1+rate, i+1);
+            runDisc += fcf/df;
+            cumDisc.push(runDisc);
+
+            pvRev += r/df;
+            pvExp += c/df;
+        }
+
+        const npv = runDisc;
+        const bc = pvRev / pvExp;
+        const irr = getIRR(fcfArr);
+        const pp = getPayback(fcfArr);
+        const pbp = pp ? pp + 0.6 : null;
+        const bep = 2 * ((1+cPct/100) / (1+rPct/100));
+
+        return { npv, irr, bc, pp, pbp, bep, tRev, tExp, annualNet, cumCash, cumDisc, annualRev, annualExp };
+    }
+
+    function getIRR(vals) {
+        let g = 0.1;
+        for(let i=0; i<1000; i++) {
+            let n=0, d=0;
+            for(let t=0; t<vals.length; t++) {
+                let div = Math.pow(1+g, t+1);
+                n += vals[t]/div;
+                d -= (t+1)*vals[t]/(div*(1+g));
+            }
+            let next = g - n/d;
+            if(Math.abs(next-g)<1e-6) return next;
+            g = next;
+        }
+        return null;
+    }
+
+    function getPayback(vals) {
+        let cum = 0;
+        for(let i=0; i<vals.length; i++) {
+            let p = cum; cum += vals[i];
+            if(p<0 && cum>=0) return i + Math.abs(p)/vals[i];
+        }
+        return null;
+    }
+
+    // --- RENDERERS ---
+    function renderKPIs(m, dRate) {
+        const diff = (m.irr*100) - dRate;
+        
+        // --- NEW IRR ANIMATION COLOR LOGIC ---
+        // > 20: Green, 10-20: Yellow, 0-10: Orange, <= 0: Red
+        let irrAnimColor = '#ef4444'; // Red default
+        if(diff > 20) irrAnimColor = '#10b981'; // Green
+        else if(diff > 10) irrAnimColor = '#f59e0b'; // Yellow
+        else if(diff > 0) irrAnimColor = '#f97316'; // Orange
+
+        // Textual logic (kept similar to before but slightly adjusted range names)
+        let irrTxt = "ریسک بالا", irrC = "var(--danger)";
+        if(diff > 15) { irrTxt = "بسیار جذاب"; irrC = "var(--success)"; }
+        else if(diff >= 0) { irrTxt = "قابل قبول"; irrC = "var(--warning)"; }
+
+        let npvTxt = "زیان‌ده", npvC = "var(--danger)";
+        if(m.npv > 0) { npvTxt = "سودآور"; npvC = "var(--secondary)"; }
+
+        const r1 = [
+            { t: "هزینه سرمایه‌گذاری ثابت", v: fmt.format(BASE.capex), s: "میلیون ریال", c: "var(--muted)", i: "fa-warehouse" },
+            { t: "مجموع جریانات ورودی", v: fmt.format(Math.round(m.tRev)), s: "میلیون ریال", c: "var(--success)", i: "fa-arrow-trend-up" },
+            { t: "مجموع جریانات خروجی", v: fmt.format(Math.round(m.tExp)), s: "میلیون ریال", c: "var(--danger)", i: "fa-arrow-trend-down" },
+            { t: "نسبت درآمد به هزینه (B/C)", v: m.bc.toFixed(2), s: "شاخص کارایی", c: "var(--primary)", i: "fa-scale-balanced" }
+        ];
+
+        // R2 ITEMS
+        const irrItem = { t: "نرخ بازده داخلی (IRR)", v: (m.irr*100).toFixed(1)+"%", s: irrTxt, c: irrC, i: "fa-chart-pie", isIRR: true };
+        const otherR2 = [
+            { t: "خالص ارزش فعلی (NPV)", v: fmt.format(Math.round(m.npv)), s: npvTxt, c: npvC, i: "fa-sack-dollar" },
+            { t: "دوره بازگشت سرمایه (PP)", v: m.pp?m.pp.toFixed(1):">10", s: "سال (از شروع)", c: "var(--warning)", i: "fa-hourglass-half" },
+            { t: "دوره بازگشت سود (PBP)", v: m.pbp?m.pbp.toFixed(1):">10", s: "سال (بهره‌برداری)", c: "var(--warning)", i: "fa-hourglass-end" },
+            { t: "نقطه سربه‌سر (B.P)", v: m.bep.toFixed(1)+"%", s: "ریسک عملیاتی", c: "#0ea5e9", i: "fa-crosshairs" }
+        ];
+
+        const card = (d) => `
+            <div class="kpi-card" style="--color:${d.c}">
+                <i class="fa-solid ${d.i} kpi-bg-icon"></i>
+                <div class="kpi-top">
+                    <span class="kpi-title">${d.t}</span>
+                </div>
+                <div class="kpi-val dir-ltr" style="color:${d.c}; text-shadow:0 0 10px ${d.c}20">${d.v}</div>
+                <div class="kpi-sub">${d.s}</div>
+            </div>`;
+
+        // Special renderer for IRR
+        const cardIRR = (d) => `
+            <div class="kpi-card irr-anim-card" style="--color:${d.c}; --anim-color:${irrAnimColor}">
+                <i class="fa-solid ${d.i} kpi-bg-icon"></i>
+                <div class="kpi-top">
+                    <span class="kpi-title">${d.t}</span>
+                </div>
+                <div class="kpi-val dir-ltr" style="color:${d.c}; text-shadow:0 0 10px ${d.c}20">${d.v}</div>
+                <div class="kpi-sub">${d.s}</div>
+            </div>`;
+
+        el('kpiRow1').innerHTML = r1.map(card).join('');
+        el('kpiRow2').innerHTML = cardIRR(irrItem) + otherR2.map(card).join('');
+    }
+
+    // --- CHARTS ---
+    let cCash, cCost, cBe;
+
+    function initCharts() {
+        Chart.defaults.font.family = "Vazirmatn";
+        Chart.defaults.color = "#94a3b8";
+        
+        cCash = new Chart(el('cashChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: BASE.years, datasets: [] },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true } } }, 
+                scales: { 
+                    x: { grid: { display: false }, stacked: false }, 
+                    y: { grid: { color: 'var(--border)' }, stacked: false } 
+                } 
+            }
+        });
+
+        cCost = new Chart(el('costChart').getContext('2d'), {
+            type: 'doughnut',
+            data: { labels: BASE.capexLabels, datasets: [{ data: BASE.capexParts, borderWidth: 0 }] },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { position: 'right', labels: { usePointStyle: true } }, 
+                    // UPDATED: Show Percentage
+                    datalabels: { 
+                        color: '#fff', 
+                        font: { weight: 'bold' },
+                        formatter: (value, ctx) => {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.map(data => { sum += data; });
+                            let percentage = (value*100 / sum).toFixed(1)+"%";
+                            return percentage;
+                        }
+                    } 
+                } 
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        cBe = new Chart(el('beChart').getContext('2d'), {
+            type: 'line',
+            data: { labels: BASE.years, datasets: [] },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                plugins: { legend: { position: 'top', labels: { usePointStyle: true } } }, 
+                scales: { 
+                    x: { grid: { display: false } }, 
+                    y: { grid: { color: 'var(--border)' } } 
+                } 
+            }
+        });
+    }
+
+    function updateChartsTheme() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const colorText = isDark ? '#f1f5f9' : '#1e293b';
+        const colorGrid = isDark ? '#334155' : '#e2e8f0'; // Light Gray for light mode
+        
+        [cCash, cCost, cBe].forEach(c => {
+            if(c.options.scales?.y) {
+                c.options.scales.y.grid.color = colorGrid;
+                // Also update x if needed, though usually display:false in main chart
+            }
+            if(c.options.plugins?.legend?.labels) c.options.plugins.legend.labels.color = colorText;
+            c.update();
+        });
+    }
+
+    function updateCharts(m) {
+        // Theme Colors
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const colLine = isDark ? '#a78bfa' : '#4f46e5';
+        const colBarG = isDark ? '#34d399' : '#10b981';
+        const colBarR = isDark ? '#f87171' : '#ef4444';
+        
+        cCash.data.datasets = [
+            { 
+                type: 'line', label: 'جریان نقد خالص', data: m.annualNet,
+                borderColor: colLine, borderWidth: 3, backgroundColor: isDark ? 'rgba(167, 139, 250, 0.2)' : 'rgba(79, 70, 229, 0.2)', fill: true, tension: 0.4, order: 0,
+                pointBackgroundColor: isDark ? '#1e293b' : '#fff'
+            },
+            { 
+                type: 'bar', label: 'درآمدها', data: m.annualRev,
+                backgroundColor: colBarG, borderRadius: 4, order: 1, barPercentage: 0.6
+            },
+            { 
+                type: 'bar', label: 'هزینه‌ها', data: m.annualExp,
+                backgroundColor: colBarR, borderRadius: 4, order: 2, barPercentage: 0.6
+            }
+        ];
+        cCash.update();
+
+        cCost.data.datasets[0].backgroundColor = isDark 
+            ? ['#6366f1', '#38bdf8', '#34d399', '#fbbf24', '#f87171']
+            : ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444'];
+        cCost.update();
+
+        cBe.data.datasets = [
+            { label: 'PP', data: m.cumCash, borderColor: isDark ? '#fbbf24' : '#f59e0b', borderWidth: 3, fill: false },
+            { label: 'DPBP', data: m.cumDisc, borderColor: isDark ? '#38bdf8' : '#0ea5e9', borderDash: [5,5], borderWidth: 2, fill: false },
+            { label: 'صفر', data: Array(10).fill(0), borderColor: isDark ? '#f87171' : '#ef4444', borderWidth: 1 }
+        ];
+        cBe.update();
+    }
+
+    // --- MATRIX LOGIC ---
+    function renderMatrix(rVal, cVal) {
+        // -20% to +20% with 5% steps
+        const steps = [-0.20, -0.15, -0.10, -0.05, 0, 0.05, 0.10, 0.15, 0.20];
+        const currentD = parseInt(el('discRange').value);
+        
+        let h = '<thead><tr><th>درآمد ↓ \\ هزینه →</th>';
+        steps.forEach(s => h += `<th>${s>0?'+':''}${Math.round(s*100)}%</th>`);
+        h += '</tr></thead><tbody>';
+        
+        steps.forEach(rs => {
+            h += `<tr><th>${rs>0?'+':''}${Math.round(rs*100)}%</th>`;
+            steps.forEach(cs => {
+                const tr = rVal + (rs*100);
+                const tc = cVal + (cs*100);
+                const m = calcMetrics(tr, tc, currentD);
+                const val = m.irr ? Math.round(m.irr*100) : 0;
+                
+                // Color Logic based on Current Discount Rate (D)
+                // Red: < D+3%
+                // Orange: D+3% <= val < D+18%
+                // Green: >= D+18%
+                let cls = '';
+                if(val < currentD + 3) cls = 'bg-red';
+                else if(val < currentD + 18) cls = 'bg-orange';
+                else cls = 'bg-green';
+                
+                const border = (Math.abs(rs)<0.01 && Math.abs(cs)<0.01) ? '2px solid var(--primary)' : '1px solid transparent';
+                
+                h += `<td class="${cls}" style="border:${border}">${val}%</td>`;
+            }); 
+            h += '</tr>';
+        }); 
+        el('matrixTable').innerHTML = h + '</tbody>';
+    }
+
+    // --- MAIN ---
+    function update() {
+        const r = parseInt(el('revRange').value);
+        const c = parseInt(el('costRange').value);
+        const d = parseInt(el('discRange').value);
+
+        const rvEl = el('revVal');
+        rvEl.innerText = (r>0?'+':'')+r+'%';
+        rvEl.className = 'val-tag ' + (r>0 ? 'val-pos' : r<0 ? 'val-neg' : 'val-neu');
+
+        const cvEl = el('costVal');
+        cvEl.innerText = (c>0?'+':'')+c+'%';
+        cvEl.className = 'val-tag ' + (c>0 ? 'val-neg' : c<0 ? 'val-pos' : 'val-neu'); 
+
+        el('discVal').innerText = d+'%';
+
+        const m = calcMetrics(r, c, d);
+        renderKPIs(m, d);
+        updateCharts(m);
+        renderMatrix(r, c);
+    }
+
+    function resetDefaults() {
+        el('revRange').value = 0;
+        el('costRange').value = 0;
+        el('discRange').value = 42;
+        update();
+    }
+
+    ['revRange','costRange','discRange'].forEach(id => el(id).addEventListener('input', update));
+    initCharts();
+    update();
+    updateChartsTheme(); // Ensure initial theme colors are set
+  </script>
+</body>
+</html>
