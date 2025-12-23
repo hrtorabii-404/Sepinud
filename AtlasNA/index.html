@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اطلس سرمایه گذاری نمک آبرود</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            overflow: hidden; /* Prevent body scroll */
+        }
+
+        .book-container {
+            position: relative; /* Container for absolutely positioned pages */
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column; /* Key for stable layout */
+            align-items: center;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1);
+            
+            /* Simple & Clean Animation */
+            opacity: 0;
+            transform: scale(0.98);
+            pointer-events: none;
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            z-index: 1;
+        }
+
+        .page.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+            z-index: 10;
+        }
+        
+        /* Layout structure for each page */
+        .page > header, .page > footer {
+            flex-shrink: 0; /* Prevent header/footer from shrinking */
+            width: 100%;
+            padding: 1.5rem 2.5rem;
+        }
+        
+        .page > main {
+            flex-grow: 1; /* Allow main content to take up available space */
+            overflow: hidden; /* Changed from auto to hidden to prevent scroll on cover */
+            width: 100%;
+            padding: 1rem 2.5rem;
+        }
+        
+        #tocPage main {
+            overflow-y: auto; /* Re-enable scroll only for TOC main content */
+        }
+
+        #coverPage {
+             background-color: #f8fafc; /* gray-50 */
+        }
+        
+        #tocPage {
+            background-color: #f1f5f9; /* gray-100 */
+        }
+
+        .content-page {
+             background-color: #e2e8f0; /* gray-200 */
+             padding: 0; /* Remove parent padding for iframe */
+        }
+        .content-page > header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #cbd5e1; /* gray-300 */
+        }
+        .content-page > main {
+             padding: 0; /* Remove padding for iframe container */
+             background-color: white;
+        }
+
+        .cover-clickable-area {
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .cover-clickable-area h1, .cover-clickable-area h2 {
+             transition: color 0.3s ease-in-out;
+        }
+
+        .cover-clickable-area:hover h1, .cover-clickable-area:hover h2 {
+            color: #2563eb; /* blue-600 */
+        }
+        
+        .toc-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 10rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .toc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .toc-card .info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 0.75rem;
+            transform: translateY(100%);
+            transition: transform 0.4s ease-in-out;
+            font-size: 0.8rem;
+        }
+        .toc-card:hover .info {
+            transform: translateY(0);
+        }
+        
+        /* Tooltip for Cover Page */
+        .tooltip-container .tooltip {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .tooltip-container:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Responsive typography for cover title - Adjusted for smaller screens */
+        .responsive-h1 {
+            font-size: clamp(1.75rem, 5vw, 3rem);
+            line-height: 1.2;
+        }
+        .responsive-h2 {
+            font-size: clamp(1.1rem, 3.5vw, 1.875rem);
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body class="bg-gray-300 flex items-center justify-center min-h-screen p-4">
+
+    <div id="bookContainer" class="book-container w-full max-w-5xl h-[95vh] max-h-[960px]">
+        
+        <!-- Page 1: Cover -->
+        <div id="coverPage" class="page active">
+            <header class="flex justify-center pt-2 md:pt-4">
+                <img src="https://uploadkon.ir/uploads/df5427_25NA-LOGO-copy.png" alt="لوگوی نمک آبرود" class="h-28 md:h-32 max-h-[20vh]"
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x200/e2e8f0/334155?text=Logo+NA';">
+            </header>
+            <main class="text-center cover-clickable-area">
+                <div>
+                    <h1 class="responsive-h1 font-extrabold text-gray-800">اطلس سرمایه گذاری</h1>
+                    <h2 class="responsive-h2 font-bold text-gray-700 mt-2">شهرک توریستی نمک آبرود</h2>
+                    <p class="text-gray-500 mt-4 text-xs">برای مشاهده فهرست، روی عنوان بالا کلیک کنید</p>
+                </div>
+            </main>
+            <footer class="flex flex-col items-center pt-2 pb-16 md:pb-8">
+                <div class="flex items-center justify-center gap-x-8 mb-4">
+                    <img src="https://uploadkon.ir/uploads/611127_25OMS-LOGO-copy.png" alt="لوگوی OMS" class="h-16 md:h-20"
+                         onerror="this.onerror=null; this.src='https://placehold.co/100x64/e2e8f0/334155?text=Logo+OMS';">
+                    <img src="https://uploadkon.ir/uploads/70c214_25sepiLogoo.png" alt="لوگوی IMPco" class="h-16 md:h-20"
+                         onerror="this.onerror=null; this.src='https://placehold.co/100x64/e2e8f0/334155?text=Logo+IMPco';">
+                </div>
+                <div class="text-sm text-gray-600 text-center">
+                    <p>
+                        تهیه شده توسط 
+                        <span class="relative inline-block tooltip-container font-semibold cursor-pointer">
+                            گروه سپینود
+                            <span class="tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max bg-gray-800 text-white text-xs rounded py-1 px-3 text-right leading-relaxed">
+                               تحلیل و طراحی : حمیدرضا ترابی
+                            </span>
+                        </span>
+                    </p>
+                    <p>شهریورماه 1404</p>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Page 2: Table of Contents -->
+        <div id="tocPage" class="page">
+            <header class="flex justify-between items-center border-b border-gray-300">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800">فهرست مطالب</h2>
+                <button id="backToCoverButton" title="بازگشت به جلد" class="flex items-center p-2 rounded-full hover:bg-gray-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <span class="text-xs text-gray-500 font-light mr-1">بازگشت</span>
+                </button>
+            </header>
+            <main>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
+                    <!-- Cards are now in the correct order -->
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="reportPage">
+                        <h3 class="font-bold text-lg text-gray-800">گزارش مدیریتی و تحلیلی شناخت</h3>
+                        <p class="text-sm text-gray-500 mt-2">تحلیل وضعیت موجود و پتانسیل‌ها</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                     <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="costDashboardPage">
+                        <h3 class="font-bold text-lg text-gray-800">داشبورد مدیریتی برآورد هزینه</h3>
+                        <p class="text-sm text-gray-500 mt-2">برآورد هزینه های زیرساختی</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="incomeDashboardPage">
+                        <h3 class="font-bold text-lg text-gray-800">داشبورد مدیریتی درآمدهای مسکونی</h3>
+                        <p class="text-sm text-gray-500 mt-2">تحلیل جامع درآمدها برای تصمیم‌گیری‌های کلان مدیریتی</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="packagePage">
+                        <h3 class="font-bold text-lg text-gray-800">بسته های پیشنهادی پروژه های بالقوه</h3>
+                        <p class="text-sm text-gray-500 mt-2">معرفی بسته‌های سرمایه‌گذاری</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="investmentDashboardPage">
+                        <h3 class="font-bold text-lg text-gray-800">داشبورد تحلیلی پروژه‌های سرمایه‌گذاری</h3>
+                        <p class="text-sm text-gray-500 mt-2">تحلیل پروژه‌های بالقوه</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="infraDashboardPage">
+                        <h3 class="font-bold text-lg text-gray-800">داشبورد راهبری اولویت بندی پروژه‌ها</h3>
+                        <p class="text-sm text-gray-500 mt-2">اولویت‌بندی پروژه‌های زیرساختی</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="dashboardPage">
+                        <h3 class="font-bold text-lg text-gray-800">داشبورد جامع راهبری مالی و اجرایی</h3>
+                        <p class="text-sm text-gray-500 mt-2">تحلیل و پایش شاخص‌های کلیدی</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="mapsDashboardPage">
+                        <h3 class="font-bold text-lg text-gray-800">داشبورد و نقشه ضوابط پهنه‌بندی</h3>
+                        <p class="text-sm text-gray-500 mt-2">نقشه تعاملی پروژه‌ها و ضوابط</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="fsDashboardPage">
+                        <h3 class="font-bold text-lg text-gray-800">داشبورد ارزیابی مالی پروژه های پیشنهادی</h3>
+                        <p class="text-sm text-gray-500 mt-2">Feasibility Study of Proposed Projects</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                    <!-- کارت جدید در اینجا اضافه شد -->
+                    <div class="toc-card bg-white rounded-lg p-5 text-center cursor-pointer border" data-page="omanaPage">
+                        <h3 class="font-bold text-lg text-gray-800">وظایف و مسئولیت‌های هیئت امنا (مالکین)</h3>
+                        <p class="text-sm text-gray-500 mt-2">بررسی ساختار و وظایف هیئت امنا</p>
+                        <div class="info"><p>برای مشاهده جزئیات کامل کلیک کنید.</p></div>
+                    </div>
+                </div>
+            </main>
+            <footer class="text-center text-xs text-gray-500">
+                <p>اطلس سرمایه گذاری شهرک توریستی نمک آبرود</p>
+            </footer>
+        </div>
+        
+        <!-- Content Pages -->
+        <div id="reportPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">گزارش مدیریتی و تحلیلی شناخت شهرک نمک‌آبرود</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/DashboardNA/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="costDashboardPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">داشبورد مدیریتی برآورد هزینه</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Dashboard/Infra/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="packagePage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">بسته های پیشنهادی پروژه های بالقوه</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Package/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="investmentDashboardPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">داشبورد تحلیلی پروژه‌های سرمایه‌گذاری</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Dashboard/20pFi/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="infraDashboardPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">داشبورد راهبری اولویت بندی پروژه ها</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Dashboard/Prioritization/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="dashboardPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">داشبورد جامع راهبری مالی و اجرایی</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Dashboard/Cost/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="mapsDashboardPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">داشبورد تعاملی پروژه‌ها و نقشه ضوابط پهنه‌بندی</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Dashboard/Maps/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="fsDashboardPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">داشبورد ارزیابی مالی پروژه های پیشنهادی</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/FS_project/" class="w-full h-full border-0"></iframe></main>
+        </div>
+        <div id="incomeDashboardPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">داشبورد مدیریتی درآمدهای مسکونی</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Dashboard/MaskuniIncome/" class="w-full h-full border-0"></iframe></main>
+        </div>
+
+        <!-- صفحه جدید در اینجا اضافه شد -->
+        <div id="omanaPage" class="page content-page">
+            <header class="flex justify-between items-center"><h2 class="text-lg font-bold text-gray-800">وظایف و مسئولیت‌های هیئت امنا (مالکین)</h2><button class="back-to-toc flex items-center p-2 rounded-full hover:bg-gray-300/50 transition-colors" title="بازگشت به فهرست"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span class="text-xs text-gray-500 font-light mr-1">بازگشت</span></button></header>
+            <main><iframe src="https://hrtorabii-404.github.io/namakabroud-report/Dashboard/Omanayi/" class="w-full h-full border-0"></iframe></main>
+        </div>
+
+    </div>
+
+<script>
+    const pages = document.querySelectorAll('.page');
+    const coverClickableArea = document.querySelector('.cover-clickable-area');
+    const backToCoverButton = document.getElementById('backToCoverButton');
+    const backToTocButtons = document.querySelectorAll('.back-to-toc');
+    const tocCards = document.querySelectorAll('.toc-card');
+
+    let navigationHistory = ['coverPage'];
+
+    function showPage(pageId) {
+        pages.forEach(page => {
+            page.classList.toggle('active', page.id === pageId);
+        });
+    }
+
+    function navigateTo(pageId) {
+        const current = navigationHistory[navigationHistory.length - 1];
+        if (pageId !== current) {
+            navigationHistory.push(pageId);
+        }
+        showPage(pageId);
+    }
+
+function goBack() {
+        if (navigationHistory.length > 1) {
+            navigationHistory.pop();
+            const prevPage = navigationHistory[navigationHistory.length - 1];
+            showPage(prevPage);
+            
+            // *** مهم: فوکوس را به پنجره اصلی برگردان ***
+            // تا Backspace بعدی در صفحه فهرست به درستی کار کند
+            if (prevPage === 'tocPage' || prevPage === 'coverPage') {
+                window.focus();
+            }
+        }
+    }
+
+    // Event Listeners
+    coverClickableArea.addEventListener('click', () => navigateTo('tocPage'));
+    backToCoverButton.addEventListener('click', () => navigateTo('coverPage'));
+    
+    backToTocButtons.forEach(button => {
+        button.addEventListener('click', () => navigateTo('tocPage'));
+    });
+
+    tocCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const pageId = card.dataset.page;
+            if (pageId) {
+                const targetPage = document.getElementById(pageId);
+                // Reload iframe on navigation to ensure scripts are fresh
+                if (targetPage) {
+                    const iframe = targetPage.querySelector('iframe');
+                    if (iframe && iframe.src) {
+                       // Note: Re-setting src might not be enough for some caching scenarios
+                       // but is good practice.
+                       const oldSrc = iframe.src;
+                       iframe.src = 'about:blank';
+                       setTimeout(() => { iframe.src = oldSrc; }, 0);
+                    }
+                }
+                navigateTo(pageId);
+            }
+        });
+    });
+    
+    window.addEventListener('message', function(e) {
+        // A minor security check, but for this context it's okay.
+        // In a real app, you'd want to check e.origin.
+        if (e && e.data && e.data.type === 'NAVIGATE_BACK') {
+            goBack();
+        }
+    });
+
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace') {
+            const activePage = document.querySelector('.page.active');
+            // Only act if the focus is on the main page (not inside an iframe)
+            if (document.hasFocus() && activePage) {
+                 // If it's a content page (with an iframe), do nothing, let the child handle it.
+                 // If it's TOC, go back to cover.
+                 // If it's cover, do nothing.
+                if (activePage.id === 'tocPage') {
+                    e.preventDefault();
+                    goBack();
+                }
+            }
+        }
+    });
+</script>
+
+
+</body>
+</html>
+
