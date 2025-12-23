@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد تحلیل مالی و زمان‌بندی پروژه‌ها</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            direction: rtl;
+            background-color: #f1f5f9;
+            color: #334155;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .slider {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; height: 8px; border-radius: 4px;
+            background-color: #e2e8f0; outline: none;
+            transition: background-color 0.2s;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 24px; height: 24px; border-radius: 50%;
+            cursor: pointer; background-color: var(--thumb-color);
+            border: 4px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .slider::-moz-range-thumb {
+            width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+            background-color: var(--thumb-color); border: 4px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .kpi-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden; /* For overlay effect */
+        }
+        /* Header Styles */
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+        .logo { height: 100px; width: auto; object-fit: contain; }
+        .logo.center { height: 180px; }
+        .logo.right { height: 100px; }
+        
+        /* Tooltip & Overlay Styles */
+        .tooltip { position: relative; display: inline-block; cursor: pointer; }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            background-color: #334155;
+            color: #fff;
+            text-align: right;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem; /* 12px */
+            line-height: 1.6;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 240px;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -120px;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        #table-tooltip-popup {
+            position: fixed;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            width: max-content;
+            pointer-events: none; /* Important */
+        }
+        .reset-btn {
+            background-color: #475569; color: white; font-weight: bold; padding: 0.5rem 1rem;
+            border-radius: 0.5rem; transition: background-color 0.2s, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; 
+            cursor: pointer; border: none;
+        }
+        .reset-btn:hover { background-color: #334155; }
+        
+        /* KPI Card Hover Effect */
+        .kpi-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(2, 6, 23, 0.85);
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+        .kpi-card.has-overlay:hover .kpi-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* Accordion Styles */
+        #control-panel-body {
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out, border 0.5s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            border-top: 0;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm pb-2">
+        <div class="logo-container">
+            <img src="https://uploadkon.ir/uploads/70c214_25sepiLogoo.png" alt="لوگو سپینود" class="logo">
+            <img src="https://uploadkon.ir/uploads/df5427_25NA-LOGO-copy.png" alt="لوگو نمک آبرود" class="logo center">
+            <img src="https://uploadkon.ir/uploads/611127_25OMS-LOGO-copy.png" alt="لوگو عمران مسکن شمال" class="logo right">
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold text-slate-800 text-center mt-2">داشبورد جامع راهبری مالی و اجرایی نمک‌آبرود</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-6">
+        
+        <!-- Explanatory Card -->
+        <div class="card mb-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-3">راهنمای داشبورد: از داده تا تصمیم</h2>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                این داشبورد یک ابزار تصمیم‌یار استراتژیک است که برای مدل‌سازی سناریوهای مختلف مالی و ارزیابی تأثیر آن‌ها بر برنامه ۵ ساله توسعه زیرساخت‌های نمک‌آبرود طراحی شده است. منطق این ابزار بر اساس اصول زیر است:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm">
+                <div class="bg-slate-50 p-4 rounded-lg border-r-4 border-teal-500">
+                    <h3 class="font-bold mb-1 text-slate-700">آناتومی درآمدهای عملیاتی</h3>
+                    <p class="text-slate-600">درآمدهای عملیاتی از سه بخش اصلی تشکیل شده‌اند: <strong class="text-teal-600">خدمات گردشگری پویا</strong> (تله‌کابین، سورتمه، ورودی)، <strong class="text-sky-600">فروش املاک</strong> و <strong class="text-indigo-600">خدمات ثابت</strong> (شارژ، عوارض، اجاره). شما می‌توانید با تغییر پارامترهای بخش گردشگری، تأثیر آن را بر کل درآمدها مشاهده کنید.</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border-r-4 border-rose-500">
+                    <h3 class="font-bold mb-1 text-slate-700">مبنای تخصیص بودجه: سود خالص</h3>
+                    <p class="text-slate-600">بودجه در دسترس برای پروژه‌ها، <strong class="text-rose-600">سود خالص نهایی</strong> است. این عدد از کسر تمام هزینه‌ها (شامل بهای تمام شده، هزینه‌های عمومی و اداری، مالیات و...) از مجموع درآمدهای عملیاتی به دست می‌آید و ملاک اصلی برای تأمین مالی برنامه ۵ ساله است.</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Control Panel Card -->
+        <div id="control-panel" class="card mb-6 transition-colors duration-300">
+            <div id="control-panel-header" class="flex justify-between items-center cursor-pointer">
+                <div class="flex items-center">
+                    <h2 class="text-xl font-bold text-slate-800">کنترل پنل سناریوسازی مالی</h2>
+                    <span id="panel-hint-text" class="text-xs text-slate-400 font-normal mr-2 transition-opacity duration-300">(برای باز کردن کلیک کنید)</span>
+                     <svg id="control-panel-arrow" class="w-6 h-6 mr-3 text-slate-500 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <button id="reset-button" class="reset-btn">بازنشانی</button>
+            </div>
+            <div id="control-panel-body">
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+                    <!-- Ticket Count Sliders -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="telecabin1-tickets" class="font-bold text-slate-700">تعداد بلیط تله‌کابین خط ۱</label>
+                            <span id="telecabin1-tickets-value" class="font-bold text-lg bg-sky-100 text-sky-700 px-2 rounded"></span>
+                        </div>
+                        <input type="range" id="telecabin1-tickets" min="200000" max="2000000" step="10000" class="slider" style="--thumb-color:#0ea5e9;">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="telecabin2-tickets" class="font-bold text-slate-700">تعداد بلیط تله‌کابین خط ۲</label>
+                            <span id="telecabin2-tickets-value" class="font-bold text-lg bg-sky-100 text-sky-700 px-2 rounded"></span>
+                        </div>
+                        <input type="range" id="telecabin2-tickets" min="200000" max="2000000" step="10000" class="slider" style="--thumb-color:#0ea5e9;">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="sleigh-tickets" class="font-bold text-slate-700">تعداد بلیط سورتمه</label>
+                            <span id="sleigh-tickets-value" class="font-bold text-lg bg-sky-100 text-sky-700 px-2 rounded"></span>
+                        </div>
+                        <input type="range" id="sleigh-tickets" min="100000" max="1000000" step="10000" class="slider" style="--thumb-color:#0ea5e9;">
+                    </div>
+    
+                    <!-- Price Sliders -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="telecabin-price" class="font-bold text-slate-700">قیمت بلیط تله‌کابین (هزار تومان)</label>
+                            <span id="telecabin-price-value" class="font-bold text-lg text-indigo-700"></span>
+                        </div>
+                        <input type="range" id="telecabin-price" min="250" max="1000" step="10" class="slider" style="--thumb-color:#4f46e5;">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="sleigh-price" class="font-bold text-slate-700">قیمت بلیط سورتمه (هزار تومان)</label>
+                            <span id="sleigh-price-value" class="font-bold text-lg text-purple-700"></span>
+                        </div>
+                        <input type="range" id="sleigh-price" min="250" max="1000" step="10" class="slider" style="--thumb-color:#7e22ce;">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="entrance-fee" class="font-bold text-slate-700">هزینه درب ورودی (هزار تومان)</label>
+                            <span id="entrance-fee-value" class="font-bold text-lg text-pink-700"></span>
+                        </div>
+                        <input type="range" id="entrance-fee" min="200" max="1000" step="10" class="slider" style="--thumb-color:#be185d;">
+                    </div>
+                    
+                    <!-- Inflation Rate Slider -->
+                    <div class="lg:col-span-3">
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="inflation-rate" class="font-bold text-slate-700">ضریب افزایش سالانه درآمد و هزینه (تورم)</label>
+                            <span id="inflation-rate-value" class="font-bold text-lg bg-amber-100 text-amber-700 px-2 rounded"></span>
+                        </div>
+                        <input type="range" id="inflation-rate" min="0" max="100" step="1" class="slider" style="--thumb-color:#d97706;">
+                    </div>
+                 </div>
+            </div>
+        </div>
+
+
+        <!-- Results Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="card text-center flex flex-col justify-center">
+                <h3 class="text-lg font-semibold text-slate-500">مجموع درآمد سالانه (با احتساب تورم)</h3>
+                <p id="total-revenue-value" class="text-4xl font-extrabold my-2 text-teal-600"></p>
+                <p class="text-xs text-slate-400">میلیارد تومان</p>
+            </div>
+            <div class="card text-center flex flex-col justify-center">
+                <h3 class="text-lg font-semibold text-slate-500">مجموع هزینه سالانه (با احتساب تورم)</h3>
+                <p id="total-cost-value" class="text-4xl font-extrabold my-2 text-rose-600"></p>
+                 <p class="text-xs text-slate-400">میلیارد تومان</p>
+            </div>
+            <div class="card text-center flex flex-col justify-center bg-slate-800 text-white">
+                <h3 class="text-lg font-semibold text-slate-300">سود خالص نهایی برای پروژه‌ها</h3>
+                <p id="net-profit-value" class="text-4xl font-extrabold my-2 text-emerald-400"></p>
+                 <p class="text-xs text-slate-400">بودجه سالانه برای هزینه در پروژه‌های زیرساختی</p>
+            </div>
+        </div>
+
+        <!-- KPI Section -->
+        <div class="card mb-6">
+             <h2 class="text-xl font-bold text-slate-700 text-center mb-4">شاخص‌های کلیدی عملکرد (KPIs)</h2>
+             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="kpi-card bg-slate-50 rounded-lg">
+                    <h3 class="font-bold text-slate-600 text-sm mb-2">ترکیب سبد درآمدی</h3>
+                    <div class="w-full h-24"> <canvas id="revenue-mix-chart"></canvas> </div>
+                </div>
+                 <div class="kpi-card bg-slate-50 rounded-lg has-overlay">
+                    <h3 class="font-bold text-slate-600 text-sm mb-2">شاخص پوشش هزینه پروژه</h3>
+                    <p id="kpi-coverage-index" class="text-4xl font-extrabold text-blue-600 my-2"></p>
+                    <p class="text-xs text-slate-500">توانایی سود برای پوشش هزینه متوسط سالانه</p>
+                     <div class="kpi-overlay">
+                        <p class="text-xs text-center leading-relaxed">
+                            <strong>فرمول: </strong> (سود خالص / هزینه متوسط سالانه) * ۱۰۰
+                            <br>
+                            این شاخص نشان می‌دهد سود خالص چند درصد هزینه <strong class="text-amber-400">متوسط سالانه</strong> پروژه‌ها را پوشش می‌دهد.
+                        </p>
+                    </div>
+                </div>
+                 <div class="kpi-card bg-slate-50 rounded-lg has-overlay">
+                    <h3 class="font-bold text-slate-600 text-sm mb-2">هزینه ناشی از تورم</h3>
+                    <p id="kpi-inflation-cost" class="text-4xl font-extrabold text-amber-600 my-2"></p>
+                    <p class="text-xs text-slate-400">میلیارد تومان</p>
+                    <p class="text-xs text-slate-500 mt-1">افزایش هزینه عملیاتی به دلیل تورم</p>
+                    <div class="kpi-overlay">
+                         <p class="text-xs text-center leading-relaxed">
+                            <strong>فرمول: </strong> (کل هزینه‌های پایه * نرخ تورم)
+                            <br>
+                            این عدد نشان می‌دهد تورم چه میزان هزینه اضافی بر کل هزینه‌های عملیاتی (<strong class="text-amber-400">بهای تمام شده، عمومی و...</strong>) تحمیل می‌کند.
+                        </p>
+                    </div>
+                </div>
+                <div class="kpi-card bg-slate-50 rounded-lg has-overlay">
+                    <h3 class="font-bold text-slate-600 text-sm mb-2">حاشیه سود عملیاتی</h3>
+                     <p id="kpi-operational-margin" class="text-4xl font-extrabold text-green-600 my-2"></p>
+                    <p class="text-xs text-slate-500">سودآوری بخش خدمات گردشگری</p>
+                    <div class="kpi-overlay">
+                         <p class="text-xs text-center leading-relaxed">
+                            <strong>فرمول: </strong> ((درآمد گردشگری - هزینه‌های عملیاتی) / درآمد گردشگری) * ۱۰۰
+                            <br>
+                            این شاخص کارایی بخش <strong class="text-amber-400">خدمات توریستی</strong> را بدون احتساب درآمدهای غیرعملیاتی (مثل فروش املاک) می‌سنجد.
+                        </p>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <!-- Financial Analysis Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card">
+                <h3 class="text-xl font-bold text-slate-700 text-center mb-4">مقایسه هزینه پروژه‌ها با بودجه سالانه</h3>
+                <div class="relative h-[400px]">
+                     <canvas id="financial-chart"></canvas>
+                 </div>
+            </div>
+            <div id="analysis-card" class="card flex flex-col justify-center items-center text-center transition-colors duration-500">
+                <div id="analysis-icon" class="text-6xl mb-4"></div>
+                <h3 id="analysis-title" class="text-2xl font-extrabold mb-2"></h3>
+                <p id="analysis-text" class="text-slate-600 leading-relaxed max-w-md"></p>
+            </div>
+        </div>
+
+        <!-- Project Cost Breakdown Section -->
+        <div class="card mt-6">
+            <h2 class="text-2xl font-bold text-center text-slate-700 mb-2">تحلیل و تفکیک هزینه‌های کلان پروژه</h2>
+            <p class="text-center text-slate-500 text-sm mb-6 max-w-2xl mx-auto">این بخش، بودجه کل مورد نیاز برای تکمیل تمامی پروژه‌های زیرساختی و نیمه‌تمام طی ۵ سال را به تفکیک دسته‌بندی‌های اصلی نمایش می‌دهد. مجموع کل هزینه‌ها تقریباً ۵,۹۸۶ میلیارد تومان است.</p>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 items-center">
+                <div class="md:col-span-2">
+                    <div class="relative h-[300px] w-full">
+                        <canvas id="cost-breakdown-chart"></canvas>
+                    </div>
+                </div>
+                <div id="cost-details" class="md:col-span-3 space-y-3">
+                    <!-- Details will be populated by JS -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cumulative Analysis Chart Section -->
+        <div class="card mt-6">
+            <h2 class="text-2xl font-bold text-center text-slate-700 mb-6">تحلیل تجمعی بودجه و هزینه‌ها در افق ۵ ساله</h2>
+            <div class="relative h-[400px]">
+                 <canvas id="cumulative-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- 5-Year Plan & Cash Flow Table -->
+        <div class="card mt-6">
+             <h2 class="text-2xl font-bold text-center text-slate-700 mb-6">برنامه زمان‌بندی و جریان نقدینگی ۵ ساله</h2>
+             <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg">
+                    <thead class="bg-slate-800 text-white">
+                        <tr>
+                            <th class="text-right p-3 font-semibold">سال</th>
+                            <th class="text-right p-3 font-semibold">پروژه‌های اصلی سال</th>
+                            <th class="text-right p-3 font-semibold">هزینه پروژه‌ها</th>
+                            <th class="text-right p-3 font-semibold">بودجه تخصیص یافته</th>
+                            <th class="text-right p-3 font-semibold">مازاد / کسری سالانه</th>
+                            <th class="text-right p-3 font-semibold">ذخیره نقدینگی انباشته</th>
+                        </tr>
+                    </thead>
+                    <tbody id="financial-table-body" class="text-slate-700">
+                       <!-- Dynamic rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-white text-center p-4 mt-8 border-t">
+        <p class="text-slate-600">تهیه شده توسط 
+            <span class="tooltip footer-tooltip font-bold text-slate-700">گروه سپینود
+                <span class="tooltiptext">
+                    تحلیل و طراحی: حمیدرضا ترابی
+                    <br>
+                    <span class="opacity-80">hr.torabii@gmail.com</span>
+                </span>
+            </span>
+             - شهریور ماه ۱۴۰۴
+        </p>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+window.focus();
+            // --- DOM Elements ---
+            const sliders = {
+                telecabin1Tickets: document.getElementById('telecabin1-tickets'),
+                telecabin2Tickets: document.getElementById('telecabin2-tickets'),
+                sleighTickets: document.getElementById('sleigh-tickets'),
+                telecabinPrice: document.getElementById('telecabin-price'),
+                sleighPrice: document.getElementById('sleigh-price'),
+                entranceFee: document.getElementById('entrance-fee'),
+                inflationRate: document.getElementById('inflation-rate'),
+            };
+
+            const displays = {
+                telecabin1Tickets: document.getElementById('telecabin1-tickets-value'),
+                telecabin2Tickets: document.getElementById('telecabin2-tickets-value'),
+                sleighTickets: document.getElementById('sleigh-tickets-value'),
+                telecabinPrice: document.getElementById('telecabin-price-value'),
+                sleighPrice: document.getElementById('sleigh-price-value'),
+                entranceFee: document.getElementById('entrance-fee-value'),
+                inflationRate: document.getElementById('inflation-rate-value'),
+                totalRevenue: document.getElementById('total-revenue-value'),
+                totalCost: document.getElementById('total-cost-value'),
+                netProfit: document.getElementById('net-profit-value'),
+                kpiCoverage: document.getElementById('kpi-coverage-index'),
+                kpiInflation: document.getElementById('kpi-inflation-cost'),
+                kpiMargin: document.getElementById('kpi-operational-margin'),
+            };
+            
+            const analysisCard = {
+                card: document.getElementById('analysis-card'),
+                icon: document.getElementById('analysis-icon'),
+                title: document.getElementById('analysis-title'),
+                text: document.getElementById('analysis-text'),
+            };
+
+            const tableBody = document.getElementById('financial-table-body');
+            const financialChartCanvas = document.getElementById('financial-chart').getContext('2d');
+            const revenueMixChartCanvas = document.getElementById('revenue-mix-chart').getContext('2d');
+            const cumulativeChartCanvas = document.getElementById('cumulative-chart').getContext('2d');
+            const resetButton = document.getElementById('reset-button');
+            Chart.defaults.font.family = "'Vazirmatn', sans-serif";
+
+            // --- Financial & Project Constants ---
+            const BASE_VALUES = {
+                propertySalesRevenue: 818.8,
+                staticServiceRevenue: 394.0 + 17.9 + 73.1, 
+                otherRevenues: 1.5 + 24.4,
+                totalCosts: 566 + 156 + 16 + 113,
+                operationalCosts: 566 + 156, // COGS + SG&A
+                baseTelecabin1Tickets: 587054,
+                baseTelecabin2Tickets: 600000,
+                baseSleighTickets: 261067,
+                baseEntranceCount: 301242 + 286714,
+            };
+            
+            // UPDATED: Project costs are now based on the new total of 5,986.2B Toman, distributed across 5 years.
+            const PROJECT_COSTS = [1102.4, 1070.1, 1066.9, 1209.5, 1537.3];
+            const YEARS = ['۱۴۰۵', '۱۴۰۶', '۱۴۰۷', '۱۴۰۸', '۱۴۰۹'];
+            const YEARLY_PROJECT_DESCRIPTIONS = [
+                'تکمیل زیرساخت‌های اصلی و شروع پروژه‌های جدید',
+                'تکمیل فاضلاب، ورودی‌ها و شروع پروژه زهکشی',
+                'ادامه پروژه زهکشی و تکمیل تصفیه‌خانه',
+                'تکمیل زهکشی و شروع پروژه‌های راه‌سازی و نیروگاه',
+                'تکمیل نهایی پروژه‌های راه‌سازی و نیروگاه',
+            ];
+            const YEARLY_PROJECT_DETAILS_HTML = [
+                `تکمیل <strong class="text-green-400">۱۰۰٪</strong> آب، برق، گاز و ساختمان‌ها <br> شروع قدرتمند فاضلاب با پیشرفت <strong class="text-blue-400">۶۰٪</strong>.`,
+                `تکمیل شبکه فاضلاب تا <strong class="text-green-400">۱۰۰٪</strong> <br> شروع پروژه زهکشی با پیشرفت <strong class="text-blue-400">۲۵٪</strong>.`,
+                `پیشرفت عمده زهکشی تا <strong class="text-yellow-400">۸۰٪</strong> <br> تکمیل تصفیه‌خانه فاضلاب تا <strong class="text-green-400">۱۰۰٪</strong>.`,
+                `تکمیل زهکشی تا <strong class="text-green-400">۱۰۰٪</strong> <br> شروع راه‌سازی (<strong class="text-blue-400">۶۰٪</strong>) و نیروگاه (<strong class="text-blue-400">۲۷٪</strong>).`,
+                `تکمیل نهایی راه‌سازی تا <strong class="text-green-400">۱۰۰٪</strong> <br> تکمیل پروژه نیروگاه تا <strong class="text-green-400">۱۰۰٪</strong>.`
+            ];
+
+
+            // --- Chart.js Instances ---
+            let financialChart = new Chart(financialChartCanvas, {
+                type: 'bar',
+                data: { labels: YEARS, datasets: [
+                    { label: 'هزینه پروژه‌ها', data: PROJECT_COSTS, backgroundColor: '#ef4444', borderRadius: 4 },
+                    { label: 'بودجه تخصیص یافته', data: [], backgroundColor: '#14b8a6', borderRadius: 4 }
+                ]},
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: v => `${v.toLocaleString('fa-IR')} B` } } },
+                    plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toLocaleString('fa-IR')} میلیارد تومان` } } }
+                }
+            });
+
+            let revenueMixChart = new Chart(revenueMixChartCanvas, {
+                type: 'doughnut',
+                data: { labels: ['خدمات گردشگری', 'فروش املاک', 'خدمات ثابت'], datasets: [{ data: [], backgroundColor: ['#2dd4bf', '#38bdf8', '#a78bfa'], borderColor: '#f1f5f9', borderWidth: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '70%', 
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: function(context) {
+                            let label = context.label || '';
+                            const value = context.parsed;
+                            return `${label}: ${value.toLocaleString('fa-IR', {maximumFractionDigits:0})} میلیارد تومان`;
+                        }}}
+                    } 
+                }
+            });
+
+            let cumulativeChart = new Chart(cumulativeChartCanvas, {
+                type: 'line',
+                data: {
+                    labels: YEARS,
+                    datasets: [
+                        {
+                            label: 'هزینه تجمعی پروژه‌ها',
+                            data: [],
+                            borderColor: '#f43f5e',
+                            backgroundColor: 'rgba(244, 63, 94, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#f43f5e'
+                        },
+                        {
+                            label: 'بودجه تجمعی در دسترس',
+                            data: [],
+                            borderColor: '#0d9488',
+                            backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#0d9488',
+                            borderDash: [5, 5] // Dashed line
+                        }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: v => `${v.toLocaleString('fa-IR')} B` } } },
+                    plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toLocaleString('fa-IR', {maximumFractionDigits: 0})} میلیارد تومان` } } }
+                }
+            });
+            
+            // --- Table Tooltip Logic ---
+            const tableTooltipPopup = document.createElement('div');
+            tableTooltipPopup.id = 'table-tooltip-popup';
+            document.body.appendChild(tableTooltipPopup);
+            
+            // --- Core Calculation Logic ---
+            function calculateFinance() {
+                const telecabinPrice = parseFloat(sliders.telecabinPrice.value);
+                const sleighPrice = parseFloat(sliders.sleighPrice.value);
+                const entranceFee = parseFloat(sliders.entranceFee.value);
+                const telecabin1Tickets = parseInt(sliders.telecabin1Tickets.value);
+                const telecabin2Tickets = parseInt(sliders.telecabin2Tickets.value);
+                const sleighTickets = parseInt(sliders.sleighTickets.value);
+                const inflation = parseFloat(sliders.inflationRate.value) / 100;
+
+                const totalNewTickets = telecabin1Tickets + telecabin2Tickets + sleighTickets;
+                const totalBaseTickets = BASE_VALUES.baseTelecabin1Tickets + BASE_VALUES.baseTelecabin2Tickets + BASE_VALUES.baseSleighTickets;
+                const entranceRatio = totalBaseTickets > 0 ? BASE_VALUES.baseEntranceCount / totalBaseTickets : 0;
+                const newEntranceCount = totalNewTickets * entranceRatio;
+
+                const newTelecabinRevenue = ((telecabin1Tickets + telecabin2Tickets) * telecabinPrice) / 1000000;
+                const newSleighRevenue = (sleighTickets * sleighPrice) / 1000000;
+                const newEntranceRevenue = (newEntranceCount * entranceFee) / 1000000;
+                const dynamicTourismRevenue = newTelecabinRevenue + newSleighRevenue + newEntranceRevenue;
+
+                const baseTotalRevenue = BASE_VALUES.propertySalesRevenue + BASE_VALUES.staticServiceRevenue + 
+                                       BASE_VALUES.otherRevenues + dynamicTourismRevenue;
+
+                const inflatedTotalRevenue = baseTotalRevenue * (1 + inflation);
+                const inflatedTotalCosts = BASE_VALUES.totalCosts * (1 + inflation);
+                const finalNetProfit = inflatedTotalRevenue - inflatedTotalCosts;
+                
+                updateUI(finalNetProfit, inflatedTotalRevenue, inflatedTotalCosts, dynamicTourismRevenue, inflation);
+            }
+
+            // --- UI Update Logic ---
+            function updateUI(netProfit, totalRevenue, totalCost, dynamicTourismRevenue, inflation) {
+                // Update slider displays
+                displays.telecabin1Tickets.textContent = parseInt(sliders.telecabin1Tickets.value).toLocaleString('fa-IR');
+                displays.telecabin2Tickets.textContent = parseInt(sliders.telecabin2Tickets.value).toLocaleString('fa-IR');
+                displays.sleighTickets.textContent = parseInt(sliders.sleighTickets.value).toLocaleString('fa-IR');
+                displays.telecabinPrice.textContent = parseInt(sliders.telecabinPrice.value).toLocaleString('fa-IR');
+                displays.sleighPrice.textContent = parseInt(sliders.sleighPrice.value).toLocaleString('fa-IR');
+                displays.entranceFee.textContent = parseInt(sliders.entranceFee.value).toLocaleString('fa-IR');
+                displays.inflationRate.textContent = `${parseInt(sliders.inflationRate.value).toLocaleString('fa-IR')}%`;
+
+                Object.values(sliders).forEach(slider => {
+                    const value = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+                    const thumbColor = slider.style.getPropertyValue('--thumb-color');
+                    slider.style.background = `linear-gradient(to left, ${thumbColor} ${value}%, #e2e8f0 ${value}%)`;
+                });
+
+                // Update main metric cards
+                displays.totalRevenue.textContent = totalRevenue.toLocaleString('fa-IR', { maximumFractionDigits: 1 });
+                displays.totalCost.textContent = totalCost.toLocaleString('fa-IR', { maximumFractionDigits: 1 });
+                displays.netProfit.textContent = netProfit.toLocaleString('fa-IR', { maximumFractionDigits: 1 });
+
+                // Update table
+                tableBody.innerHTML = '';
+                let cumulativeSurplus = 0;
+                YEARS.forEach((year, i) => {
+                    const cost = PROJECT_COSTS[i];
+                    const annualSurplus = netProfit - cost;
+                    cumulativeSurplus += annualSurplus;
+                    const surplusColor = annualSurplus >= 0 ? 'text-green-600' : 'text-red-600';
+                    const cumulativeColor = cumulativeSurplus >= 0 ? 'text-blue-700' : 'text-orange-600';
+                    
+                    const row = document.createElement('tr');
+                    row.className = 'border-b';
+                    row.innerHTML = `
+                        <td class="p-3 font-bold">${year}</td>
+                        <td class="p-3 text-sm text-slate-600">${YEARLY_PROJECT_DESCRIPTIONS[i]}</td>
+                        <td class="p-3">${cost.toLocaleString('fa-IR')}</td>
+                        <td class="p-3 font-semibold text-teal-700">${netProfit.toLocaleString('fa-IR', { maximumFractionDigits: 1 })}</td>
+                        <td class="p-3 font-bold ${surplusColor}">${annualSurplus.toLocaleString('fa-IR', { maximumFractionDigits: 1 })}</td>
+                        <td class="p-3 font-extrabold ${cumulativeColor}">${cumulativeSurplus.toLocaleString('fa-IR', { maximumFractionDigits: 1 })}</td>
+                    `;
+                    
+                    row.addEventListener('mouseenter', (event) => {
+                        tableTooltipPopup.innerHTML = YEARLY_PROJECT_DETAILS_HTML[i];
+                        tableTooltipPopup.style.opacity = '1';
+                    });
+                    row.addEventListener('mousemove', (event) => {
+                        tableTooltipPopup.style.top = `${event.clientY + 15}px`;
+                        tableTooltipPopup.style.left = `${event.clientX - tableTooltipPopup.offsetWidth - 15}px`;
+                    });
+                    row.addEventListener('mouseleave', () => {
+                         tableTooltipPopup.style.opacity = '0';
+                    });
+                    
+                    tableBody.appendChild(row);
+                });
+                
+                // Update charts
+                financialChart.data.datasets[1].data = Array(5).fill(netProfit);
+                financialChart.update();
+                
+                const cumulativeCosts = PROJECT_COSTS.reduce((acc, cost, i) => {
+                    acc.push(parseFloat(((acc[i-1] || 0) + cost).toFixed(1)));
+                    return acc;
+                }, []);
+                const cumulativeBudgets = YEARS.map((_, i) => parseFloat((netProfit * (i + 1)).toFixed(1)));
+                cumulativeChart.data.datasets[0].data = cumulativeCosts;
+                cumulativeChart.data.datasets[1].data = cumulativeBudgets;
+                cumulativeChart.update();
+                
+                revenueMixChart.data.datasets[0].data = [dynamicTourismRevenue, BASE_VALUES.propertySalesRevenue, BASE_VALUES.staticServiceRevenue];
+                revenueMixChart.update();
+
+                // Update KPIs
+                const kpiMarginEl = displays.kpiMargin;
+                const avgProjectCost = PROJECT_COSTS.reduce((a, b) => a + b, 0) / PROJECT_COSTS.length;
+                displays.kpiCoverage.textContent = `${((netProfit / avgProjectCost) * 100).toFixed(0)}%`;
+                displays.kpiInflation.textContent = `${(BASE_VALUES.totalCosts * inflation).toLocaleString('fa-IR', {maximumFractionDigits:0})}`;
+                const operationalMargin = dynamicTourismRevenue > 0 ? ((dynamicTourismRevenue - (BASE_VALUES.operationalCosts * (1+inflation))) / dynamicTourismRevenue) * 100 : 0;
+                kpiMarginEl.textContent = `${operationalMargin.toFixed(1)}%`;
+                
+                if (operationalMargin < 0) {
+                    kpiMarginEl.classList.remove('text-green-600');
+                    kpiMarginEl.classList.add('text-red-600');
+                } else {
+                    kpiMarginEl.classList.remove('text-red-600');
+                    kpiMarginEl.classList.add('text-green-600');
+                }
+
+
+                // Update analysis card
+                if (cumulativeSurplus > 1000) {
+                    analysisCard.card.className = 'card flex flex-col justify-center items-center text-center bg-emerald-50 border-emerald-500 border-r-4';
+                    analysisCard.icon.textContent = '✅';
+                    analysisCard.title.textContent = 'وضعیت مالی: بسیار مطلوب';
+                    analysisCard.text.innerHTML = `با سود خالص سالانه <strong class="text-emerald-700">${netProfit.toLocaleString('fa-IR', {maximumFractionDigits:0})} میلیارد تومان</strong>، تمام پروژه‌ها به راحتی تأمین مالی شده و یک ذخیره نقدینگی انباشته قدرتمند ایجاد می‌شود.`;
+                } else if (cumulativeSurplus > 0) {
+                     analysisCard.card.className = 'card flex flex-col justify-center items-center text-center bg-sky-50 border-sky-500 border-r-4';
+                    analysisCard.icon.textContent = '👍';
+                    analysisCard.title.textContent = 'وضعیت مالی: قابل قبول';
+                    analysisCard.text.innerHTML = `سود خالص <strong class="text-sky-700">${netProfit.toLocaleString('fa-IR', {maximumFractionDigits:0})} میلیارد تومان</strong> برای پوشش هزینه‌ها کافی است، اما ذخیره نقدینگی محدود است. مدیریت هزینه‌ها اهمیت بالایی دارد.`;
+                } else {
+                     analysisCard.card.className = 'card flex flex-col justify-center items-center text-center bg-rose-50 border-rose-500 border-r-4';
+                    analysisCard.icon.textContent = '⚠️';
+                    analysisCard.title.textContent = 'وضعیت مالی: بحرانی';
+                    analysisCard.text.innerHTML = `بودجه سالانه <strong class="text-rose-700">${netProfit.toLocaleString('fa-IR', {maximumFractionDigits:0})} میلیارد تومان</strong> برای پوشش هزینه‌های سنگین پروژه‌ها کافی نیست و پروژه با کسری بودجه <strong class="text-rose-700">${Math.abs(cumulativeSurplus).toLocaleString('fa-IR', {maximumFractionDigits:0})} میلیارد تومانی</strong> مواجه خواهد شد.`;
+                }
+            }
+
+            // --- Cost Breakdown Chart Setup ---
+            function setupCostBreakdownChart() {
+                const costData = {
+                    labels: ['پست برق و نیروگاه', 'زهکشی و آب‌های سطحی', 'شبکه فاضلاب و تصفیه‌خانه', 'راه‌سازی', 'پروژه‌های نیمه تمام مسکونی', 'زیرساخت‌های اصلی', 'دسترسی و ورودی‌ها', 'ساختمان‌های خدماتی'],
+                    data: [1592.0, 1473.3, 1200.0, 541.1, 518.9, 299.2, 212.6, 149.2],
+                    colors: ['#4f46e5', '#06b6d4', '#10b981', '#64748b', '#ef4444', '#3b82f6', '#a855f7', '#f97316']
+                };
+
+                new Chart(document.getElementById('cost-breakdown-chart').getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: costData.labels, datasets: [{ data: costData.data, backgroundColor: costData.colors, borderColor: '#ffffff', borderWidth: 2, hoverOffset: 8 }] },
+                    options: { responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) {
+                            let label = context.label || '';
+                            const value = context.parsed;
+                            const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value.toLocaleString('fa-IR')} میلیارد تومان (${percentage}%)`;
+                        }}}}
+                    }
+                });
+                
+                const detailsContainer = document.getElementById('cost-details');
+                const totalCost = costData.data.reduce((a, b) => a + b, 0);
+                detailsContainer.innerHTML = ''; // Clear previous details before adding new ones
+                costData.labels.forEach((label, index) => {
+                    const value = costData.data[index];
+                    const color = costData.colors[index];
+                    const percentage = ((value / totalCost) * 100).toFixed(1);
+                    detailsContainer.innerHTML += `<div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full ml-3" style="background-color: ${color};"></div>
+                        <div class="flex-1 flex justify-between items-center">
+                            <span class="font-semibold text-slate-700">${label}</span>
+                            <div class="text-right">
+                                <span class="font-bold text-slate-800">${value.toLocaleString('fa-IR')}</span>
+                                <span class="text-xs text-slate-500 mr-1">(${percentage}%)</span>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            }
+
+            // --- Collapsible Control Panel Logic ---
+            const controlPanel = document.getElementById('control-panel');
+            const controlPanelHeader = document.getElementById('control-panel-header');
+            const controlPanelBody = document.getElementById('control-panel-body');
+            const controlPanelArrow = document.getElementById('control-panel-arrow');
+            const panelHintText = document.getElementById('panel-hint-text');
+
+            function setPanelOpen(isOpen, isInstant = false) {
+                 if (isInstant) {
+                    controlPanelBody.style.transition = 'none';
+                    resetButton.style.transition = 'none';
+                } else {
+                    controlPanelBody.style.transition = 'max-height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out, border 0.5s ease-in-out';
+                    resetButton.style.transition = 'opacity 0.3s ease-in-out, visibility 0.3s ease-in-out';
+                }
+
+                if (isOpen) {
+                    controlPanel.classList.add('is-open');
+                    controlPanel.style.backgroundColor = '#ffffff'; // white
+                    controlPanelArrow.style.transform = 'rotate(180deg)';
+                    controlPanelBody.style.maxHeight = controlPanelBody.scrollHeight + "px";
+                    controlPanelBody.style.paddingTop = '1.5rem';
+                    controlPanelBody.style.marginTop = '1rem';
+                    controlPanelBody.style.borderTop = '1px solid #e2e8f0';
+                    resetButton.style.opacity = '1';
+                    resetButton.style.visibility = 'visible';
+                    panelHintText.style.opacity = '0';
+
+                } else {
+                    controlPanel.classList.remove('is-open');
+                    controlPanel.style.backgroundColor = '#f8fafc'; // slate-50
+                    controlPanelArrow.style.transform = 'rotate(0deg)';
+                    controlPanelBody.style.maxHeight = '0';
+                    controlPanelBody.style.paddingTop = '0';
+                    controlPanelBody.style.marginTop = '0';
+                    controlPanelBody.style.borderTop = '0';
+                    resetButton.style.opacity = '0';
+                    resetButton.style.visibility = 'hidden';
+                    panelHintText.style.opacity = '1';
+                }
+                
+                if (isInstant) {
+                     setTimeout(() => {
+                       controlPanelBody.style.transition = 'max-height 0.5s ease-in-out, padding 0.5s ease-in-out, margin 0.5s ease-in-out, border 0.5s ease-in-out';
+                       resetButton.style.transition = 'opacity 0.3s ease-in-out, visibility 0.3s ease-in-out';
+                    }, 50);
+                }
+            }
+            
+            controlPanelBody.addEventListener('transitionend', () => {
+                if(controlPanel.classList.contains('is-open')) {
+                    controlPanelBody.style.maxHeight = 'none'; // Allow content to reflow if window is resized
+                }
+            });
+
+
+            controlPanelHeader.addEventListener('click', (e) => {
+                if (!resetButton.contains(e.target)) {
+                    if (controlPanel.classList.contains('is-open')) {
+                         controlPanelBody.style.maxHeight = controlPanelBody.scrollHeight + "px";
+                         setTimeout(() => setPanelOpen(false), 10);
+                    } else {
+                        setPanelOpen(true);
+                    }
+                }
+            });
+
+
+            // --- Initial Setup ---
+            function resetValues() {
+                sliders.telecabin1Tickets.value = BASE_VALUES.baseTelecabin1Tickets;
+                sliders.telecabin2Tickets.value = BASE_VALUES.baseTelecabin2Tickets;
+                sliders.sleighTickets.value = BASE_VALUES.baseSleighTickets;
+                sliders.telecabinPrice.value = 550;
+                sliders.sleighPrice.value = 500;
+                
+                const baseEntranceRevenue = 162.1;
+                const avgEntranceFee = (baseEntranceRevenue * 1000) / (BASE_VALUES.baseEntranceCount / 1000);
+                sliders.entranceFee.value = avgEntranceFee > 1000 ? 1000 : (avgEntranceFee < 200 ? 200 : avgEntranceFee);
+
+                sliders.inflationRate.value = 0;
+                
+                calculateFinance();
+            }
+
+            function initialSetup() {
+                setupCostBreakdownChart();
+                Object.values(sliders).forEach(slider => slider.addEventListener('input', calculateFinance));
+                resetButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    resetValues();
+                });
+                resetValues();
+                setTimeout(() => setPanelOpen(false, true), 100); 
+            }
+
+            initialSetup();
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace') {
+        const isEditable = e.target.isContentEditable || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+        if (!isEditable) {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'NAVIGATE_BACK' }, '*');
+        }
+    }
+});
+        });
+    </script>
+
+</body>
+</html>
