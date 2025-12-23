@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد مدیریتی | برآورد هزینه های تکمیل زیرساخت نمک‌آبرود</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8fafc; /* Slate 50 */
+            color: #334155; /* Slate 700 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+        }
+        .main-card {
+             background-color: white;
+             border-radius: 1.5rem; /* Increased border radius */
+             padding: 2rem;
+             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+             border: 1px solid #e2e8f0; /* Slate 200 */
+             position: relative; /* Needed for hover overlay */
+             overflow: hidden; /* Needed for hover overlay */
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            color: #1e293b; /* Slate 800 */
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            margin-left: 1rem;
+            color: #4f46e5; /* Indigo 600 */
+        }
+        .section-subtitle {
+            color: #64748b; /* Slate 500 */
+            max-w: 4xl;
+            margin-bottom: 2.5rem;
+        }
+        
+        /* Custom Hover Card for Management Info */
+        .info-card {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 4px solid;
+        }
+        .info-card .info-hover-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.98);
+            color: #1e293b;
+            padding: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .info-card:hover .info-hover-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .info-hover-content h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .info-hover-content p {
+            font-size: 0.875rem;
+        }
+
+        /* New Hover Effect for Major Projects */
+        .details-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            background-color: white;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 180px;
+        }
+        .details-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .details-card-front {
+            transition: opacity 0.3s ease-in-out;
+            text-align: center;
+        }
+        .details-card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(4px);
+            pointer-events: none;
+        }
+        .details-card:hover .details-card-front {
+            opacity: 0;
+        }
+        .details-card:hover .details-card-back {
+            opacity: 1;
+        }
+        .details-card-back h4 { font-weight: 900; font-size: 1.1rem; margin-bottom: 0.75rem; width: 100%; color: #1e293b; text-align: right;}
+        .details-card-back ul { list-style: none; padding: 0; width: 100%; }
+        .details-card-back li { font-size: 0.85rem; padding: 0.3rem 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+        .details-card-back li:last-child { border-bottom: none; }
+        .details-card-back span { font-weight: 700; color: #374151; }
+        
+        /* Transparent Hover for Breakdown Cards */
+        .breakdown-card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(2px);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* Allow hover on the card itself */
+        }
+        .main-card:hover .breakdown-card-overlay {
+            opacity: 1;
+        }
+
+        /* New Logo Styles based on user feedback */
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+        .logo {
+            height: 110px;
+            width: auto;
+            object-fit: contain;
+        }
+        .logo.center {
+            height: 220px;
+        }
+        .logo.right {
+            height: 120px;
+        }
+
+        /* Footer Hover Tooltip */
+        .author-hover {
+            position: relative;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 4px;
+        }
+        .author-hover .tooltip {
+            position: absolute;
+            bottom: 150%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none;
+            width: max-content;
+            z-index: 10;
+        }
+        .author-hover:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Logos Section -->
+        <header class="mb-8">
+            <div class="logo-container">
+                <img src="https://uploadkon.ir/uploads/70c214_25sepiLogoo.png" alt="لوگو سپینود" class="logo">
+                <img src="https://uploadkon.ir/uploads/df5427_25NA-LOGO-copy.png" alt="لوگو نمک آبرود" class="logo center">
+                <img src="https://uploadkon.ir/uploads/611127_25OMS-LOGO-copy.png" alt="لوگو عمران مسکن شمال" class="logo right"> 
+            </div>
+        </header>
+
+        <!-- Main Title Banner -->
+        <section class="bg-stone-100 rounded-3xl py-8 px-4 text-center mb-12 border border-stone-200">
+             <h1 class="text-3xl md:text-4xl font-black text-slate-800 mb-3">داشبورد مدیریتی برآورد هزینه</h1>
+            <p class="text-lg text-slate-500">تحلیل جامع هزینه‌های تکمیل زیرساخت‌ها و پروژه‌های نیمه‌تمام</p>
+        </section>
+        
+        <!-- Total Cost Card -->
+        <section class="text-center mb-12">
+            <div class="group relative max-w-md mx-auto">
+                <div class="absolute -inset-1 bg-gradient-to-r from-purple-200 to-indigo-200 rounded-full opacity-0 group-hover:opacity-100 transition duration-1000 blur-xl -z-10"></div>
+                <div class="relative bg-white rounded-3xl p-8 shadow-lg border border-slate-200 transition-all duration-300 hover:shadow-2xl hover:scale-105">
+                    <p class="text-xl text-slate-600">مجموع کل هزینه نهایی مورد نیاز</p>
+                    <p class="text-6xl font-black text-slate-800 tracking-tight my-3">۵,۹۸۶.۲</p>
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-bold">میلیارد تومان</span>
+                        <span class="text-slate-400 text-sm">(برآورد نهایی)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- High-Level Breakdown -->
+        <section class="mb-12">
+            <div class="text-center">
+                <h2 class="section-title justify-center"><i class="fa-solid fa-chart-pie"></i>نمای کلی سرمایه‌گذاری</h2>
+                <p class="section-subtitle mx-auto">
+                    تفکیک کلان بودجه نشان می‌دهد که سرمایه‌گذاری به سه بخش اصلی تقسیم می‌شود: پروژه‌های زیربنایی فرامحله‌ای، زیرساخت‌های داخلی محلات و هزینه‌های تکمیل پروژه‌های مسکونی نیمه‌تمام.
+                </p>
+            </div>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="main-card">
+                    <p class="text-xl font-bold text-slate-800 mb-2">پروژه‌های فرامحله‌ای</p>
+                    <p class="text-5xl font-black text-sky-600">۴,۶۲۷.۱ <span class="text-xl text-slate-500">م.ت</span></p>
+                    <div class="breakdown-card-overlay">
+                        <p class="text-right text-sm text-slate-600 leading-relaxed">
+                        شامل پروژه‌های کلانی مانند نیروگاه و تصفیه‌خانه که به کل شهرک خدمات‌رسانی می‌کنند و <span class="font-bold text-sky-700 bg-sky-100 px-2 py-1 rounded">۷۷.۳٪</span> از کل بودجه را تشکیل می دهد.
+                        </p>
+                    </div>
+                </div>
+                <div class="main-card">
+                    <p class="text-xl font-bold text-slate-800 mb-2">زیرساخت‌های داخل محلات</p>
+                    <p class="text-5xl font-black text-amber-600">۸۴۰.۲ <span class="text-xl text-slate-500">م.ت</span></p>
+                    <div class="breakdown-card-overlay">
+                         <p class="text-right text-sm text-slate-600 leading-relaxed">
+                        شامل تکمیل شبکه‌های آب، برق، گاز و راه‌سازی در داخل ۸ محله مسکونی است و <span class="font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded">۱۴.۰٪</span> از بودجه را به خود اختصاص می‌دهد.
+                        </p>
+                    </div>
+                </div>
+                 <div class="main-card">
+                    <p class="text-xl font-bold text-slate-800 mb-2">مسکونی نیمه‌تمام</p>
+                    <p class="text-5xl font-black text-red-600">۵۱۸.۹ <span class="text-xl text-slate-500">م.ت</span></p>
+                    <div class="breakdown-card-overlay">
+                         <p class="text-right text-sm text-slate-600 leading-relaxed">
+                        شامل هزینه تکمیل ویلاهای توسکا و پروژه باب‌الجواد است و <span class="font-bold text-red-700 bg-red-100 px-2 py-1 rounded">۸.۷٪</span> از بودجه را به خود اختصاص می‌دهد.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Key Cost Indicators -->
+        <section class="mb-12 main-card">
+            <div class="text-center">
+                <h2 class="section-title justify-center"><i class="fa-solid fa-ruler-combined"></i>شاخص‌های کلیدی هزینه (مبالغ واحد)</h2>
+                <p class="section-subtitle mx-auto">این بخش هزینه‌های واحد را برای هر متر مربع یا متر طول نمایش می‌دهد که مبنای اصلی تمام محاسبات تفکیکی است. برای مشاهده جزئیات، موس را روی هر کارت نگه دارید.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="info-card border-blue-500">
+                    <h3 class="font-bold text-lg mb-2 flex items-center"><i class="fa-solid fa-road text-blue-500 ml-2"></i> راه‌سازی (تومان/م.م)</h3>
+                    <div class="flex justify-between py-2 border-b"><span class="text-slate-600">سواره‌رو + جدول</span><span class="font-bold bg-blue-100 text-blue-800 px-3 py-1 rounded-full">۲,۷۴۰,۰۰۰</span></div>
+                    <div class="flex justify-between py-2"><span class="text-slate-600">پیاده‌رو</span><span class="font-bold bg-blue-100 text-blue-800 px-3 py-1 rounded-full">۱,۰۵۵,۰۰۰</span></div>
+                    <div class="info-hover-content"><h4>منبع هزینه</h4><p>بر اساس فهرست‌بهای ۱۴۰۲ و آنالیز پیمانکار</p></div>
+                </div>
+                <div class="info-card border-purple-500">
+                    <h3 class="font-bold text-lg mb-2 flex items-center"><i class="fa-solid fa-water text-purple-500 ml-2"></i> شبکه فاضلاب (تومان/م.ط)</h3>
+                    <div class="flex justify-between py-2"><span class="text-slate-600">هزینه لوله‌گذاری</span><span class="font-bold bg-purple-100 text-purple-800 px-3 py-1 rounded-full">۶,۵۰۰,۰۰۰</span></div>
+                    <div class="info-hover-content"><h4>نکته</h4><p>این هزینه واحد شامل حفاری، مصالح، لوله‌گذاری و اتصالات می‌باشد.</p></div>
+                </div>
+                <div class="info-card border-cyan-500">
+                    <h3 class="font-bold text-lg mb-2 flex items-center"><i class="fa-solid fa-hand-holding-droplet text-cyan-500 ml-2"></i> آبرسانی (تومان/م.ط)</h3>
+                    <div class="flex justify-between py-2 border-b"><span class="text-slate-600">مسکونی</span><span class="font-bold bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full">۴,۲۲۱,۶۴۲</span></div>
+                    <div class="flex justify-between py-2"><span class="text-slate-600">گردشگری</span><span class="font-bold bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full">۵,۹۱۰,۲۹۸</span></div>
+                    <div class="info-hover-content"><h4>مبنای محاسبه</h4><p>تفکیک هزینه بر اساس قطر لوله و نیاز آبی هر بخش</p></div>
+                </div>
+                <div class="info-card border-green-500">
+                    <h3 class="font-bold text-lg mb-2 flex items-center"><i class="fa-solid fa-fire text-green-500 ml-2"></i> گازرسانی (تومان/م.ط)</h3>
+                    <div class="flex justify-between py-2 border-b"><span class="text-slate-600">مسکونی</span><span class="font-bold bg-green-100 text-green-800 px-3 py-1 rounded-full">۵,۰۶۵,۹۷۰</span></div>
+                    <div class="flex justify-between py-2"><span class="text-slate-600">گردشگری</span><span class="font-bold bg-green-100 text-green-800 px-3 py-1 rounded-full">۶,۷۵۴,۶۲۶</span></div>
+                    <div class="info-hover-content"><h4>مبنای محاسبه</h4><p>تفکیک هزینه بر اساس فشار گاز و قطر لوله مورد نیاز</p></div>
+                </div>
+                <div class="info-card border-yellow-500">
+                    <h3 class="font-bold text-lg mb-2 flex items-center"><i class="fa-solid fa-lightbulb text-yellow-500 ml-2"></i> برق‌رسانی (تومان/م.ط)</h3>
+                    <div class="flex justify-between py-2 border-b"><span class="text-slate-600">شبکه مسکونی</span><span class="font-bold bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">۵,۹۱۰,۲۹۸</span></div>
+                    <div class="flex justify-between py-2"><span class="text-slate-600">شبکه گردشگری</span><span class="font-bold bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">۷,۵۹۸,۹۵۵</span></div>
+                    <div class="info-hover-content"><h4>نکته مدیریتی</h4><p>این هزینه فقط مربوط به شبکه است. هزینه پست و نیروگاه (۱,۵۹۲ میلیارد تومان) جداگانه محاسبه شده.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investment by Zone -->
+        <section class="mb-12 main-card">
+            <div class="text-center">
+                <h2 class="section-title justify-center"><i class="fa-solid fa-map-location-dot"></i>توزیع سرمایه‌گذاری در محلات</h2>
+                <p class="section-subtitle mx-auto">این نمودار بودجه مورد نیاز برای تکمیل زیرساخت‌های اصلی (راه، آب، برق و گاز) را به تفکیک هر محله و حوزه خدماتی نشان می‌دهد. محله ۸ با ۲۶۵.۸ میلیارد تومان، بیشترین سهم از سرمایه‌گذاری را به خود اختصاص داده است.</p>
+            </div>
+            <div class="chart-container" style="height: 500px;">
+                <canvas id="investmentByZone"></canvas>
+            </div>
+        </section>
+
+        <!-- Major Projects -->
+        <section class="mb-12 main-card">
+            <div class="text-center">
+                <h2 class="section-title justify-center"><i class="fa-solid fa-building-columns"></i>هزینه‌های پروژه‌های فرامحله‌ای</h2>
+                <p class="section-subtitle mx-auto">این پروژه‌های کلان و حیاتی، بخش عمده‌ای از بودجه کل را تشکیل می‌دهند. موس را روی هر کارت نگه دارید تا جزئیات نمایش داده شود.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="details-card">
+                    <div class="details-card-front">
+                        <h3 class="font-bold text-lg mb-2">💡 تکمیل پست‌های برق و نیروگاه</h3>
+                        <p class="text-4xl font-black text-gray-800">۱,۵۹۲.۰</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات پروژه برق</h4><ul><li>شبکه (۲۰kV و LV) <span>۴۶۲.۰ م.ت</span></li><li>پست‌ها و ایستگاه‌ها <span>۱۴۰.۰ م.ت</span></li><li>نیروگاه گازسوز <span>۴۴۸.۵ م.ت</span></li><li>سایر هزینه‌ها (بالاسری، بیمه و...) <span>۵۴۱.۵ م.ت</span></li><li>ظرفیت نیروگاه <span>۱۵ مگاوات</span></li></ul></div>
+                </div>
+                <div class="details-card">
+                    <div class="details-card-front">
+                        <h3 class="font-bold text-lg mb-2">🌊 زهکشی و هدایت آب‌های سطحی</h3>
+                        <p class="text-4xl font-black text-gray-800">۱,۴۷۳.۳</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات پروژه زهکشی</h4><ul><li>ساماندهی آبراهه‌ها <span>۲۳۲.۹ م.ت</span></li><li>خطوط انتقال GRP <span>۵۵۸.۴ م.ت</span></li><li>حوضچه‌های سرریز <span>۶۸.۲ م.ت</span></li><li>طول کل کانال‌ها <span>۳۸.۵ کیلومتر</span></li></ul></div>
+                </div>
+                <div class="details-card">
+                    <div class="details-card-front">
+                         <h3 class="font-bold text-lg mb-2">💧 شبکه فاضلاب و تصفیه‌خانه</h3>
+                         <p class="text-4xl font-black text-gray-800">۱,۲۰۰.۰</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات پروژه فاضلاب</h4><ul><li>هزینه لوله‌گذاری <span>۷۵۹ م.ت</span></li><li>هزینه تصفیه‌خانه <span>۱۲۹ م.ت</span></li><li>هزینه منهول‌ها <span>۳۱۲ م.ت</span></li><li>طول کل شبکه <span>۸۸ کیلومتر</span></li></ul></div>
+                </div>
+                <div class="details-card">
+                    <div class="details-card-front">
+                        <h3 class="font-bold text-lg mb-2">🏢 ساختمان‌های خدماتی</h3>
+                        <p class="text-4xl font-black text-gray-800">۱۴۹.۲</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات ساختمان‌ها</h4><ul><li>مرکز آتش‌نشانی <span>۱۳۳.۸ م.ت</span></li><li>درمانگاه <span>۱۵.۴ م.ت</span></li><li>زیربنای کل <span>۱,۲۰۰ م.م</span></li></ul></div>
+                </div>
+                <div class="details-card">
+                    <div class="details-card-front">
+                        <h3 class="font-bold text-lg mb-2">🚗 معبر دسترسی غربی</h3>
+                        <p class="text-4xl font-black text-gray-800">۱۰۸.۰</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات معبر غربی</h4><ul><li>مساحت کل <span>۳۲,۹۳۰ م.م</span></li><li>طول مسیر <span>۸۹۰ متر</span></li><li>شامل <span>روسازی، جدول، روشنایی</span></li></ul></div>
+                </div>
+                <div class="details-card">
+                    <div class="details-card-front">
+                         <h3 class="font-bold text-lg mb-2">🔄 اصلاح هندسی ورودی</h3>
+                         <p class="text-4xl font-black text-gray-800">۱۰۴.۶</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات ورودی شهرک</h4><ul><li>مساحت پل <span>۵,۷۰۰ م.م</span></li><li>طول پل <span>۷۶۰ متر</span></li><li>هزینه واحد <span>۱۶.۶ م.ت / م.م</span></li></ul></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Unfinished Residential Projects -->
+        <section class="mb-12 main-card">
+            <div class="text-center">
+                <h2 class="section-title justify-center"><i class="fa-solid fa-house-chimney-window"></i>هزینه‌های پروژه‌های مسکونی نیمه‌تمام</h2>
+                <p class="section-subtitle mx-auto">این بخش شامل برآورد هزینه مورد نیاز جهت تکمیل پروژه‌های مسکونی باقی‌مانده است.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="details-card">
+                    <div class="details-card-front">
+                        <h3 class="font-bold text-lg mb-2">🌲 ۳۶ ویلایی توسکا</h3>
+                        <p class="text-4xl font-black text-gray-800">۴۴۳.۹</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات پروژه توسکا</h4><ul><li>هزینه ساخت (۲۰,۷۳۰ م.م) <span>۴۱۴.۶ م.ت</span></li><li>هزینه محوطه‌سازی (۱۱,۷۱۲ م.م) <span>۲۹.۳ م.ت</span></li><li>متراژ کل ویلاها <span>۲۰,۷۳۰ متر مربع</span></li></ul></div>
+                </div>
+                <div class="details-card">
+                    <div class="details-card-front">
+                        <h3 class="font-bold text-lg mb-2">🕌 پروژه باب الجواد (مشهد)</h3>
+                        <p class="text-4xl font-black text-gray-800">۷۵.۰</p><p class="text-gray-500">میلیارد تومان</p>
+                    </div>
+                    <div class="details-card-back"><h4>جزئیات پروژه باب‌الجواد</h4><ul><li>درصد باقیمانده پروژه <span>~۵٪</span></li><li>کاربری <span>تجاری-اقامتی</span></li><li>موقعیت <span>مشهد</span></li></ul></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cost Anatomy -->
+        <section class="mb-12 main-card">
+            <div class="text-center">
+                <h2 class="section-title justify-center"><i class="fa-solid fa-magnifying-glass-chart"></i>آناتومی هزینه‌ها: از پایه تا نهایی</h2>
+                <p class="section-subtitle mx-auto">هزینه نهایی از ترکیب "هزینه مستقیم پایه" (بر اساس فهرست‌بها) و "ضرایب تعدیل" (شامل بالاسری و تجهیز کارگاه) به دست آمده است. این رویکرد، دقت و قابلیت دفاع محاسبات را تضمین می‌کند.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-bold text-center text-lg mb-4">تجزیه هزینه پایه راهسازی (سواره‌رو)</h3>
+                    <div class="chart-container" style="height: 350px;"><canvas id="roadCostBreakdown"></canvas></div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-center text-lg mb-4">مقایسه هزینه پایه تأسیسات (بر متر طول)</h3>
+                    <div class="chart-container" style="height: 350px;"><canvas id="utilitiesCostBreakdown"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Summary Infographic -->
+        <section>
+            <div class="text-center">
+                <h2 class="section-title justify-center"><i class="fa-solid fa-calculator"></i>جمع‌بندی بودجه</h2>
+                <p class="section-subtitle mx-auto">نمودار زیر ساختار نهایی بودجه را به صورت بصری نمایش می‌دهد.</p>
+            </div>
+            <div class="main-card">
+                <div class="flex flex-col md:flex-row items-center justify-around gap-4">
+                    <!-- Component 1 -->
+                    <div class="text-center w-full md:w-1/4">
+                        <p class="text-lg font-bold">پروژه‌های فرامحله‌ای</p>
+                        <p class="text-4xl font-black text-sky-600 my-2">۴,۶۲۷.۱</p>
+                        <div class="h-4 bg-sky-400 rounded-full"></div>
+                    </div>
+                    <!-- Plus Icon -->
+                    <div class="text-4xl text-slate-300 my-2 md:my-0 font-light">+</div>
+                    <!-- Component 2 -->
+                    <div class="text-center w-full md:w-1/4">
+                        <p class="text-lg font-bold">زیرساخت محلات</p>
+                        <p class="text-4xl font-black text-amber-600 my-2">۸۴۰.۲</p>
+                        <div class="h-4 bg-amber-400 rounded-full"></div>
+                    </div>
+                     <!-- Plus Icon -->
+                    <div class="text-4xl text-slate-300 my-2 md:my-0 font-light">+</div>
+                    <!-- Component 3 -->
+                    <div class="text-center w-full md:w-1/4">
+                        <p class="text-lg font-bold">مسکونی نیمه‌تمام</p>
+                        <p class="text-4xl font-black text-red-600 my-2">۵۱۸.۹</p>
+                        <div class="h-4 bg-red-400 rounded-full"></div>
+                    </div>
+                </div>
+                <div class="flex justify-center my-6">
+                    <i class="fa-solid fa-arrow-down text-4xl text-slate-300"></i>
+                </div>
+                <!-- Total -->
+                <div class="bg-slate-100 p-6 rounded-2xl text-center">
+                    <p class="text-xl font-bold">مجموع کل هزینه</p>
+                    <p class="text-5xl font-black text-indigo-600 mt-2">۵,۹۸۶.۲</p>
+                    <div class="w-full h-4 rounded-full mt-4" style="background: linear-gradient(to left, #38bdf8 77.3%, #fbbf24 calc(77.3% + 14%), #f87171 calc(77.3% + 14%));" title="پروژه‌های فرامحله‌ای: ۷۷.۳٪ | زیرساخت محلات: ۱۴.۰٪ | مسکونی نیمه‌تمام: ۸.۷٪"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    
+    <footer class="text-center py-8 text-slate-500 text-sm">
+        <p>تهیه شده در مهندسین مشاور <span class="author-hover">سپینود<span class="tooltip">حمیدرضا ترابی
+hr.torabii@gmail.com</span></span> - شهریورماه ۱۴۰۴</p>
+    </footer>
+
+    <!-- The Javascript for charts is unchanged -->
+    <script>
+        const vazirmatnFont = {
+            family: "'Vazirmatn', sans-serif"
+        };
+
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    rtl: true,
+                    bodyFont: vazirmatnFont,
+                    titleFont: vazirmatnFont,
+                    backgroundColor: '#111827',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    padding: 12,
+                    cornerRadius: 8,
+                    boxPadding: 4,
+                },
+                legend: {
+                    labels: {
+                        font: { ...vazirmatnFont, size: 12 },
+                        boxWidth: 20,
+                        padding: 20,
+                    }
+                }
+            },
+            scales: {
+                y: { 
+                    ticks: { font: vazirmatnFont, color: '#4b5563' },
+                    grid: { color: '#e5e7eb' }
+                },
+                x: { 
+                    ticks: { font: vazirmatnFont, color: '#4b5563' },
+                    grid: { display: false }
+                }
+            }
+        };
+        
+        const roadCostData = {
+            labels: ['زیرسازی (اساس و زیراساس)', 'آسفالت (بیندر و توپکا)', 'عملیات خاکی و جدول'],
+            values: [2600000, 2275000, 1625000],
+            percentages: [40, 35, 25],
+            colors: ['#60a5fa', '#3b82f6', '#1e40af']
+        };
+
+        new Chart(document.getElementById('roadCostBreakdown'), {
+            type: 'doughnut',
+            data: {
+                labels: roadCostData.labels,
+                datasets: [{
+                    data: roadCostData.percentages,
+                    backgroundColor: roadCostData.colors,
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                ...defaultChartOptions,
+                plugins: {
+                    ...defaultChartOptions.plugins,
+                    tooltip: {
+                         ...defaultChartOptions.plugins.tooltip,
+                         callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const percentage = context.raw || 0;
+                                const value = roadCostData.values[context.dataIndex];
+                                const formattedValue = value.toLocaleString('fa-IR');
+                                return `${label}: ${percentage}% (${formattedValue} ریال)`;
+                            }
+                        }
+                    },
+                }
+            }
+        });
+
+        new Chart(document.getElementById('utilitiesCostBreakdown'), {
+            type: 'bar',
+            data: {
+                labels: ['حفاری', 'لوله/کابل', 'اتصالات/تست', 'روشنایی'],
+                datasets: [
+                    {
+                        label: 'آبرسانی',
+                        data: [1, 1, 0.5, 0],
+                        backgroundColor: '#06b6d4',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'گازرسانی',
+                        data: [1.2, 1.6, 0.7, 0],
+                        backgroundColor: '#16a34a',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'برق‌رسانی',
+                        data: [1.1, 1.2, 0, 1],
+                        backgroundColor: '#f59e0b',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                ...defaultChartOptions,
+                scales: {
+                    ...defaultChartOptions.scales,
+                    y: { ...defaultChartOptions.scales.y, beginAtZero: true, title: { display: true, text: 'میلیون تومان', font: vazirmatnFont } },
+                }
+            }
+        });
+
+
+        new Chart(document.getElementById('investmentByZone'), {
+            type: 'bar',
+            data: {
+                labels: ['محله ۵', 'محله ۳', 'محله ۶', 'محله ۲', 'محله ۱', 'حوزه خدماتی', 'محله ۴', 'محله ۷', 'محله ۸'],
+                datasets: [
+                    { label: 'راهسازی', data: [3.9, 19.5, 29.2, 32.1, 54.3, 70.6, 81.8, 86.5, 163.2], backgroundColor: '#64748b' },
+                    { label: 'آبرسانی', data: [0.3, 2.4, 3.4, 3.6, 6.7, 10.8, 15.9, 16.7, 19.0], backgroundColor: '#06b6d4' },
+                    { label: 'برق‌رسانی', data: [0.4, 4.3, 3.6, 1.3, 5.4, 1.9, 20.9, 25.4, 41.8], backgroundColor: '#f59e0b' },
+                    { label: 'گازرسانی', data: [0.4, 2.9, 3.8, 8.0, 11.1, 5.8, 13.4, 28.2, 41.8], backgroundColor: '#16a34a' }
+                ]
+            },
+            options: {
+                ...defaultChartOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: { 
+                        stacked: true, 
+                        title: { display: true, text: 'هزینه (میلیارد تومان)', font: vazirmatnFont },
+                        ticks: { font: vazirmatnFont, color: '#4b5563' },
+                        grid: { color: '#e5e7eb' }
+                    },
+                    y: { 
+                        stacked: true,
+                        ticks: { font: vazirmatnFont, color: '#4b5563' },
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    ...defaultChartOptions.plugins,
+                    legend: {
+                        ...defaultChartOptions.plugins.legend,
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    </script>
+<script>
+window.addEventListener('keydown', function(e){
+  if (e.key === 'Backspace') {
+    const el = e.target;
+    const tag = el && el.tagName;
+    const isEditable = tag === 'INPUT' || tag === 'TEXTAREA' || (el && el.isContentEditable);
+    if (!isEditable) {
+      e.preventDefault();
+      // پیام به والد بفرست (داشبورد اصلی)
+      window.parent.postMessage({ type: 'NAVIGATE_BACK' }, '*');
+    }
+  }
+});
+</script>
+
+</body>
+</html>
