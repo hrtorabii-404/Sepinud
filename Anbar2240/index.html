@@ -46,9 +46,6 @@
       --bg-card: #1e293b;
       --border: #334155;
       --shadow-color: rgba(0, 0, 0, 0.3);
-      
-      --neon-green-glow: 0 0 15px rgba(52, 211, 153, 0.6);
-      --neon-red-glow: 0 0 15px rgba(248, 113, 113, 0.6);
     }
 
     * { box-sizing: border-box; outline: none; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
@@ -96,7 +93,7 @@
     }
     .theme-toggle:hover { background: var(--border); transform: translateY(-1px); }
 
-    /* --- TWO-TIER KPI CARDS (COMPACT SOFT DESIGN) --- */
+    /* --- COMPACT KPI CARDS --- */
     .kpi-row-1 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 16px; }
     .kpi-row-2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
     
@@ -112,25 +109,29 @@
     }
 
     .kpi-card {
-      background: var(--bg-card); border-radius: 16px; padding: 16px; position: relative;
-      box-shadow: 0 4px 10px var(--shadow-color); border: 1px solid var(--border);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      min-height: 100px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
+      background: var(--bg-card); border-radius: 12px; padding: 14px 18px; position: relative;
+      box-shadow: 0 4px 10px var(--shadow-color); border: 1px solid var(--border); border-right: 4px solid var(--color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      min-height: 85px; display: flex; flex-direction: column; justify-content: center; overflow: hidden;
     }
-    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px var(--shadow-color); border-color: var(--color); z-index: 10; }
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px var(--shadow-color); z-index: 10; }
     
-    .kpi-bg-icon-wrapper { position: absolute; inset: 0; overflow: hidden; border-radius: 16px; pointer-events: none; z-index: 0; }
-    .kpi-bg-icon { position: absolute; bottom: -15px; left: -10px; font-size: 4.5rem; opacity: 0.06; color: var(--color); transform: rotate(15deg); }
-    
-    .kpi-icon-box {
-        width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-        border-radius: 10px; font-size: 1rem; margin-bottom: 8px;
+    .kpi-bg-icon-wrapper { position: absolute; inset: 0; overflow: hidden; border-radius: 12px; pointer-events: none; z-index: 0; }
+    /* Animated Background Icon */
+    .kpi-bg-icon { 
+        position: absolute; bottom: -10px; left: -5px; font-size: 4rem; 
+        opacity: 0.12; color: var(--color); transform: rotate(10deg);
+        transition: transform 0.5s cubic-bezier(0.3, 1.5, 0.6, 1), opacity 0.5s ease;
+    }
+    .kpi-card:hover .kpi-bg-icon {
+        transform: scale(1.3) rotate(0deg) translate(-10px, -5px);
+        opacity: 0.25;
     }
     
-    .kpi-content-box { z-index: 3; position: relative; }
-    .kpi-title { font-size: 0.8rem; color: var(--muted); font-weight: 700; display: block; margin-bottom: 4px; }
-    .kpi-val { font-size: 1.3rem; font-weight: 800; color: var(--dark); line-height: 1.2; direction: ltr; text-align: right; margin-bottom: 4px;}
-    .kpi-sub { font-size: 0.7rem; color: var(--color); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+    .kpi-content-box { z-index: 3; position: relative; display: flex; flex-direction: column; gap: 4px;}
+    .kpi-title { font-size: 0.8rem; color: var(--muted); font-weight: 700; display: block; }
+    .kpi-val { font-size: 1.4rem; font-weight: 900; color: var(--dark); line-height: 1; direction: ltr; text-align: right;}
+    .kpi-sub { font-size: 0.7rem; color: var(--color); font-weight: 600; }
 
     /* --- ACCORDIONS --- */
     .layout-accordion {
@@ -156,106 +157,15 @@
     .info-row:last-child { border-bottom: none; }
     .info-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; font-weight: bold; }
 
-    /* --- CONTROLS --- */
-    .controls-wrapper { position: relative; z-index: 100; margin-bottom: 40px; width: 100%; transition: all 0.4s ease; }
-    .controls { background: transparent; border: 1px solid transparent; border-radius: 24px; padding: 10px 0; box-shadow: none; position: relative; width: 100%; transition: all 0.4s ease;}
-    .ctrl-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    .ctrl-title { font-weight: 800; color: var(--dark); display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
-    
-    .btn-reset {
-      font-family: var(--font-main); background: var(--bg-card); color: var(--muted); border: 1px solid var(--border);
-      padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 2px 5px var(--shadow-color);
-    }
-    .btn-reset:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-1px); }
-
-    .ctrl-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
-    .ctrl-item { position: relative; padding: 16px 12px 10px; border-radius: 16px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: 0 4px 10px var(--shadow-color); transition: 0.3s; display: flex; flex-direction: column; justify-content: center; flex: 1; }
-    .ctrl-item:hover { transform: translateY(-2px); box-shadow: 0 10px 20px var(--shadow-color); border-color: var(--primary); }
-    .ctrl-label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.85rem; margin-bottom: 12px; color: var(--dark); position: relative; z-index: 2; }
-    .sama-code { font-size: 0.65rem; color: var(--muted); display: block; margin-top: -8px; margin-bottom: 10px; font-weight: normal; }
-    .val-tag { font-family: var(--font-main); font-size: 0.85rem; direction: ltr; background: transparent; border: none; padding: 0; color: var(--dark); font-weight: 800; }
-
-    /* --- RIGHT SIDEBAR STATE (When Scrolled) --- */
-    @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    
-    .tablet-toggle-header, .mobile-fab, .bottom-sheet-overlay, .mobile-close-btn, .alt-reset-btn { display: none !important; }
-    .tablet-collapsible { display: block; width: 100%; }
-    
-    @media (min-width: 1025px) {
-        .controls-wrapper.compact { 
-            position: fixed; 
-            top: 20px; 
-            right: 20px; 
-            width: 280px; 
-            margin: 0; 
-            height: calc(100vh - 40px);
-            animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            pointer-events: none; /* Let clicks pass through empty space */
-        }
-        .controls-wrapper.compact .controls { 
-            width: 100%; 
-            height: 100%;
-            padding: 20px; 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(16px) saturate(180%); 
-            -webkit-backdrop-filter: blur(16px) saturate(180%); 
-            border: 1px solid rgba(255, 255, 255, 0.4); 
-            border-top-color: rgba(255, 255, 255, 0.8); 
-            border-radius: 20px; 
-            box-shadow: -10px 10px 40px rgba(0,0,0,0.1); 
-            display: flex; 
-            flex-direction: column; 
-            overflow-y: auto;
-            pointer-events: auto; /* Enable clicks on the panel */
-        }
-        [data-theme="dark"] .controls-wrapper.compact .controls { 
-            background: rgba(30, 41, 59, 0.85); 
-            border-color: rgba(255, 255, 255, 0.1); 
-            box-shadow: -10px 10px 40px rgba(0,0,0,0.5); 
-        }
-        
-        /* Custom scrollbar for sidebar */
-        .controls-wrapper.compact .controls::-webkit-scrollbar { width: 4px; }
-        .controls-wrapper.compact .controls::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
-
-        .controls-wrapper.compact .ctrl-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
-        .controls-wrapper.compact .desktop-reset-btn { width: 100%; justify-content: center; }
-        .controls-wrapper.compact .ctrl-title span { font-size: 1rem; }
-        
-        .controls-wrapper.compact .ctrl-grid { grid-template-columns: 1fr; gap: 8px; }
-        .controls-wrapper.compact .ctrl-item { 
-            padding: 10px 14px; 
-            min-height: 55px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-        }
-        .controls-wrapper.compact .ctrl-label { margin-bottom: 6px; }
-        .controls-wrapper.compact .sama-code { display: none; } /* Hide codes to save space in sidebar */
-    }
-
-    /* Sliders */
-    input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; }
-    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: var(--border); border-radius: 99px; }
-    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--bg-card); border: 4px solid var(--muted); margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: transform 0.1s; }
-    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-    #mix1Range::-webkit-slider-thumb, #revRange::-webkit-slider-thumb { border-color: var(--success); }
-    #mix2Range::-webkit-slider-thumb, #costRange::-webkit-slider-thumb { border-color: var(--danger); }
-    #dwellRange::-webkit-slider-thumb, #discRange::-webkit-slider-thumb { border-color: var(--warning); }
-    #tiersRange::-webkit-slider-thumb { border-color: var(--primary); }
-    #occ1Range::-webkit-slider-thumb, #occ2Range::-webkit-slider-thumb, #mix3Range::-webkit-slider-thumb { border-color: var(--secondary); }
-    #infRRange::-webkit-slider-thumb, #infRange::-webkit-slider-thumb { border-color: #a855f7; }
-
-    /* --- CHARTS (Stretched Vertically) --- */
+    /* --- TALL CHARTS --- */
     .charts-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
     @media (max-width: 1024px) { .charts-wrapper { grid-template-columns: 1fr !important; } }
     .chart-box { background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 6px 15px var(--shadow-color); min-width: 0; display: flex; flex-direction: column; }
     .chart-header { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
     .chart-title { font-size: 1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; }
     
-    /* Increased chart height from 400px to 500px to stretch the Y-axis */
-    .chart-body { position: relative; height: 500px; width: 100%; flex: 1;}
+    /* Increased height for explicitly taller charts */
+    .chart-body { position: relative; height: 550px; width: 100%; flex: 1;}
 
     /* MATRIX */
     .matrix-container { width: 100%; margin-top: 30px; background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 6px 15px var(--shadow-color); }
@@ -272,13 +182,134 @@
     [data-theme="dark"] .bg-orange { color: #fbbf24 !important; }
     [data-theme="dark"] .bg-red { color: #f87171 !important; }
 
+    /* --- FLOATING SIDEBAR CONTROL PANEL --- */
+    .fab-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 14px 24px;
+        font-family: var(--font-main);
+        font-size: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        z-index: 9000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5);
+        transition: all 0.3s ease;
+    }
+    .fab-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6);
+    }
+    
+    .sidebar-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+        z-index: 9998; opacity: 0; visibility: hidden; transition: 0.3s;
+    }
+    .sidebar-overlay.open { opacity: 1; visibility: visible; }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: -360px; /* Hidden initially */
+        width: 340px;
+        max-width: 100vw;
+        height: 100vh;
+        background: var(--bg-card);
+        box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+        z-index: 9999;
+        transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+    }
+    [data-theme="dark"] .sidebar { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px); border-left: 1px solid var(--border); }
+    .sidebar.open { right: 0; }
+
+    .sidebar-header {
+        padding: 20px 24px;
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 1px solid var(--border); background: var(--bg-body);
+    }
+    .sidebar-title { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; color: var(--dark); }
+    .sidebar-close { background: none; border: none; font-size: 1.4rem; color: var(--muted); cursor: pointer; transition: 0.2s; }
+    .sidebar-close:hover { color: var(--danger); transform: rotate(90deg); }
+
+    .sidebar-content {
+        padding: 24px;
+        overflow-y: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    /* Sidebar Scrollbar */
+    .sidebar-content::-webkit-scrollbar { width: 6px; }
+    .sidebar-content::-webkit-scrollbar-track { background: transparent; }
+    .sidebar-content::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 10px; }
+
+    .btn-reset {
+      font-family: var(--font-main); background: var(--bg-body); color: var(--dark); border: 1px solid var(--border);
+      padding: 10px 16px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; width: 100%; margin-top: 10px;
+    }
+    .btn-reset:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .ctrl-item { position: relative; padding: 14px; border-radius: 14px; background: var(--bg-body); border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; justify-content: center; }
+    .ctrl-item:focus-within, .ctrl-item:hover { border-color: var(--primary); box-shadow: 0 4px 12px var(--shadow-color); background: var(--bg-card);}
+    .ctrl-label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--dark); }
+    .sama-code { font-size: 0.7rem; color: var(--muted); display: block; margin-top: -4px; margin-bottom: 12px; font-weight: normal; }
+    .val-tag { font-family: var(--font-main); font-size: 0.9rem; direction: ltr; background: transparent; border: none; padding: 0; color: var(--primary); font-weight: 900; }
+
+    /* Sliders */
+    input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; margin: 0; }
+    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: var(--border); border-radius: 99px; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--bg-card); border: 4px solid var(--muted); margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.1s; }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    
+    #mix1Range::-webkit-slider-thumb, #revRange::-webkit-slider-thumb { border-color: var(--success); }
+    #mix2Range::-webkit-slider-thumb, #costRange::-webkit-slider-thumb { border-color: var(--danger); }
+    #dwellRange::-webkit-slider-thumb, #discRange::-webkit-slider-thumb { border-color: var(--warning); }
+    #tiersRange::-webkit-slider-thumb { border-color: var(--primary); }
+    #occ1Range::-webkit-slider-thumb, #occ2Range::-webkit-slider-thumb, #mix3Range::-webkit-slider-thumb { border-color: var(--secondary); }
+    #infRRange::-webkit-slider-thumb, #infRange::-webkit-slider-thumb { border-color: #a855f7; }
+
     footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 50px; opacity: 0.9; padding-bottom: 20px; }
   </style>
 </head>
 <body>
 
-  <div class="bottom-sheet-overlay" id="bsOverlay" onclick="closeBottomSheet()"></div>
-  <button class="mobile-fab" onclick="openBottomSheet()"><i class="fa-solid fa-sliders"></i> کنترل پنل یکپارچه</button>
+  <button class="fab-btn" onclick="openSidebar()"><i class="fa-solid fa-sliders"></i> پنل تنظیمات</button>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <aside class="sidebar" id="controlSidebar">
+      <div class="sidebar-header">
+          <div class="sidebar-title"><i class="fa-solid fa-sliders" style="color: var(--primary)"></i> کنترل پنل یکپارچه</div>
+          <button class="sidebar-close" onclick="closeSidebar()"><i class="fa-solid fa-times"></i></button>
+      </div>
+      <div class="sidebar-content">
+           <div class="ctrl-item"><div class="ctrl-label"><span>طبقات چیدمان</span><span class="val-tag" id="valTiers">1</span></div><span class="sama-code">&nbsp;</span><input type="range" id="tiersRange" min="1" max="5" step="1" value="1"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>سهم الکترونیک</span><span class="val-tag" id="valMix1">60.2%</span></div><span class="sama-code">کد سما: ۱۰۳۰۱۹۱</span><input type="range" id="mix1Range" min="0" max="100" step="1" value="60"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>سهم ماشین‌آلات</span><span class="val-tag" id="valMix2">27%</span></div><span class="sama-code">کد سما: ۱۰۳۰۱۹۲</span><input type="range" id="mix2Range" min="0" max="100" step="1" value="27"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>شیمیایی و پزشکی</span><span class="val-tag" id="valMix3">12.8%</span></div><span class="sama-code">سما: ۱۰۵، ۱۳۲، ۱۴۰</span><input type="range" id="mix3Range" min="0" max="100" step="1" value="13"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>میانگین رسوب</span><span class="val-tag" id="valDwell">49 روز</span></div><span class="sama-code">&nbsp;</span><input type="range" id="dwellRange" min="10" max="120" step="1" value="49"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>نرخ تنزیل</span><span class="val-tag" id="discVal">35%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="discRange" min="0" max="100" step="1" value="35"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۱</span><span class="val-tag" id="valOcc1">40%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="occ1Range" min="0" max="85" step="1" value="40"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۲</span><span class="val-tag" id="valOcc2">60%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="occ2Range" min="0" max="85" step="1" value="60"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>رشد سالانه تعرفه</span><span class="val-tag" id="infRVal">50%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="infRRange" min="10" max="100" step="1" value="50"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>تورم سالانه OPEX</span><span class="val-tag" id="infVal">53%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="infRange" min="10" max="100" step="1" value="53"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام درآمدها</span><span class="val-tag" id="revVal">0%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="revRange" min="-50" max="50" step="1" value="0"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام هزینه‌ها</span><span class="val-tag" id="costVal">0%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="costRange" min="-50" max="50" step="1" value="0"></div>
+           
+           <button class="btn-reset" onclick="resetDefaults()"><i class="fa-solid fa-rotate-right"></i> بازنشانی پیش‌فرض‌ها</button>
+      </div>
+  </aside>
 
   <header>
     <div class="header-inner">
@@ -296,7 +327,7 @@
     <div class="project-info">
         <div class="info-header-row">
             <div class="info-text">
-                این داشبورد به یک <b>«موتور محاسباتی دینامیک»</b> مجهز شده است. با تغییر اهرم‌های مدیریتی در کنترل پنل، تمام محاسباتِ کالبدی، بازاریابی (تغییر سبد کالا و رسوب) و اقتصادی (تورم و رشد تعرفه) به صورت ریاضی محاسبه شده و روی مدل پایه تأثیر می‌گذارد و شاخص‌های مالی زیر در لحظه به‌روزرسانی می‌شوند.
+                این داشبورد به یک <b>«موتور محاسباتی دینامیک»</b> مجهز شده است. با تغییر اهرم‌های مدیریتی در کنترل پنل (دکمه پایین صفحه)، تمام محاسباتِ کالبدی، بازاریابی و اقتصادی به صورت ریاضی محاسبه شده و شاخص‌های مالی زیر در لحظه به‌روزرسانی می‌شوند.
             </div>
         </div>
         <div class="info-tags">
@@ -313,44 +344,6 @@
     
     <div class="kpi-row-2" id="kpiRow2"></div>
 
-    <div class="controls-wrapper" id="controlPanel">
-      <div class="controls">
-        
-        <div class="tablet-toggle-header" onclick="toggleTabletControls()">
-            <div class="ctrl-title"><i class="fa-solid fa-sliders" style="color:var(--primary)"></i> <span>کنترل پنل یکپارچه</span></div>
-            <i class="fa-solid fa-chevron-down layout-arrow" id="tabletCtrlArrow" style="transition:0.4s"></i>
-        </div>
-
-        <div class="ctrl-header desktop-header">
-          <div class="ctrl-title"><i class="fa-solid fa-sliders" style="color:var(--primary)"></i> <span>کنترل پنل یکپارچه</span></div>
-          <i class="fa-solid fa-times mobile-close-btn" onclick="closeBottomSheet()"></i>
-          <button class="btn-reset desktop-reset-btn" onclick="resetDefaults()"><i class="fa-solid fa-rotate-right"></i> <span>بازنشانی پیش‌فرض‌ها</span></button>
-        </div>
-        
-        <div class="tablet-collapsible" id="tabletCollapsible">
-            <div class="ctrl-grid">
-               <div class="ctrl-item"><div class="ctrl-label"><span>طبقات چیدمان</span><span class="val-tag" id="valTiers">1</span></div><span class="sama-code">&nbsp;</span><input type="range" id="tiersRange" min="1" max="5" step="1" value="1"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>سهم الکترونیک</span><span class="val-tag" id="valMix1">60.2%</span></div><span class="sama-code">کد سما: ۱۰۳۰۱۹۱</span><input type="range" id="mix1Range" min="0" max="100" step="1" value="60"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>سهم ماشین‌آلات</span><span class="val-tag" id="valMix2">27%</span></div><span class="sama-code">کد سما: ۱۰۳۰۱۹۲</span><input type="range" id="mix2Range" min="0" max="100" step="1" value="27"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>شیمیایی و پزشکی</span><span class="val-tag" id="valMix3">12.8%</span></div><span class="sama-code">سما: ۱۰۵، ۱۳۲، ۱۴۰</span><input type="range" id="mix3Range" min="0" max="100" step="1" value="13"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>میانگین رسوب</span><span class="val-tag" id="valDwell">49 روز</span></div><span class="sama-code">&nbsp;</span><input type="range" id="dwellRange" min="10" max="120" step="1" value="49"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>نرخ تنزیل</span><span class="val-tag" id="discVal">35%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="discRange" min="0" max="100" step="1" value="35"></div>
-               
-               <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۱</span><span class="val-tag" id="valOcc1">40%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="occ1Range" min="0" max="85" step="1" value="40"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۲</span><span class="val-tag" id="valOcc2">60%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="occ2Range" min="0" max="85" step="1" value="60"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>رشد سالانه تعرفه</span><span class="val-tag" id="infRVal">50%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="infRRange" min="10" max="100" step="1" value="50"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>تورم سالانه OPEX</span><span class="val-tag" id="infVal">53%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="infRange" min="10" max="100" step="1" value="53"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام درآمدها</span><span class="val-tag" id="revVal">0%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="revRange" min="-50" max="50" step="1" value="0"></div>
-               <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام هزینه‌ها</span><span class="val-tag" id="costVal">0%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="costRange" min="-50" max="50" step="1" value="0"></div>
-               
-            </div>
-            <div style="display:flex; justify-content:center; margin-top:20px;">
-                <button class="btn-reset alt-reset-btn" onclick="resetDefaults()"><i class="fa-solid fa-rotate-right"></i> <span>بازنشانی پیش‌فرض‌ها</span></button>
-            </div>
-        </div>
-      </div>
-    </div>
-
     <div class="layout-accordion">
         <div class="layout-header" onclick="toggleAccordion('layout')">
             <span class="layout-title"><i class="fa-solid fa-chart-line" style="color:var(--secondary)"></i> جانمایی و عملکرد عملیاتی انبار (بر مبنای ۱۴۰۴)</span>
@@ -359,8 +352,8 @@
         <div class="layout-content" id="layoutContent">
             <div class="layout-inner">
                 <div class="charts-wrapper" style="grid-template-columns: 2fr 1fr; margin-bottom: 0;">
-                    <div class="chart-box" style="height: 400px;"><div class="chart-header"><div class="chart-title">روند تقاضا و ظرفیت‌سازی مسقف</div></div><div class="chart-body" style="height: 100%;"><canvas id="growthChart"></canvas></div></div>
-                    <div class="chart-box" style="justify-content: center; height: 400px;">
+                    <div class="chart-box"><div class="chart-header"><div class="chart-title">روند تقاضا و ظرفیت‌سازی مسقف</div></div><div class="chart-body"><canvas id="growthChart"></canvas></div></div>
+                    <div class="chart-box" style="justify-content: center;">
                         <div class="info-list">
                             <div class="info-row"><span style="font-weight: 800; color: var(--dark)">سال ۱۴۰۱</span><span style="color: var(--muted); font-size: 0.9rem">۱۷۱ تن <span style="font-size: 0.75rem; opacity: 0.7"></span></span></div>
                             <div class="info-row"><span style="font-weight: 800; color: var(--dark)">سال ۱۴۰۲</span><div style="display: flex; align-items: center; gap: 10px;"><span class="info-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">رشد ۱,۱۴۹٪</span><span style="font-weight: 800; color: var(--secondary); font-size: 1.1rem; width: 60px; text-align: left;">۲,۱۴۴ تن</span></div></div>
@@ -383,10 +376,10 @@
         </div>
         <div class="layout-content" id="cargoContent">
             <div class="layout-inner">
-                <p style="color: var(--muted); font-size: 0.95rem; margin-top: 0;">نمودارها به صورت زنده با تغییر اسلایدرهای سبد کالا (کدهای ۱۰۳۰۱۹۱، ۱۰۳۰۱۹۲ و سایرین) بروزرسانی شده و نسبت حجم کالبدی به سهم درآمدی را مقایسه می‌کنند.</p>
+                <p style="color: var(--muted); font-size: 0.95rem; margin-top: 0;">نمودارها به صورت زنده با تغییر اسلایدرهای سبد کالا در پنل شناور، بروزرسانی شده و نسبت حجم کالبدی به سهم درآمدی را مقایسه می‌کنند.</p>
                 <div class="charts-wrapper" style="grid-template-columns: 1fr 1fr; margin-bottom: 0;">
-                    <div class="chart-box" style="height: 400px;"><div class="chart-header"><div class="chart-title">توزیع وزنی کالاها (ظرفیت)</div></div><div class="chart-body" style="height: 100%;"><canvas id="weightDonutChart"></canvas></div></div>
-                    <div class="chart-box" style="height: 400px;"><div class="chart-header"><div class="chart-title">مقایسه سهم وزنی و درآمدی</div></div><div class="chart-body" style="height: 100%;"><canvas id="revenueBarChart"></canvas></div></div>
+                    <div class="chart-box"><div class="chart-header"><div class="chart-title">توزیع وزنی کالاها (ظرفیت)</div></div><div class="chart-body"><canvas id="weightDonutChart"></canvas></div></div>
+                    <div class="chart-box"><div class="chart-header"><div class="chart-title">مقایسه سهم وزنی و درآمدی</div></div><div class="chart-body"><canvas id="revenueBarChart"></canvas></div></div>
                 </div>
             </div>
         </div>
@@ -422,34 +415,18 @@
         document.getElementById(id + 'Content').classList.toggle('open');
         document.getElementById(id + 'Arrow').classList.toggle('open');
     }
-    function toggleTabletControls() {
-        const coll = document.getElementById('tabletCollapsible');
-        coll.classList.toggle('open');
-        document.getElementById('tabletCtrlArrow').style.transform = coll.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    
+    // Sidebar Functions
+    function openSidebar() {
+        document.getElementById('controlSidebar').classList.add('open');
+        document.getElementById('sidebarOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden'; // prevent background scrolling
     }
-    function openBottomSheet() {
-        document.getElementById('controlPanel').classList.add('sheet-open');
-        document.getElementById('bsOverlay').classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeBottomSheet() {
-        document.getElementById('controlPanel').classList.remove('sheet-open');
-        document.getElementById('bsOverlay').classList.remove('show');
+    function closeSidebar() {
+        document.getElementById('controlSidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
         document.body.style.overflow = '';
     }
-    
-    // Sidebar Sticky Logic
-    window.addEventListener('scroll', () => {
-        if(window.innerWidth > 1024) { // Only convert to sidebar on desktop
-            const p = document.getElementById('controlPanel');
-            // Check if we scrolled past the header/info box
-            if(window.scrollY > 300) {
-                p.classList.add('compact');
-            } else {
-                p.classList.remove('compact');
-            }
-        }
-    });
 
     // --- Core Master Configuration ---
     const BASE_REV = [0, 161814, 371363, 710232, 1231542, 1884260, 2882918, 4410864, 6748622, 10325392];
@@ -562,7 +539,7 @@
         return null;
     }
 
-    // --- Render Rendering (Compact Soft UI Style) ---
+    // --- Render Rendering (Compact Design) ---
     function renderKPIs(m, dRate) {
         // ROW 1
         const r1 = [
@@ -576,7 +553,6 @@
         el('kpiRow1').innerHTML = r1.map(d => `
             <div class="kpi-card" style="--color:${d.c};">
                 <div class="kpi-bg-icon-wrapper"><i class="fa-solid ${d.i} kpi-bg-icon"></i></div>
-                <div class="kpi-icon-box" style="color: ${d.c}; background: color-mix(in srgb, ${d.c} 15%, transparent);"><i class="fa-solid ${d.i}"></i></div>
                 <div class="kpi-content-box">
                     <span class="kpi-title">${d.t}</span>
                     <div class="kpi-val">${d.v}</div>
@@ -597,7 +573,6 @@
         el('kpiRow2').innerHTML = r2.map(d => `
             <div class="kpi-card" style="--color:${d.c};">
                 <div class="kpi-bg-icon-wrapper"><i class="fa-solid ${d.i} kpi-bg-icon"></i></div>
-                <div class="kpi-icon-box" style="color: ${d.c}; background: color-mix(in srgb, ${d.c} 15%, transparent);"><i class="fa-solid ${d.i}"></i></div>
                 <div class="kpi-content-box">
                     <span class="kpi-title">${d.t}</span>
                     <div class="kpi-val">${d.v}</div>
@@ -612,7 +587,7 @@
         Chart.defaults.font.family = "Vazirmatn";
         Chart.defaults.color = "#94a3b8";
         
-        // Added maxTicksLimit to stretch the Y-axis points
+        // Added maxTicksLimit to stretch the Y-axis points visually
         const yAxisConfig = { grid: { color: 'var(--border)' }, beginAtZero: true, ticks: { maxTicksLimit: 6, padding: 10 } };
         
         cCash = new Chart(el('cashChart').getContext('2d'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { grid: { display: false } }, y: yAxisConfig } } });
