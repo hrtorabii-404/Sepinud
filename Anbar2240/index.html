@@ -93,39 +93,35 @@
     }
     .theme-toggle:hover { background: var(--border); transform: translateY(-1px); }
 
-    /* --- COMPACT KPI CARDS --- */
-    .kpi-row-1 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 16px; }
-    .kpi-row-2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-    
-    @media (max-width: 1200px) { 
-        .kpi-row-1 { grid-template-columns: repeat(3, 1fr); } 
-        .kpi-row-2 { grid-template-columns: repeat(2, 1fr); }
+    /* --- FLUID KPI CARDS (FLEXBOX NO-GAPS) --- */
+    .kpi-row-1, .kpi-row-2 { 
+        display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; 
     }
-    @media (max-width: 850px) { 
-        .kpi-row-1, .kpi-row-2 { grid-template-columns: repeat(2, 1fr); } 
-    }
-    @media (max-width: 500px) { 
-        .kpi-row-1, .kpi-row-2 { grid-template-columns: 1fr; } 
-    }
+    .kpi-row-2 { margin-bottom: 24px; }
 
     .kpi-card {
       background: var(--bg-card); border-radius: 12px; padding: 14px 18px; position: relative;
       box-shadow: 0 4px 10px var(--shadow-color); border: 1px solid var(--border); border-right: 4px solid var(--color);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       min-height: 85px; display: flex; flex-direction: column; justify-content: center; overflow: hidden;
+      /* Flex property makes cards stretch to fill exact space without any gaps */
+      flex: 1 1 calc(20% - 16px); min-width: 220px; 
     }
+    
+    .kpi-row-2 .kpi-card { flex: 1 1 calc(33.333% - 16px); }
+
     .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px var(--shadow-color); z-index: 10; }
     
     .kpi-bg-icon-wrapper { position: absolute; inset: 0; overflow: hidden; border-radius: 12px; pointer-events: none; z-index: 0; }
     /* Animated Background Icon */
     .kpi-bg-icon { 
-        position: absolute; bottom: -10px; left: -5px; font-size: 4rem; 
-        opacity: 0.12; color: var(--color); transform: rotate(10deg);
+        position: absolute; bottom: -10px; left: -5px; font-size: 4.5rem; 
+        opacity: 0.15; color: var(--color); transform: rotate(10deg);
         transition: transform 0.5s cubic-bezier(0.3, 1.5, 0.6, 1), opacity 0.5s ease;
     }
     .kpi-card:hover .kpi-bg-icon {
         transform: scale(1.3) rotate(0deg) translate(-10px, -5px);
-        opacity: 0.25;
+        opacity: 0.3;
     }
     
     .kpi-content-box { z-index: 3; position: relative; display: flex; flex-direction: column; gap: 4px;}
@@ -157,15 +153,16 @@
     .info-row:last-child { border-bottom: none; }
     .info-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; font-weight: bold; }
 
-    /* --- TALL CHARTS --- */
+    /* --- CHARTS --- */
     .charts-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
     @media (max-width: 1024px) { .charts-wrapper { grid-template-columns: 1fr !important; } }
     .chart-box { background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 6px 15px var(--shadow-color); min-width: 0; display: flex; flex-direction: column; }
     .chart-header { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
     .chart-title { font-size: 1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; }
     
-    /* Increased height for explicitly taller charts */
-    .chart-body { position: relative; height: 550px; width: 100%; flex: 1;}
+    /* Double Height Chart Boxes */
+    .chart-body { position: relative; height: 450px; width: 100%; flex: 1;}
+    .tall-chart-body { height: 750px !important; } /* Extended height for specific charts */
 
     /* MATRIX */
     .matrix-container { width: 100%; margin-top: 30px; background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 6px 15px var(--shadow-color); }
@@ -182,94 +179,71 @@
     [data-theme="dark"] .bg-orange { color: #fbbf24 !important; }
     [data-theme="dark"] .bg-red { color: #f87171 !important; }
 
-    /* --- FLOATING SIDEBAR CONTROL PANEL --- */
+    /* --- COMPACT FLOATING SIDEBAR --- */
     .fab-btn {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: var(--primary);
-        color: #fff;
-        border: none;
-        border-radius: 50px;
-        padding: 14px 24px;
-        font-family: var(--font-main);
-        font-size: 1rem;
-        font-weight: 800;
-        cursor: pointer;
-        z-index: 9000;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5);
-        transition: all 0.3s ease;
+        position: fixed; bottom: 30px; right: 30px; background: var(--primary); color: #fff;
+        border: none; border-radius: 50px; padding: 14px 24px; font-family: var(--font-main);
+        font-size: 1rem; font-weight: 800; cursor: pointer; z-index: 9000; display: flex; align-items: center; gap: 10px;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5); transition: all 0.3s ease;
     }
-    .fab-btn:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6);
-    }
+    .fab-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6); }
     
     .sidebar-overlay {
         position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
         z-index: 9998; opacity: 0; visibility: hidden; transition: 0.3s;
     }
-    .sidebar-overlay.open { opacity: 1; visibility: visible; }
 
     .sidebar {
-        position: fixed;
-        top: 0;
-        right: -360px; /* Hidden initially */
-        width: 340px;
-        max-width: 100vw;
-        height: 100vh;
-        background: var(--bg-card);
-        box-shadow: -10px 0 30px rgba(0,0,0,0.2);
-        z-index: 9999;
-        transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-        display: flex;
-        flex-direction: column;
+        position: fixed; top: 0; right: -360px; width: 340px; max-width: 100vw; height: 100vh;
+        background: var(--bg-card); box-shadow: -10px 0 30px rgba(0,0,0,0.2); z-index: 9999;
+        transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column;
     }
     [data-theme="dark"] .sidebar { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px); border-left: 1px solid var(--border); }
     .sidebar.open { right: 0; }
 
-    .sidebar-header {
-        padding: 20px 24px;
-        display: flex; justify-content: space-between; align-items: center;
-        border-bottom: 1px solid var(--border); background: var(--bg-body);
+    /* Smart Sidebar behavior for desktop: Floating and non-blocking */
+    @media (min-width: 1024px) {
+        .sidebar-overlay { display: none !important; } /* Unblock interactions */
+        .sidebar {
+            top: 20px; right: -320px; width: 260px; /* Narrower width */
+            height: auto; max-height: calc(100vh - 40px);
+            border-radius: 20px; border: 1px solid var(--border);
+            box-shadow: -5px 10px 30px var(--shadow-color);
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px) saturate(180%);
+        }
+        [data-theme="dark"] .sidebar { background: rgba(15, 23, 42, 0.85); }
+        .sidebar.open { right: 20px; } /* Floats nicely inside the screen */
     }
-    .sidebar-title { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; color: var(--dark); }
-    .sidebar-close { background: none; border: none; font-size: 1.4rem; color: var(--muted); cursor: pointer; transition: 0.2s; }
+
+    .sidebar-header {
+        padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 1px solid var(--border); background: transparent;
+    }
+    .sidebar-title { font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 8px; color: var(--dark); }
+    .sidebar-close { background: none; border: none; font-size: 1.2rem; color: var(--muted); cursor: pointer; transition: 0.2s; }
     .sidebar-close:hover { color: var(--danger); transform: rotate(90deg); }
 
-    .sidebar-content {
-        padding: 24px;
-        overflow-y: auto;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
+    .sidebar-content { padding: 16px 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     
-    /* Sidebar Scrollbar */
-    .sidebar-content::-webkit-scrollbar { width: 6px; }
+    .sidebar-content::-webkit-scrollbar { width: 4px; }
     .sidebar-content::-webkit-scrollbar-track { background: transparent; }
     .sidebar-content::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 10px; }
 
     .btn-reset {
       font-family: var(--font-main); background: var(--bg-body); color: var(--dark); border: 1px solid var(--border);
-      padding: 10px 16px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; width: 100%; margin-top: 10px;
+      padding: 10px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; width: 100%; margin-top: 10px;
     }
     .btn-reset:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .ctrl-item { position: relative; padding: 14px; border-radius: 14px; background: var(--bg-body); border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; justify-content: center; }
+    .ctrl-item { position: relative; padding: 12px; border-radius: 12px; background: var(--bg-body); border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; justify-content: center; min-height: 55px; }
     .ctrl-item:focus-within, .ctrl-item:hover { border-color: var(--primary); box-shadow: 0 4px 12px var(--shadow-color); background: var(--bg-card);}
-    .ctrl-label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--dark); }
-    .sama-code { font-size: 0.7rem; color: var(--muted); display: block; margin-top: -4px; margin-bottom: 12px; font-weight: normal; }
-    .val-tag { font-family: var(--font-main); font-size: 0.9rem; direction: ltr; background: transparent; border: none; padding: 0; color: var(--primary); font-weight: 900; }
+    .ctrl-label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.8rem; margin-bottom: 6px; color: var(--dark); }
+    .val-tag { font-family: var(--font-main); font-size: 0.85rem; direction: ltr; background: transparent; border: none; padding: 0; color: var(--primary); font-weight: 900; }
 
-    /* Sliders */
+    /* Compact Sliders */
     input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; margin: 0; }
-    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: var(--border); border-radius: 99px; }
-    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--bg-card); border: 4px solid var(--muted); margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.1s; }
+    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 5px; background: var(--border); border-radius: 99px; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--bg-card); border: 3px solid var(--muted); margin-top: -5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.1s; }
     input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
     
     #mix1Range::-webkit-slider-thumb, #revRange::-webkit-slider-thumb { border-color: var(--success); }
@@ -284,28 +258,28 @@
 </head>
 <body>
 
-  <button class="fab-btn" onclick="openSidebar()"><i class="fa-solid fa-sliders"></i> پنل تنظیمات</button>
+  <button class="fab-btn" onclick="toggleSidebar()"><i class="fa-solid fa-sliders"></i> اهرم‌های کنترلی</button>
 
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <aside class="sidebar" id="controlSidebar">
       <div class="sidebar-header">
-          <div class="sidebar-title"><i class="fa-solid fa-sliders" style="color: var(--primary)"></i> کنترل پنل یکپارچه</div>
+          <div class="sidebar-title"><i class="fa-solid fa-sliders" style="color: var(--primary)"></i> تنظیمات زنده</div>
           <button class="sidebar-close" onclick="closeSidebar()"><i class="fa-solid fa-times"></i></button>
       </div>
       <div class="sidebar-content">
-           <div class="ctrl-item"><div class="ctrl-label"><span>طبقات چیدمان</span><span class="val-tag" id="valTiers">1</span></div><span class="sama-code">&nbsp;</span><input type="range" id="tiersRange" min="1" max="5" step="1" value="1"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>سهم الکترونیک</span><span class="val-tag" id="valMix1">60.2%</span></div><span class="sama-code">کد سما: ۱۰۳۰۱۹۱</span><input type="range" id="mix1Range" min="0" max="100" step="1" value="60"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>سهم ماشین‌آلات</span><span class="val-tag" id="valMix2">27%</span></div><span class="sama-code">کد سما: ۱۰۳۰۱۹۲</span><input type="range" id="mix2Range" min="0" max="100" step="1" value="27"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>شیمیایی و پزشکی</span><span class="val-tag" id="valMix3">12.8%</span></div><span class="sama-code">سما: ۱۰۵، ۱۳۲، ۱۴۰</span><input type="range" id="mix3Range" min="0" max="100" step="1" value="13"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>میانگین رسوب</span><span class="val-tag" id="valDwell">49 روز</span></div><span class="sama-code">&nbsp;</span><input type="range" id="dwellRange" min="10" max="120" step="1" value="49"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>نرخ تنزیل</span><span class="val-tag" id="discVal">35%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="discRange" min="0" max="100" step="1" value="35"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۱</span><span class="val-tag" id="valOcc1">40%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="occ1Range" min="0" max="85" step="1" value="40"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۲</span><span class="val-tag" id="valOcc2">60%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="occ2Range" min="0" max="85" step="1" value="60"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>رشد سالانه تعرفه</span><span class="val-tag" id="infRVal">50%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="infRRange" min="10" max="100" step="1" value="50"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>تورم سالانه OPEX</span><span class="val-tag" id="infVal">53%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="infRange" min="10" max="100" step="1" value="53"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام درآمدها</span><span class="val-tag" id="revVal">0%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="revRange" min="-50" max="50" step="1" value="0"></div>
-           <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام هزینه‌ها</span><span class="val-tag" id="costVal">0%</span></div><span class="sama-code">&nbsp;</span><input type="range" id="costRange" min="-50" max="50" step="1" value="0"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>طبقات چیدمان</span><span class="val-tag" id="valTiers">1</span></div><input type="range" id="tiersRange" min="1" max="5" step="1" value="1"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>سهم الکترونیک</span><span class="val-tag" id="valMix1">60.2%</span></div><input type="range" id="mix1Range" min="0" max="100" step="1" value="60"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>سهم ماشین‌آلات</span><span class="val-tag" id="valMix2">27%</span></div><input type="range" id="mix2Range" min="0" max="100" step="1" value="27"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>شیمیایی و پزشکی</span><span class="val-tag" id="valMix3">12.8%</span></div><input type="range" id="mix3Range" min="0" max="100" step="1" value="13"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>میانگین رسوب</span><span class="val-tag" id="valDwell">49 روز</span></div><input type="range" id="dwellRange" min="10" max="120" step="1" value="49"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>نرخ تنزیل</span><span class="val-tag" id="discVal">35%</span></div><input type="range" id="discRange" min="0" max="100" step="1" value="35"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۱</span><span class="val-tag" id="valOcc1">40%</span></div><input type="range" id="occ1Range" min="0" max="85" step="1" value="40"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۲</span><span class="val-tag" id="valOcc2">60%</span></div><input type="range" id="occ2Range" min="0" max="85" step="1" value="60"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>رشد سالانه تعرفه</span><span class="val-tag" id="infRVal">50%</span></div><input type="range" id="infRRange" min="10" max="100" step="1" value="50"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>تورم سالانه OPEX</span><span class="val-tag" id="infVal">53%</span></div><input type="range" id="infRange" min="10" max="100" step="1" value="53"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام درآمدها</span><span class="val-tag" id="revVal">0%</span></div><input type="range" id="revRange" min="-50" max="50" step="1" value="0"></div>
+           <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام هزینه‌ها</span><span class="val-tag" id="costVal">0%</span></div><input type="range" id="costRange" min="-50" max="50" step="1" value="0"></div>
            
            <button class="btn-reset" onclick="resetDefaults()"><i class="fa-solid fa-rotate-right"></i> بازنشانی پیش‌فرض‌ها</button>
       </div>
@@ -327,7 +301,7 @@
     <div class="project-info">
         <div class="info-header-row">
             <div class="info-text">
-                این داشبورد به یک <b>«موتور محاسباتی دینامیک»</b> مجهز شده است. با تغییر اهرم‌های مدیریتی در کنترل پنل (دکمه پایین صفحه)، تمام محاسباتِ کالبدی، بازاریابی و اقتصادی به صورت ریاضی محاسبه شده و شاخص‌های مالی زیر در لحظه به‌روزرسانی می‌شوند.
+                این داشبورد به یک <b>«موتور محاسباتی دینامیک»</b> مجهز شده است. با تغییر اهرم‌های مدیریتی در کنترل پنل شناور (دکمه پایین صفحه)، تمام محاسباتِ کالبدی، بازاریابی و اقتصادی به صورت زنده محاسبه شده و همزمان اثر آن روی شاخص‌ها و نمودارها قابل مشاهده است.
             </div>
         </div>
         <div class="info-tags">
@@ -386,8 +360,8 @@
     </div>
 
     <div class="charts-wrapper">
-        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--secondary)"></i> جریان نقدینگی (شبیه‌ساز سالانه)</div></div><div class="chart-body"><canvas id="cashChart"></canvas></div></div>
-        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-crosshairs" style="color:var(--danger)"></i> نقطه سربه‌سر و بازگشت سرمایه</div></div><div class="chart-body"><canvas id="beChart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--secondary)"></i> جریان نقدینگی آزاد (FCF) ۱۰ ساله</div></div><div class="chart-body tall-chart-body"><canvas id="cashChart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-crosshairs" style="color:var(--danger)"></i> عبور از نقطه سربه‌سر</div></div><div class="chart-body tall-chart-body"><canvas id="beChart"></canvas></div></div>
     </div>
     
     <div class="matrix-container">
@@ -416,11 +390,20 @@
         document.getElementById(id + 'Arrow').classList.toggle('open');
     }
     
-    // Sidebar Functions
+    // Smart Toggle Sidebar Functions
+    function toggleSidebar() {
+        const sidebar = document.getElementById('controlSidebar');
+        if(sidebar.classList.contains('open')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    }
     function openSidebar() {
         document.getElementById('controlSidebar').classList.add('open');
         document.getElementById('sidebarOverlay').classList.add('open');
-        document.body.style.overflow = 'hidden'; // prevent background scrolling
+        // Only prevent body scroll on small screens where overlay is active
+        if(window.innerWidth < 1024) document.body.style.overflow = 'hidden'; 
     }
     function closeSidebar() {
         document.getElementById('controlSidebar').classList.remove('open');
@@ -461,7 +444,7 @@
 
         let fcfArr = [], annualRev = [], annualExp = [], cumCash = [];
         let runCum = 0, tRev = 0, peakRev = 0;
-        const limit = 10; // Fixed at 10 years
+        const limit = 10; 
 
         for(let t=0; t < limit; t++) {
             let r = 0, c = 0, fcf = 0;
@@ -539,9 +522,8 @@
         return null;
     }
 
-    // --- Render Rendering (Compact Design) ---
+    // --- Render Rendering (Fluid Responsive Grid) ---
     function renderKPIs(m, dRate) {
-        // ROW 1
         const r1 = [
             { t: "سرمایه‌گذاری (CAPEX)", v: fmt.format(Math.round(m.capex)), s: "تأمین فاز ساخت", c: "var(--primary)", i: "fa-building" },
             { t: "بازده داخلی (IRR)", v: m.irr !== null ? (m.irr*100).toFixed(1)+"%" : "N/A", s: m.irr*100 > dRate ? "مطلوب (بالاتر از نرخ)" : "نامطلوب", c: m.irr*100 > dRate ? "var(--success)" : "var(--danger)", i: "fa-percent" },
@@ -560,7 +542,6 @@
                 </div>
             </div>`).join('');
 
-        // ROW 2
         let stratText = (m.mix1 + m.mix2 > 50) ? "سبد High-Tech (حاشیه سود بالا)" : "سبد عمومی (نیاز به گردش بالا)";
         let stratColor = (m.mix1 + m.mix2 > 50) ? "var(--success)" : "var(--secondary)";
         
@@ -587,7 +568,6 @@
         Chart.defaults.font.family = "Vazirmatn";
         Chart.defaults.color = "#94a3b8";
         
-        // Added maxTicksLimit to stretch the Y-axis points visually
         const yAxisConfig = { grid: { color: 'var(--border)' }, beginAtZero: true, ticks: { maxTicksLimit: 6, padding: 10 } };
         
         cCash = new Chart(el('cashChart').getContext('2d'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { grid: { display: false } }, y: yAxisConfig } } });
@@ -613,7 +593,6 @@
 
     function updateCharts(m) {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        
         let labelsArr = [];
         for(let i=0; i<10; i++) labelsArr.push(YEARS_ARR[i] || "سال " + (i+1));
 
@@ -678,7 +657,6 @@
         let mix2 = parseInt(el('mix2Range').value);
         let mix3 = parseInt(el('mix3Range').value);
         
-        // Auto-balance mixes to 100
         if (mix1 + mix2 + mix3 > 100) { mix3 = 100 - mix1 - mix2; if(mix3 < 0) { mix3=0; mix2=100-mix1;} el('mix3Range').value = mix3; el('mix2Range').value = mix2; }
         
         el('valTiers').innerText = tiers;
