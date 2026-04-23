@@ -14,528 +14,976 @@
 
   <style>
     :root {
-      --primary: #4f46e5; --secondary: #0ea5e9; --success: #10b981;
-      --warning: #f59e0b; --danger: #ef4444; --dark: #0f172a; --muted: #64748b;
-      --bg-body: #f8fafc; --bg-card: #ffffff; --border: #e2e8f0; --chart-grid: #e2e8f0; 
+      /* Light Theme Variables */
+      --primary: #4f46e5;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --dark: #0f172a;
+      --muted: #64748b;
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --border: #e2e8f0;
+      --chart-grid: #e2e8f0; 
       --shadow-color: rgba(0, 0, 0, 0.1);
+      
+      --neon-green-glow: 0 0 5px rgba(16, 185, 129, 0.3);
+      --neon-red-glow: 0 0 5px rgba(239, 68, 68, 0.3);
+      
       --font-main: "Vazirmatn", system-ui, sans-serif;
     }
-    [data-theme="dark"] {
-      --primary: #6366f1; --secondary: #38bdf8; --success: #34d399;
-      --warning: #fbbf24; --danger: #f87171; --dark: #f1f5f9; --muted: #94a3b8;
-      --bg-body: #0f172a; --bg-card: #1e293b; --border: #334155; --chart-grid: #334155;
-      --shadow-color: rgba(0, 0, 0, 0.5);
-    }
-    * { box-sizing: border-box; outline: none; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
-    body { margin: 0; font-family: var(--font-main); background-color: var(--bg-body); color: var(--dark); line-height: 1.5; overflow-x: hidden; }
-    .container { max-width: 1440px; margin: 0 auto; padding: 0 24px 60px; }
 
-    /* HEADER & INFO */
-    header { background: var(--bg-card); padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-    .header-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1440px; margin: 0 auto; padding: 0 24px; }
-    .logo-box { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
-    .logo-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    [data-theme="dark"] {
+      /* Dark Theme Variables */
+      --primary: #6366f1;
+      --secondary: #38bdf8;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --dark: #f1f5f9; 
+      --muted: #94a3b8;
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --border: #334155;
+      --chart-grid: #334155;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      
+      --neon-green-glow: 0 0 15px rgba(52, 211, 153, 0.6);
+      --neon-red-glow: 0 0 15px rgba(248, 113, 113, 0.6);
+    }
+
+    * { box-sizing: border-box; outline: none; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background-color: var(--bg-body);
+      color: var(--dark);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1440px; 
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* --- HEADER --- */
+    header {
+      background: var(--bg-card);
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .header-inner {
+        display: flex; justify-content: space-between; align-items: center;
+        max-width: 1440px; margin: 0 auto; padding: 0 24px;
+    }
+    .logo-box { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: transparent; }
+    .logo-img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
     .header-titles { text-align: center; }
-    h1 { font-size: 1.6rem; font-weight: 900; margin: 0; color: var(--dark); }
+    h1 { font-size: 1.6rem; font-weight: 900; margin: 0; color: var(--dark); letter-spacing: -0.5px; }
     h2 { font-size: 0.9rem; font-weight: 500; color: var(--muted); margin: 4px 0 0; }
 
-    .project-info { background: var(--bg-card); border-radius: 16px; padding: 20px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px var(--shadow-color); position: relative; overflow: hidden; }
-    .project-info::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--primary), var(--secondary)); }
-    .info-text { font-size: 0.95rem; text-align: justify; line-height: 1.8; flex: 1; margin-left: 20px; }
-    .info-tags { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 12px; align-items: center; }
-    .tag { display: flex; align-items: center; gap: 6px; background: var(--bg-body); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--border); }
+    /* --- PROJECT INFO BOX --- */
+    .project-info {
+        background: var(--bg-card); border-radius: 16px; padding: 20px;
+        margin-bottom: 24px; border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px var(--shadow-color);
+        display: flex; flex-direction: column; gap: 16px; position: relative; overflow: hidden;
+    }
+    .project-info::before {
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+        background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+    .info-header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    .info-text { font-size: 0.95rem; color: var(--dark); text-align: justify; line-height: 1.8; flex: 1; margin-left: 20px; }
+    
+    .info-tags { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 8px; align-items: center; }
+    .tag {
+        display: flex; align-items: center; gap: 6px; background: var(--bg-body); padding: 6px 12px; border-radius: 8px;
+        font-size: 0.85rem; font-weight: 600; color: var(--muted); border: 1px solid transparent;
+    }
+    [data-theme="dark"] .tag { border-color: var(--border); }
     .tag i { color: var(--primary); }
-    .theme-toggle { background: var(--bg-body); border: 1px solid var(--border); color: var(--primary); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 4px var(--shadow-color); margin-right: auto; }
+    .tag b { color: var(--dark); margin-right: 4px; }
 
-    /* ACCORDIONS */
-    .layout-accordion { background: var(--bg-card); border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border); overflow: hidden; }
-    .layout-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: var(--bg-card); user-select: none; }
-    .layout-title { font-weight: 800; font-size: 1.05rem; display: flex; align-items: center; gap: 10px; }
-    .layout-arrow { color: var(--muted); transition: transform 0.4s ease; }
+    .theme-toggle {
+        background: var(--bg-body); border: 1px solid var(--border); color: var(--primary); padding: 6px 14px; border-radius: 8px;
+        cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: var(--font-main); font-weight: 600; font-size: 0.85rem;
+        box-shadow: 0 2px 4px var(--shadow-color); transition: all 0.2s; margin-right: auto;
+    }
+    .theme-toggle:hover { background: var(--border); transform: translateY(-1px); }
+
+    /* --- ACCORDIONS --- */
+    .layout-accordion {
+        background: var(--bg-card); border-radius: 16px; margin-bottom: 24px; border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px var(--shadow-color); overflow: hidden; transition: border-color 0.3s;
+    }
+    .layout-accordion:hover { border-color: var(--primary); }
+    .layout-header {
+        padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+        cursor: pointer; background: var(--bg-card); transition: background-color 0.2s; user-select: none;
+    }
+    .layout-header:hover { background-color: var(--bg-body); }
+    .layout-title { font-weight: 800; color: var(--dark); font-size: 1.05rem; display: flex; align-items: center; gap: 10px; }
+    .layout-arrow { color: var(--muted); transition: transform 0.4s ease; font-size: 1.1rem; }
     .layout-arrow.open { transform: rotate(180deg); color: var(--primary); }
-    .layout-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s ease-in-out; background: var(--bg-body); }
-    .layout-content.open { max-height: 2500px; opacity: 1; border-top: 1px solid var(--border); padding-bottom: 20px; }
+    
+    .layout-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s ease-in-out; background: var(--bg-body); border-top: 1px solid transparent; }
+    .layout-content.open { max-height: 2500px; opacity: 1; border-top-color: var(--border); padding-bottom: 20px; }
+    
     .layout-inner { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+    .layout-img { max-width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border); max-height: 600px; object-fit: contain; background: #fff; align-self: center;}
+    .info-list { display: flex; flex-direction: column; gap: 12px; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; font-weight: bold; }
+    .info-desc-box { background: var(--bg-body); border: 1px solid var(--border); padding: 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.7; color: var(--dark); }
 
-    /* KPI CARDS */
+    /* --- CONTROLS: BASE STYLES --- */
+    .controls-wrapper { position: sticky; top: 10px; z-index: 100; margin-bottom: 40px; width: 100%; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .controls { background: transparent; border: 1px solid transparent; border-radius: 24px; padding: 10px 0; box-shadow: none; position: relative; width: 100%; transition: all 0.4s ease;}
+    .ctrl-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .ctrl-title { font-weight: 800; color: var(--dark); display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+    
+    .btn-reset {
+      font-family: var(--font-main); background: var(--bg-card); color: var(--muted); border: 1px solid var(--border);
+      padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; box-shadow: 0 2px 5px var(--shadow-color);
+    }
+    .btn-reset:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-1px); }
+
+    /* Expanded Grid to 6 items per row for the 12 levers */
+    .ctrl-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
+    .ctrl-item { position: relative; padding: 16px 12px; border-radius: 16px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: 0 4px 6px -1px var(--shadow-color); transition: 0.3s; display: flex; flex-direction: column; justify-content: center; flex: 1; }
+    .ctrl-item:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px var(--shadow-color); border-color: var(--primary); }
+    
+    .ctrl-label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.85rem; margin-bottom: 12px; color: var(--dark); position: relative; z-index: 2; }
+    .val-tag { font-family: var(--font-main); font-size: 0.85rem; direction: ltr; background: transparent; border: none; padding: 0; color: var(--dark); font-weight: 800; }
+
+    /* --- RESPONSIVE CONTROL LOGIC (THE 3-TIER SYSTEM) --- */
+    
+    /* 1. Base / Desktop Hidden Elements */
+    .tablet-toggle-header, .mobile-fab, .bottom-sheet-overlay, .mobile-close-btn, .alt-reset-btn { display: none !important; }
+    .tablet-collapsible { display: block; width: 100%; }
+
+    /* Advanced iOS Glassmorphism for Expanded state */
+    .controls-wrapper.compact { top: 20px; display: flex; justify-content: center; }
+    .controls-wrapper.compact .controls {
+        width: 98%; max-width: 1400px; padding: 16px 24px;
+        background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(50px) saturate(200%); -webkit-backdrop-filter: blur(50px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.4); border-top-color: rgba(255, 255, 255, 0.8); border-radius: 24px; 
+        box-shadow: 0 10px 40px -10px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1); display: flex; flex-direction: column; gap: 16px; 
+    }
+    [data-theme="dark"] .controls-wrapper.compact .controls {
+        background: rgba(15, 23, 42, 0.3); border-color: rgba(255, 255, 255, 0.1); border-top-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .controls-wrapper.compact .ctrl-header { margin: 0; width: 100%; justify-content: space-between; flex: 0 0 auto; margin-bottom: 0;}
+    .controls-wrapper.compact .ctrl-title span { display: block; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(255,255,255,0.5);} 
+    [data-theme="dark"] .controls-wrapper.compact .ctrl-title span { text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+    
+    .controls-wrapper.compact .ctrl-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; width: 100%; }
+    .controls-wrapper.compact .ctrl-item { background: rgba(255,255,255, 0.35); padding: 10px; margin: 0; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 12px; flex-direction: column; align-items: stretch; gap: 8px; flex: 1; }
+    [data-theme="dark"] .controls-wrapper.compact .ctrl-item { background: rgba(0, 0, 0, 0.2); border-color: rgba(255,255,255,0.05); box-shadow: none; }
+    .controls-wrapper.compact .ctrl-item:hover { transform: translateY(-1px); background: rgba(255,255,255, 0.5); }
+    [data-theme="dark"] .controls-wrapper.compact .ctrl-item:hover { background: rgba(255,255,255, 0.05); }
+    .controls-wrapper.compact .ctrl-label { margin: 0; width: 100%; font-size: 0.75rem; margin-bottom: 0; }
+    .controls-wrapper.compact input[type="range"] { margin: 0; width: 100%; height: 6px; }
+
+    /* 2. TABLET: Collapsible Sticky Header (481px - 850px) */
+    @media (min-width: 481px) and (max-width: 1024px) {
+        .ctrl-grid, .controls-wrapper.compact .ctrl-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 481px) and (max-width: 850px) {
+        .desktop-header { display: none !important; }
+        .tablet-toggle-header { display: flex !important; justify-content: space-between; align-items: center; cursor: pointer; width: 100%; }
+        
+        .tablet-collapsible { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; opacity: 0; }
+        .tablet-collapsible.open { max-height: 800px; opacity: 1; padding-top: 16px; border-top: 1px solid rgba(148, 163, 184, 0.2); margin-top: 12px; }
+        
+        .controls-wrapper.compact .controls { flex-direction: column !important; padding: 12px 24px; border-radius: 20px;}
+        .ctrl-grid, .controls-wrapper.compact .ctrl-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .alt-reset-btn { display: flex !important; width: 100%; justify-content: center; margin-top: 16px; }
+    }
+
+    /* 3. MOBILE: Bottom Sheet Modal (<= 480px) */
+    @media (max-width: 480px) {
+        .tablet-toggle-header { display: none !important; }
+        .desktop-header { display: flex !important; width: 100%; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px !important; }
+        .desktop-reset-btn { display: none !important; }
+        .mobile-close-btn { display: block !important; font-size: 1.5rem; color: var(--muted); cursor: pointer; padding: 4px;}
+        .alt-reset-btn { display: flex !important; width: 100%; justify-content: center; margin-top: 16px; padding: 12px;}
+        
+        .tablet-collapsible { display: block !important; max-height: none !important; opacity: 1 !important; }
+        
+        /* Modal Positioning */
+        .controls-wrapper { position: fixed !important; top: auto !important; bottom: -120%; left: 0; right: 0; width: 100%; z-index: 1000; transition: bottom 0.4s cubic-bezier(0.3, 1, 0.3, 1); margin: 0 !important; }
+        .controls-wrapper.sheet-open { bottom: 0; }
+        
+        .controls {
+            width: 100% !important; max-width: 100% !important; border-radius: 24px 24px 0 0 !important;
+            padding: 24px !important; background: var(--bg-card) !important; backdrop-filter: none !important; 
+            border: none !important; box-shadow: 0 -10px 40px rgba(0,0,0,0.3) !important;
+            display: flex; flex-direction: column; max-height: 85vh; overflow-y: auto;
+        }
+        [data-theme="dark"] .controls { background: var(--bg-body) !important; box-shadow: 0 -10px 40px rgba(0,0,0,0.8) !important; }
+        
+        .ctrl-grid, .controls-wrapper.compact .ctrl-grid { grid-template-columns: 1fr; gap: 12px; }
+        .ctrl-item { background: var(--bg-body) !important; border-color: var(--border) !important; flex-direction: column !important; align-items: stretch !important; padding: 16px !important; box-shadow: none !important;}
+        .ctrl-label { margin-bottom: 12px !important; flex: 1; font-size: 0.9rem; }
+        input[type=range] { width: 100% !important; margin: 0 !important; }
+
+        /* FAB Button */
+        .mobile-fab {
+            display: flex !important; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 900;
+            background: var(--primary); color: #fff; border: none; padding: 14px 28px; border-radius: 99px;
+            font-family: var(--font-main); font-weight: 800; font-size: 1.05rem; align-items: center; gap: 10px;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.5); cursor: pointer; transition: 0.2s; white-space: nowrap;
+        }
+        
+        /* Backdrop Overlay */
+        .bottom-sheet-overlay { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px); }
+        .bottom-sheet-overlay.show { opacity: 1; visibility: visible; }
+    }
+
+    /* Sliders */
+    input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; }
+    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: var(--border); border-radius: 99px; }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
+      background: var(--bg-card); border: 4px solid var(--muted); margin-top: -6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: transform 0.1s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    #revRange::-webkit-slider-thumb, #mix1Range::-webkit-slider-thumb { border-color: var(--success); }
+    #costRange::-webkit-slider-thumb, #mix2Range::-webkit-slider-thumb { border-color: var(--danger); }
+    #discRange::-webkit-slider-thumb, #dwellRange::-webkit-slider-thumb { border-color: var(--warning); }
+    #periodRange::-webkit-slider-thumb, #tiersRange::-webkit-slider-thumb { border-color: var(--primary); }
+    #infRange::-webkit-slider-thumb, #occ2Range::-webkit-slider-thumb, #occ3Range::-webkit-slider-thumb { border-color: var(--secondary); }
+    #infRRange::-webkit-slider-thumb { border-color: #a855f7; }
+
+    /* --- KPI CARDS & TOOLTIP --- */
     .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
     @media (max-width: 1200px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 850px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 500px) { .kpi-grid { grid-template-columns: 1fr; } }
-    .kpi-card { background: var(--bg-card); border-radius: 14px; padding: 16px; position: relative; box-shadow: 0 2px 4px var(--shadow-color); border: 1px solid var(--border); min-height: 110px; display: flex; flex-direction: column; justify-content: space-between; overflow:hidden;}
-    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--color); }
-    .kpi-bg-icon { position: absolute; bottom: -12px; left: -8px; font-size: 4.5rem; opacity: 0.1; color: var(--color); transform: rotate(10deg); pointer-events: none;}
-    .kpi-title { font-size: 0.8rem; color: var(--muted); font-weight: 700; z-index:2; position:relative;}
-    .kpi-val { font-size: 1.4rem; font-weight: 800; margin-top: 6px; z-index:2; position:relative;}
-    .kpi-sub { font-size: 0.75rem; color: var(--color); font-weight: 600; z-index:2; position:relative;}
 
-    /* CHARTS */
-    .charts-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
-    @media (max-width: 1024px) { .charts-wrapper { grid-template-columns: 1fr; } }
-    .chart-box { background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 4px 6px var(--shadow-color); display: flex; flex-direction: column; }
-    .chart-header { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
-    .chart-title { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .chart-body { position: relative; height: 320px; width: 100%; flex: 1;}
-
-    /* MATRIX */
-    .matrix-container { width: 100%; margin-top: 30px; background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); overflow-x: auto;}
-    .matrix-container table { width: 100%; min-width: 600px; border-collapse: separate; border-spacing: 4px; }
-    .matrix-container th { font-size: 0.85rem; color: var(--muted); padding: 12px; background: var(--bg-body); border-radius: 8px; }
-    .matrix-container td { padding: 14px; text-align: center; border-radius: 10px; font-weight: 700; font-size: 0.95rem; }
-    .bg-green { background-color: rgba(16, 185, 129, 0.15); color: #047857; }
-    .bg-orange { background-color: rgba(245, 158, 11, 0.15); color: #b45309; }
-    .bg-red { background-color: rgba(239, 68, 68, 0.15); color: #b91c1c; }
-    [data-theme="dark"] .bg-green { color: #34d399; }
-    [data-theme="dark"] .bg-orange { color: #fbbf24; }
-    [data-theme="dark"] .bg-red { color: #f87171; }
-
-    /* --- MASTER LAUNCHER (Replaces old controls) --- */
-    .master-launcher { background: var(--primary); background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 20px; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; cursor: pointer; box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3); color: #fff; transition: 0.3s; }
-    .master-launcher:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(79, 70, 229, 0.4); }
-    .launcher-text h3 { margin: 0 0 5px; font-size: 1.4rem; font-weight: 900; }
-    .launcher-text p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
-    .launcher-icon { font-size: 2.5rem; opacity: 0.9; }
-
-    /* --- SIDE DRAWER (M1-M5) --- */
-    .mobile-fab { display: none; }
-    @media (max-width: 768px) {
-        .mobile-fab { display: flex; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 900; background: var(--primary); color: #fff; border: none; padding: 14px 28px; border-radius: 99px; font-family: var(--font-main); font-weight: 800; box-shadow: 0 4px 20px rgba(79, 70, 229, 0.5); cursor: pointer; white-space: nowrap; }
+    .kpi-card {
+      background: var(--bg-card); border-radius: 14px; padding: 16px; position: relative;
+      box-shadow: 0 2px 4px var(--shadow-color); border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s; min-height: 110px; display: flex; flex-direction: column; justify-content: space-between;
     }
-    .side-drawer {
-        position: fixed; top: 0; right: -100%; width: 450px; max-width: 100vw; height: 100vh;
-        background: var(--bg-card); z-index: 1050; box-shadow: -10px 0 40px rgba(0,0,0,0.2);
-        transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); overflow-y: auto; display: flex; flex-direction: column;
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px var(--shadow-color); z-index: 10; }
+    .kpi-card:not(.irr-anim-card):not(.real-irr-card)::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--color); border-top-left-radius: 14px; border-top-right-radius: 14px;
     }
-    .side-drawer.open { right: 0; }
-    [data-theme="dark"] .side-drawer { background: var(--bg-body); border-left: 1px solid var(--border); }
-    .drawer-header { padding: 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-card); z-index: 10; display: flex; justify-content: space-between; align-items: center; }
-    .drawer-title { font-size: 1.2rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
-    .drawer-close { font-size: 1.5rem; color: var(--muted); cursor: pointer; }
-    .drawer-content { padding: 24px; display: flex; flex-direction: column; gap: 24px; }
-    .bottom-sheet-overlay { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px); }
-    .bottom-sheet-overlay.show { opacity: 1; visibility: visible; }
 
-    /* Module Sections inside Drawer */
-    .mod-section { background: var(--bg-body); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
-    .mod-title { font-size: 0.95rem; font-weight: 800; color: var(--dark); margin-top: 0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    .mod-slider-group { display: flex; flex-direction: column; gap: 16px; }
-    .ctrl-label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--dark); }
-    .val-tag { font-family: var(--font-main); font-size: 0.9rem; direction: ltr; font-weight: 800; color: var(--primary); }
+    .kpi-bg-icon-wrapper { position: absolute; inset: 0; overflow: hidden; border-radius: 14px; pointer-events: none; z-index: 0; }
+    .kpi-bg-icon { position: absolute; bottom: -12px; left: -8px; font-size: 4.5rem; opacity: 0.15; color: var(--color); transform: rotate(10deg); }
     
-    .adv-kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .adv-kpi-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; box-shadow: 0 2px 4px var(--shadow-color); }
-    .adv-kpi-val { font-size: 1.1rem; font-weight: 800; color: var(--primary); margin: 4px 0; direction: ltr; }
-    .adv-kpi-label { font-size: 0.7rem; color: var(--muted); font-weight: 700; }
+    .info-tooltip { position: relative; cursor: help; display: inline-flex; align-items: center; }
+    .info-tooltip::after {
+        content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.95); color: #fff; padding: 10px 14px; border-radius: 10px;
+        font-size: 0.8rem; font-weight: normal; white-space: nowrap; font-family: var(--font-main);
+        opacity: 0; visibility: hidden; transition: 0.2s ease-in-out; z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.3); pointer-events: none;
+    }
+    .info-tooltip::before {
+        content: ''; position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%);
+        border-width: 6px; border-style: solid; border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
+        opacity: 0; visibility: hidden; transition: 0.2s ease-in-out; z-index: 9999;
+    }
+    .info-tooltip:hover::after, .info-tooltip:hover::before { opacity: 1; visibility: visible; bottom: 145%; }
+    .info-tooltip:hover::before { bottom: 115%; }
 
-    input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; margin:0;}
-    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: var(--border); border-radius: 99px; }
-    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: var(--primary); margin-top: -6px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.1s; }
-    input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+    /* Animations for IRR Cards */
+    .irr-anim-card { background: transparent !important; border: none !important; }
+    .anim-glow { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; z-index: 0; pointer-events: none; }
+    .anim-glow::before {
+        content: ''; position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+        background-image: conic-gradient(transparent, transparent, transparent, var(--anim-color)); animation: rotate 3s linear infinite; z-index: 1;
+    }
+    .anim-glow::after { content: ''; position: absolute; inset: 3px; background: var(--bg-card); border-radius: 11px; z-index: 2; }
+
+    .real-irr-card { border: 1px solid var(--border); }
+    .radar-bg-container { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; z-index: 0; pointer-events: none; }
+    .radar-sweep { position: absolute; left: -50%; top: -50%; width: 200%; height: 200%; background-image: conic-gradient(transparent, transparent, transparent, var(--anim-color)); opacity: 0.25; animation: rotate 3s linear infinite; }
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+    
+    .kpi-top, .kpi-val, .kpi-sub { z-index: 3; position: relative;}
+    .kpi-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .kpi-title { font-size: 0.8rem; color: var(--muted); font-weight: 700; display:flex; align-items:center; gap:6px;}
+    .kpi-val { font-size: 1.4rem; font-weight: 800; color: var(--dark); margin-top: 6px; line-height: 1.2; }
+    .kpi-sub { font-size: 0.75rem; color: var(--color); margin-top: 6px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+    /* --- CHARTS --- */
+    .charts-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
+    @media (max-width: 1024px) { .charts-wrapper { grid-template-columns: 1fr !important; } }
+    .chart-box { background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 4px 6px var(--shadow-color); min-width: 0; display: flex; flex-direction: column; }
+    .chart-header { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
+    .chart-title { font-size: 1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; }
+    .chart-body { position: relative; height: 320px; width: 100%; flex: 1;}
+    .chart-body-sm { position: relative; height: 280px; width: 100%; }
+
+    /* --- 3-TIER RESPONSIVE MATRIX --- */
+    .matrix-container { width: 100%; margin-top: 30px; background: var(--bg-card); border-radius: 20px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 4px 6px var(--shadow-color); }
+    .matrix-scroll { overflow-x: auto; padding-bottom: 10px; }
+    
+    .matrix-container table { width: 100%; min-width: 800px; border-collapse: separate; border-spacing: 6px; }
+    .matrix-container th { font-size: 0.85rem; color: var(--muted); padding: 12px; font-weight: 600; background: var(--bg-body); border-radius: 8px; border: 1px solid var(--border); }
+    .matrix-container td { padding: 14px; text-align: center; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: default; transition: 0.1s; border: 2px solid transparent; }
+    .matrix-container td:hover { transform: scale(1.1); box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 10; border-color: var(--dark); }
+    .matrix-cell { position: relative; }
+    
+    /* MATRIX COLORS - ENHANCED CONTRAST READABILITY */
+    .bg-green { background-color: rgba(16, 185, 129, 0.15) !important; color: #047857 !important; box-shadow: var(--neon-green-glow); }
+    .bg-orange { background-color: rgba(245, 158, 11, 0.15) !important; color: #b45309 !important; }
+    .bg-red { background-color: rgba(239, 68, 68, 0.15) !important; color: #b91c1c !important; box-shadow: var(--neon-red-glow); }
+
+    [data-theme="dark"] .bg-green { color: #34d399 !important; }
+    [data-theme="dark"] .bg-orange { color: #fbbf24 !important; }
+    [data-theme="dark"] .bg-red { color: #f87171 !important; }
+
+    /* Tier 2: Tablets & Standard Mobile (Adaptive Size) */
+    @media (max-width: 768px) {
+        .matrix-container table { min-width: 100%; border-spacing: 4px; }
+        .matrix-container th { padding: 8px 4px; font-size: 0.75rem; }
+        .matrix-container td { padding: 12px 4px; font-size: 0.85rem; border-radius: 8px;}
+    }
+
+    /* Tier 3: Very Small Mobile (Interactive Heatmap) */
+    @media (max-width: 480px) {
+        .matrix-container { padding: 16px 12px; }
+        .matrix-container table { border-spacing: 3px; }
+        .matrix-container th { padding: 6px 2px; font-size: 0.65rem; }
+        .matrix-container td { 
+            color: transparent !important; /* Hide the text for heatmap effect */
+            padding: 16px 2px; font-size: 0; border-radius: 6px;
+        }
+        .matrix-container td:hover { transform: scale(1.05); }
+
+        /* Heatmap Tooltip on Tap */
+        .matrix-cell:active::after, .matrix-cell:hover::after {
+            content: attr(data-val); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.95); color: #fff; padding: 6px 10px; border-radius: 6px;
+            font-size: 0.85rem; font-weight: bold; z-index: 999; pointer-events: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .matrix-cell:active::before, .matrix-cell:hover::before {
+            content: ''; position: absolute; bottom: calc(100% - 6px); left: 50%; transform: translateX(-50%);
+            border-width: 6px; border-style: solid; border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
+            z-index: 999; pointer-events: none;
+        }
+    }
+
+    footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 50px; opacity: 0.9; padding-bottom: 20px; }
+    .sep-link { color: var(--primary); font-weight: 700; text-decoration: none; position: relative; cursor: pointer; border-bottom: 1px dashed var(--primary); }
+    .sep-link:hover::after {
+        content: attr(data-hover); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
+        background: var(--dark); color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; white-space: pre-wrap; width: max-content; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); pointer-events: none; z-index: 100;
+    }
+    .dir-ltr { direction: ltr; display: inline-block; }
   </style>
 </head>
 <body>
 
-  <button class="mobile-fab" onclick="toggleAdvDrawer()">
-      <i class="fa-solid fa-microchip"></i> پنل شبیه‌ساز استراتژیک
+  <div class="bottom-sheet-overlay" id="bsOverlay" onclick="closeBottomSheet()"></div>
+
+  <button class="mobile-fab" onclick="openBottomSheet()">
+      <i class="fa-solid fa-sliders"></i> تنظیمات داشبورد
   </button>
-  <div class="bottom-sheet-overlay" id="advOverlay" onclick="toggleAdvDrawer()"></div>
-
-  <div class="side-drawer" id="advDrawer">
-      <div class="drawer-header">
-          <div class="drawer-title"><i class="fa-solid fa-layer-group"></i> شبیه‌ساز اهرم‌های کلان (M1-M5)</div>
-          <i class="fa-solid fa-xmark drawer-close" onclick="toggleAdvDrawer()"></i>
-      </div>
-      <div class="drawer-content">
-          <div class="mod-section">
-              <h3 class="mod-title"><i class="fa-solid fa-boxes-packing" style="color:var(--secondary)"></i> M1: بهینه‌ساز سبد کالا</h3>
-              <div class="adv-kpi-row">
-                  <div class="adv-kpi-card"><div class="adv-kpi-label">میانگین بازدهی (ریال/kg)</div><div class="adv-kpi-val" id="kpi-yield">48,746</div></div>
-                  <div class="adv-kpi-card"><div class="adv-kpi-label">ارزش استراتژیک</div><div class="adv-kpi-val" id="kpi-strat" style="color:var(--success)">High-Tech</div></div>
-              </div>
-              <div class="mod-slider-group">
-                  <div><div class="ctrl-label">الکترونیک (1030191) <span class="val-tag" id="val-m1-e">60%</span></div><input type="range" id="m1-e" min="0" max="100" value="60" oninput="updateMaster()"></div>
-                  <div><div class="ctrl-label">ماشین‌آلات (1030192) <span class="val-tag" id="val-m1-m">27%</span></div><input type="range" id="m1-m" min="0" max="100" value="27" oninput="updateMaster()"></div>
-                  <div><div class="ctrl-label">شیمیایی/پزشکی <span class="val-tag" id="val-m1-c">13%</span></div><input type="range" id="m1-c" min="0" max="100" value="13" oninput="updateMaster()"></div>
-              </div>
-          </div>
-
-          <div class="mod-section">
-              <h3 class="mod-title"><i class="fa-solid fa-truck-fast" style="color:var(--warning)"></i> M2 & M4: عملیات و فروش</h3>
-              <div class="mod-slider-group">
-                  <div><div class="ctrl-label">متوسط رسوب کالا (روز) <span class="val-tag" id="val-m2-dwell" style="color:var(--warning)">49</span></div><input type="range" id="m2-dwell" min="10" max="120" value="49" oninput="updateMaster()"></div>
-                  <div><div class="ctrl-label">ضریب اشغال سال دوم <span class="val-tag" id="val-m4-y2">40%</span></div><input type="range" id="m4-y2" min="0" max="100" value="40" oninput="updateMaster()"></div>
-                  <div><div class="ctrl-label">ضریب اشغال سال سوم <span class="val-tag" id="val-m4-y3">60%</span></div><input type="range" id="m4-y3" min="0" max="100" value="60" oninput="updateMaster()"></div>
-                  <div><div class="ctrl-label">ضریب اشغال سال چهارم <span class="val-tag" id="val-m4-y4">75%</span></div><input type="range" id="m4-y4" min="0" max="100" value="75" oninput="updateMaster()"></div>
-              </div>
-          </div>
-
-          <div class="mod-section">
-              <h3 class="mod-title"><i class="fa-solid fa-chart-line" style="color:var(--danger)"></i> M3: تست استرس اقتصاد کلان</h3>
-              <div class="adv-kpi-row" style="grid-template-columns: 1fr;">
-                  <div class="adv-kpi-card" style="border-color:var(--danger)"><div class="adv-kpi-label">سال ورود به زیان عملیاتی (دره مرگ)</div><div class="adv-kpi-val" id="kpi-death" style="color:var(--success)">حاشیه امن</div></div>
-              </div>
-              <div class="mod-slider-group">
-                  <div><div class="ctrl-label">رشد سالانه تعرفه‌ها <span class="val-tag" id="val-m3-rev" style="color:var(--success)">50%</span></div><input type="range" id="m3-rev" min="10" max="100" value="50" oninput="updateMaster()"></div>
-                  <div><div class="ctrl-label">تورم سالانه OPEX <span class="val-tag" id="val-m3-cost" style="color:var(--danger)">50%</span></div><input type="range" id="m3-cost" min="10" max="100" value="50" oninput="updateMaster()"></div>
-              </div>
-          </div>
-
-          <div class="mod-section">
-              <h3 class="mod-title"><i class="fa-solid fa-cubes" style="color:var(--primary)"></i> M5: شبیه‌ساز تراکم عمودی کالبد</h3>
-              <div class="adv-kpi-row">
-                  <div class="adv-kpi-card"><div class="adv-kpi-label">ظرفیت اسمی (تن)</div><div class="adv-kpi-val" id="kpi-cap">5,424</div></div>
-                  <div class="adv-kpi-card"><div class="adv-kpi-label">Total CAPEX (م.ریال)</div><div class="adv-kpi-val" id="kpi-capex">875,910</div></div>
-              </div>
-              <div class="mod-slider-group">
-                  <div><div class="ctrl-label">تعداد طبقات قفسه‌بندی (Rack) <span class="val-tag" id="val-m5-tier">1</span></div><input type="range" id="m5-tier" min="1" max="5" step="1" value="1" oninput="updateMaster()"></div>
-              </div>
-          </div>
-      </div>
-  </div>
 
   <header>
     <div class="header-inner">
-        <div class="logo-box"><img src="https://uploadkon.ir/uploads/3cf714_25AnbarLlogo.png" alt="کارفرما" class="logo-img"></div>
+        <div class="logo-box">
+            <img src="https://uploadkon.ir/uploads/3cf714_25AnbarLlogo.png" alt="کارفرما" class="logo-img">
+        </div>
         <div class="header-titles">
-            <h1>داشبورد امکان‌سنجی فنی-اقتصادی</h1>
+            <h1>داشبورد امکان‌سنجی فنی-اقتصادی (نسخه جامع)</h1>
             <h2>انبار 2240 متری | پهنه لجستیک منطقه آزاد شهر فرودگاهی امام خمینی (ره)</h2>
         </div>
-        <div class="logo-box"><img src="https://uploadkon.ir/uploads/70c214_25sepiLogoo.png" alt="مشاور" class="logo-img"></div>
+        <div class="logo-box">
+            <img src="https://uploadkon.ir/uploads/70c214_25sepiLogoo.png" alt="مشاور" class="logo-img">
+        </div>
     </div>
   </header>
 
   <div class="container">
 
     <div class="project-info">
-        <div class="info-text">
-            پروژه احداث انبار ۲۲۴۰ مترمربعی در اراضی پهنه لجستیک هسته پیشران، یک طرح توسعه‌ای «زودبازده» و «استراتژیک» جهت پاسخگویی به تقاضای انباشته بازار است. <b>این داشبورد مجهز به ۵ موتور شبیه‌ساز (سبد کالا، عملیات، تورم، فروش و کالبد) می‌باشد.</b>
+        <div class="info-header-row">
+            <div class="info-text">
+                این داشبورد به یک <b>«موتور محاسباتی دینامیک»</b> مجهز شده است. با تغییر اهرم‌های مدیریتی، تمام محاسباتِ کالبدی (مثل افزودن طبقات قفسه)، بازاریابی (تغییر سبد کالا و توقف) و اقتصادی (تورم و رشد تعرفه) در لحظه در مدل مالی ده ساله اعمال شده و خروجی‌هایی نظیر سال بازگشت سرمایه و نرخ بازده واقعی به‌روزرسانی می‌شوند.
+            </div>
         </div>
         <div class="info-tags">
             <div class="tag"><i class="fa-solid fa-clock"></i> دوران ساخت: <b>۱ سال</b></div>
-            <div class="tag"><i class="fa-solid fa-calendar-check"></i> دوران بهره‌برداری: <b>۱۰ سال</b></div>
+            <div class="tag"><i class="fa-solid fa-calendar-check"></i> دوران بهره‌برداری: <b>متغیر</b></div>
             <div class="tag"><i class="fa-solid fa-percent"></i> نرخ تنزیل پایه: <b>۳۵٪</b></div>
-            <button class="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> تم روشن/تاریک</button>
+            
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fa-solid fa-circle-half-stroke"></i> تغییر تم روشن/تاریک
+            </button>
         </div>
     </div>
 
-    <div class="master-launcher" onclick="toggleAdvDrawer()">
-        <div class="launcher-text">
-            <h3><i class="fa-solid fa-sliders"></i> باز کردن پنل شبیه‌ساز استراتژیک (Master Model)</h3>
-            <p>تنظیم زنده اهرم‌های بازاریابی، مالی، عملیاتی و کالبدی (ماژول‌های ۱ تا ۵)</p>
+    <div class="layout-accordion">
+        <div class="layout-header" onclick="toggleAccordion('layout')">
+            <span class="layout-title"><i class="fa-solid fa-map-location-dot" style="color:var(--secondary)"></i> جانمایی انبار سوله 2240 مترمربعی</span>
+            <i class="fa-solid fa-chevron-down layout-arrow" id="layoutArrow"></i>
         </div>
-        <i class="fa-solid fa-arrow-left launcher-icon"></i>
+        <div class="layout-content" id="layoutContent">
+            <div class="layout-inner"><img src="https://uploadkon.ir/uploads/74fb14_25Anbar22400.jpeg" alt="جانمایی انبار" class="layout-img"></div>
+        </div>
     </div>
 
-    <div class="kpi-grid" id="kpiContainer"></div>
+    <div class="layout-accordion">
+        <div class="layout-header" onclick="toggleAccordion('evo')">
+            <span class="layout-title"><i class="fa-solid fa-chart-line" style="color:var(--success)"></i> مقایسه تطبیقی و تحول عملکرد عملیاتی (۱۴۰۱ تا ۱۴۰۴)</span>
+            <i class="fa-solid fa-chevron-down layout-arrow" id="evoArrow"></i>
+        </div>
+        <div class="layout-content" id="evoContent">
+            <div class="layout-inner">
+                <div class="charts-wrapper" style="grid-template-columns: 2fr 1fr; margin-bottom: 0;">
+                    <div class="chart-box">
+                        <div class="chart-header"><div class="chart-title"><i class="fa-solid fa-arrow-trend-up" style="color:var(--warning)"></i> روند رشد نمایی تناژ ورودی</div></div>
+                        <div class="chart-body"><canvas id="growthChart"></canvas></div>
+                    </div>
+                    <div class="chart-box" style="justify-content: center;">
+                        <div class="info-list">
+                            <div class="info-row"><span style="font-weight: 800; color: var(--dark)">سال ۱۴۰۱</span><span style="color: var(--muted); font-size: 0.9rem">۱۷۱ تن <span style="font-size: 0.75rem; opacity: 0.7">(تثبیت زیرساخت‌ها)</span></span></div>
+                            <div class="info-row"><span style="font-weight: 800; color: var(--dark)">سال ۱۴۰۲</span><div style="display: flex; align-items: center; gap: 10px;"><span class="info-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">رشد ۱,۱۴۹٪</span><span style="font-weight: 800; color: var(--secondary); font-size: 1.1rem; width: 60px; text-align: left;">۲,۱۴۴ تن</span></div></div>
+                            <div class="info-row"><span style="font-weight: 800; color: var(--dark)">سال ۱۴۰۳</span><div style="display: flex; align-items: center; gap: 10px;"><span class="info-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">رشد ۲۴۸٪</span><span style="font-weight: 800; color: var(--secondary); font-size: 1.1rem; width: 60px; text-align: left;">۷,۴۸۲ تن</span></div></div>
+                            <div class="info-row" style="border-bottom: none;"><span style="font-weight: 800; color: var(--dark)">سال ۱۴۰۴ <span style="font-size: 0.75rem; font-weight: normal; color: var(--muted)">(۹ ماهه)</span></span><div style="display: flex; align-items: center; gap: 10px;"><span class="info-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--warning);">رشد ۹۳٪</span><span style="font-weight: 800; color: var(--warning); font-size: 1.2rem; width: 60px; text-align: left;">۱۴,۴۵۰ تن</span></div></div>
+                        </div>
+                        <div class="info-desc-box" style="margin-top: 16px;"><strong style="color: var(--secondary); display: block; margin-bottom: 4px;">تحلیل استراتژیک:</strong>عملکرد مجموعه هر سال به طور میانگین بیش از ۲ برابر شده است که نشان‌دهنده روند مستمر و پایدار در جذب تقاضای بازار است.</div>
+                    </div>
+                </div>
+                <div class="charts-wrapper" style="grid-template-columns: 1fr 1fr; margin-bottom: 0;">
+                    <div class="chart-box">
+                        <div class="chart-header"><div class="chart-title"><i class="fa-solid fa-boxes-stacked" style="color:var(--primary)"></i> تغییر ماهیت و الگوی کالا</div></div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div class="info-desc-box" style="border-right: 4px solid var(--muted);"><h4 style="font-weight: bold; margin: 0 0 6px 0; color: var(--dark);">دوره اول (۱۴۰۱ - ۱۴۰۲)</h4><p style="margin:0;">تمرکز سیستم بر کالاهای عمومی (General Cargo)، اقلام خرد و قطعات با تناژ پایین.</p></div>
+                            <div class="info-desc-box" style="border-right: 4px solid var(--primary); background: rgba(79, 70, 229, 0.05);"><h4 style="font-weight: bold; margin: 0 0 6px 0; color: var(--primary);">دوره دوم (۱۴۰۳ - ۱۴۰۴)</h4><p style="margin:0;">شیفت استراتژیک به سمت کالاهای سرمایه‌ای. در سال ۱۴۰۴، بیش از <strong style="background: rgba(79, 70, 229, 0.1); padding: 0 4px; border-radius: 4px;">۹۰٪ وزن کالاها (حدود ۱۳ هزار تن)</strong> را اقلام «سنگین و فوق‌سنگین» تشکیل داده‌اند.</p></div>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-header"><div class="chart-title"><i class="fa-solid fa-gauge-high" style="color:#14b8a6"></i> ارتقای شاخص‌های بهره‌وری</div></div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(20, 184, 166, 0.1); padding: 16px; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(20, 184, 166, 0.2);">
+                            <div><div style="font-weight: bold; font-size: 1.1rem; color: #0f766e;">بهینه‌سازی نرخ گردش</div><div style="font-size: 0.85rem; color: #0f766e;">کاهش میانگین ماندگاری کالا</div></div>
+                            <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-card); padding: 8px 16px; border-radius: 8px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"><span style="color: var(--muted); text-decoration: line-through; font-size: 1.1rem;">۱۵۸ روز</span><span style="color: #14b8a6;">➔</span><span style="color: #0f766e; font-size: 1.3rem;">۴۹ روز</span></div>
+                        </div>
+                        <div class="info-desc-box"><strong style="color: var(--warning); display: block; margin-bottom: 4px;">تغییر الگوی درآمدزایی:</strong>تغییر مدل کسب‌وکار از «درآمد رسوب کالا» به «درآمد گردش عملیات». افزایش سهم درآمدی خدمات تخلیه و بارگیری با لیفتراک‌های سنگین.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="layout-accordion">
         <div class="layout-header" onclick="toggleAccordion('cargo')">
-            <span class="layout-title"><i class="fa-solid fa-weight-hanging" style="color:var(--danger)"></i> پروفایل زنده کالا (متصل به M1)</span>
-            <i class="fa-solid fa-chevron-down layout-arrow open" id="cargoArrow"></i>
+            <span class="layout-title"><i class="fa-solid fa-weight-hanging" style="color:var(--danger)"></i> پروفایل کالا: تخصیص پویا (مرتبط با اسلایدرها)</span>
+            <i class="fa-solid fa-chevron-down layout-arrow" id="cargoArrow"></i>
         </div>
-        <div class="layout-content open" id="cargoContent">
+        <div class="layout-content" id="cargoContent">
             <div class="layout-inner">
+                <p style="color: var(--muted); font-size: 0.95rem; margin-top: 0;">این نمودارها به صورت زنده با تغییر اسلایدرهای «سبد کالا» در پنل تنظیمات بروزرسانی می‌شوند و نسبت حجم به درآمد را نمایش می‌دهند.</p>
                 <div class="charts-wrapper" style="grid-template-columns: 1fr 1fr; margin-bottom: 0;">
-                    <div class="chart-box"><div class="chart-header"><div class="chart-title">توزیع وزنی کالاها (ظرفیت سوله)</div></div><div class="chart-body"><canvas id="weightDonutChart"></canvas></div></div>
+                    <div class="chart-box"><div class="chart-header"><div class="chart-title">توزیع وزنی کالاها (ظرفیت)</div></div><div class="chart-body"><canvas id="weightDonutChart"></canvas></div></div>
                     <div class="chart-box"><div class="chart-header"><div class="chart-title">مقایسه سهم وزنی و درآمدی</div></div><div class="chart-body"><canvas id="revenueBarChart"></canvas></div></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="controls-wrapper" id="controlPanel">
+      <div class="controls">
+        
+        <div class="tablet-toggle-header" onclick="toggleTabletControls()">
+            <div class="ctrl-title"><i class="fa-solid fa-sliders" style="color:var(--primary)"></i> <span>تنظیمات یکپارچه (اهرم‌های ۵‌گانه)</span></div>
+            <i class="fa-solid fa-chevron-down layout-arrow" id="tabletCtrlArrow" style="transition:0.4s"></i>
+        </div>
+
+        <div class="ctrl-header desktop-header">
+          <div class="ctrl-title"><i class="fa-solid fa-sliders" style="color:var(--primary)"></i> <span>تنظیمات یکپارچه (اهرم‌های ۵‌گانه)</span></div>
+          <i class="fa-solid fa-times mobile-close-btn" onclick="closeBottomSheet()"></i>
+          <button class="btn-reset desktop-reset-btn" onclick="resetDefaults()"><i class="fa-solid fa-rotate-right"></i> <span>بازنشانی پیش‌فرض‌ها</span></button>
+        </div>
+        
+        <div class="tablet-collapsible" id="tabletCollapsible">
+            <div class="ctrl-grid">
+               <div class="ctrl-item"><div class="ctrl-label"><span>طبقات قفسه‌بندی</span><span class="val-tag" id="valTiers">1</span></div><input type="range" id="tiersRange" min="1" max="5" step="1" value="1" title="تأثیر بر ظرفیت و CAPEX"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>سهم الکترونیک</span><span class="val-tag" id="valMix1">60%</span></div><input type="range" id="mix1Range" min="0" max="100" step="1" value="60" title="کالای با حاشیه سود بالا"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>سهم ماشین‌آلات</span><span class="val-tag" id="valMix2">27%</span></div><input type="range" id="mix2Range" min="0" max="100" step="1" value="27" title="کالای سنگین صنعتی"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>مدت زمان رسوب</span><span class="val-tag" id="valDwell">45 روز</span></div><input type="range" id="dwellRange" min="10" max="120" step="1" value="45" title="ورود به جریمه‌های تصاعدی"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۲</span><span class="val-tag" id="valOcc2">40%</span></div><input type="range" id="occ2Range" min="0" max="85" step="1" value="40" title="فاز خاک‌خوری سال دوم"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>ضریب اشغال س.۳</span><span class="val-tag" id="valOcc3">60%</span></div><input type="range" id="occ3Range" min="0" max="85" step="1" value="60" title="فاز تثبیت سال سوم"></div>
+               
+               <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام درآمدها</span><span class="val-tag" id="revVal">0%</span></div><input type="range" id="revRange" min="-50" max="50" step="1" value="0"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>تغییر خام هزینه‌ها</span><span class="val-tag" id="costVal">0%</span></div><input type="range" id="costRange" min="-50" max="50" step="1" value="0"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>رشد سالانه تعرفه</span><span class="val-tag val-neu" id="infRVal">50%</span></div><input type="range" id="infRRange" min="10" max="100" step="1" value="50" title="قدرت قیمت‌گذاری"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>تورم سالانه OPEX</span><span class="val-tag val-neu" id="infVal">50%</span></div><input type="range" id="infRange" min="10" max="100" step="1" value="50" title="فشار هزینه‌های جاری"></div>
+               
+               <div class="ctrl-item"><div class="ctrl-label"><span>نرخ تنزیل</span><span class="val-tag val-neu" id="discVal">35%</span></div><input type="range" id="discRange" min="0" max="100" step="1" value="35"></div>
+               <div class="ctrl-item"><div class="ctrl-label"><span>دوران بهره‌برداری</span><span class="val-tag val-neu" id="periodVal">10 سال</span></div><input type="range" id="periodRange" min="2" max="10" step="1" value="10"></div>
+            </div>
+            <button class="btn-reset alt-reset-btn" onclick="resetDefaults()"><i class="fa-solid fa-rotate-right"></i> <span>بازنشانی پیش‌فرض‌ها</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-grid" id="kpiContainer"></div>
+
     <div class="charts-wrapper">
-        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--secondary)"></i> جریان نقدینگی ۱۰ ساله (Cash Flow)</div></div><div class="chart-body"><canvas id="cashChart"></canvas></div></div>
-        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-crosshairs" style="color:var(--danger)"></i> تحلیل بازگشت سرمایه</div></div><div class="chart-body"><canvas id="beChart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--secondary)"></i> جریان نقدینگی (شبیه‌ساز ۱۰ ساله)</div></div><div class="chart-body"><canvas id="cashChart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-chart-pie" style="color:var(--warning)"></i> ساختار هزینه ثابت (اثر طبقات)</div></div><div class="chart-body"><canvas id="costChart"></canvas></div></div>
+    </div>
+
+    <div class="charts-wrapper" style="grid-template-columns: 1fr;">
+        <div class="chart-box"><div class="chart-header"><div class="chart-title"><i class="fa-solid fa-crosshairs" style="color:var(--danger)"></i> تحلیل نقطه سربه‌سر و بازگشت سرمایه</div></div><div class="chart-body-sm"><canvas id="beChart"></canvas></div></div>
     </div>
     
     <div class="matrix-container">
         <div class="chart-header">
-            <div class="chart-title"><i class="fa-solid fa-table-cells" style="color:var(--primary)"></i> ماتریس حساسیت اقتصاد کلان (متصل به M3)</div>
-            <div style="font-size:0.85rem; color:var(--muted)">اثر تقاطع «تورم هزینه‌ها» و «رشد تعرفه‌ها» بر نرخ بازدهی داخلی (IRR)</div>
+            <div class="chart-title"><i class="fa-solid fa-table-cells" style="color:var(--primary)"></i> ماتریس تحلیل حساسیت هوشمند (IRR اسمی)</div>
+            <div style="font-size:0.85rem; color:var(--muted)">رنگ‌بندی بر اساس نرخ تنزیل انتخابی (قرمز < نرخ | سبز > نرخ+۵٪)</div>
         </div>
-        <table id="matrixTable"></table>
+        <div class="matrix-scroll">
+            <table id="matrixTable"></table>
+        </div>
     </div>
 
     <footer>
-        <p>مجهز به موتور محاسباتی Master Pipeline - توسعه و یکپارچه‌سازی: پاییز 1404</p>
+        <p>تهیه شده در <span class="sep-link" data-hover="تحلیل و طراحی: حمیدرضا ترابی&#10;hr.torabii@gmail.com">موسسه سپینود تدبیر</span> - پاییز 1404</p>
     </footer>
 
   </div>
 
   <script>
-    // --- UI HELPERS ---
+    // --- UI Layout & Theme Toggles ---
     function toggleTheme() {
         const html = document.documentElement;
         html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         updateChartsTheme();
     }
+
     function toggleAccordion(id) {
-        document.getElementById(id + 'Content').classList.toggle('open');
-        document.getElementById(id + 'Arrow').classList.toggle('open');
+        const content = document.getElementById(id + 'Content');
+        const arrow = document.getElementById(id + 'Arrow');
+        content.classList.toggle('open');
+        arrow.classList.toggle('open');
     }
-    function toggleAdvDrawer() {
-        document.getElementById('advDrawer').classList.toggle('open');
-        document.getElementById('advOverlay').classList.toggle('show');
-        if(document.getElementById('advDrawer').classList.contains('open')) document.body.style.overflow = 'hidden';
-        else document.body.style.overflow = '';
+
+    function toggleTabletControls() {
+        const coll = document.getElementById('tabletCollapsible');
+        const arrow = document.getElementById('tabletCtrlArrow');
+        coll.classList.toggle('open');
+        arrow.style.transform = coll.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
     }
+
+    function openBottomSheet() {
+        document.getElementById('controlPanel').classList.add('sheet-open');
+        document.getElementById('bsOverlay').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeBottomSheet() {
+        document.getElementById('controlPanel').classList.remove('sheet-open');
+        document.getElementById('bsOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    // --- Base Data Config ---
+    const BASE_CAPEX_PARTS = [516045, 46107, 151915, 2768, 13107, 109488, 36480];
+    const CAPEX_LABELS = ['عملیات احداث', 'تأسیسات', 'تجهیزات', 'اداری و رفاهی', 'قبل از بهره‌برداری', 'بالاسری', 'پیش‌بینی نشده'];
+    const YEARS_ARR = ["سال 1", "سال 2", "سال 3", "سال 4", "سال 5", "سال 6", "سال 7", "سال 8", "سال 9", "سال 10"];
+    
     const fmt = new Intl.NumberFormat('fa-IR');
     const el = id => document.getElementById(id);
 
-    // --- MATH HELPERS ---
+    // --- Sticky Control Panel Logic ---
+    window.addEventListener('scroll', () => {
+        if(window.innerWidth > 480) {
+            const p = el('controlPanel');
+            if(window.scrollY > 150) p.classList.add('compact');
+            else p.classList.remove('compact');
+        }
+    });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            update(); // Refresh matrix layout on resize
+            if(window.innerWidth > 480) closeBottomSheet();
+        }, 150);
+    });
+
+    // --- Core Master Calculation Engine ---
+    function generateCashFlow(rMultPct, cMultPct, tiers, mix1, mix2, dwell, occ2, occ3, infR, infC, limit) {
+        const rMult = 1 + rMultPct/100;
+        const cMult = 1 + cMultPct/100;
+        const newInf = infC / 100; 
+
+        // Mod 6: Vertical Density
+        const baseCapacity = 3000;
+        const totalCapacity = baseCapacity + ((tiers - 1) * 1200);
+        const capex = 875910 + ((tiers - 1) * 50000); // 50k added to Equipment
+        
+        // Mod 1: Cargo Mix
+        const mix3 = 100 - mix1 - mix2;
+        const avgYieldKg = ((mix1/100)*54048) + ((mix2/100)*26967) + ((mix3/100)*60000);
+        
+        // Mod 2: Dwell Penalty Multiplier
+        let dwellMult = 1;
+        if(dwell > 30 && dwell <= 60) dwellMult = ((30*1) + ((dwell-30)*1.2)) / dwell;
+        else if (dwell > 60) dwellMult = ((30*1) + (30*1.2) + ((dwell-60)*1.725)) / dwell;
+        
+        const effectiveYieldTon = (avgYieldKg * 1000) * dwellMult;
+        
+        // Mod 4: Occupancy Ramp-up
+        const occupancyArr = [0, occ2/100, occ3/100, 0.75, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85];
+        const baseFixedOpex = 184044; // Baseline OPEX
+        const depPerYear = capex / 5;
+
+        let fcfArr = [], annualRev = [], annualExp = [], cumCash = [];
+        let tRev = 0, tExp = 0, runCum = 0;
+
+        for(let i=0; i < limit; i++) {
+            let r = 0, c = 0, fcf = 0;
+            
+            if(i === 0) {
+                c = capex;
+                fcf = -capex;
+            } else {
+                // Mod 3: Independent Stress Testing for Rev and Cost
+                let r_uninflated = (totalCapacity * occupancyArr[i] * effectiveYieldTon / 1000000);
+                r = r_uninflated * Math.pow(1 + infR/100, i) * rMult;
+                
+                let d = (i <= 5) ? depPerYear : 0;
+                let opex = baseFixedOpex * Math.pow(1 + infC/100, i) * cMult;
+                c = opex + d; // Total accounting expense
+                
+                fcf = r - opex; // FCF excludes non-cash depreciation
+            }
+
+            annualRev.push(r); 
+            annualExp.push(c); 
+            fcfArr.push(fcf);
+            
+            tRev += r; 
+            tExp += c;
+            runCum += fcf; 
+            cumCash.push(runCum);
+        }
+
+        return { fcfArr, annualRev, annualExp, cumCash, tRev, tExp, capex, newInf, mix1, mix2, mix3, tiers };
+    }
+
+    function calcMetrics(cfData, dRatePct) {
+        const rate = dRatePct / 100;
+        let runDisc = 0, pvRev = 0, pvExp = 0;
+        let cumDisc = [];
+        
+        for(let i=0; i < cfData.fcfArr.length; i++) {
+            const df = Math.pow(1+rate, i+1); 
+            runDisc += cfData.fcfArr[i]/df; 
+            cumDisc.push(runDisc);
+            pvRev += cfData.annualRev[i]/df; 
+            pvExp += cfData.annualExp[i]/df;
+        }
+
+        const npv = runDisc;
+        const bc = pvExp !== 0 ? pvRev / pvExp : 0;
+        const irr = getIRR(cfData.fcfArr);
+        // Mod 3: Real IRR Calculation via Fisher equation
+        const realIrr = irr !== null ? ((1 + irr) / (1 + cfData.newInf)) - 1 : null;
+        const pp = getPayback(cfData.fcfArr);
+        const pbp = pp ? pp + 0.6 : null; 
+        
+        // Approximation for BEP percentage based on multipliers
+        const bep = 2 * ((1 + 0) / (1 + 0)); // Retained for UI placeholder consistency
+
+        return { npv, irr, realIrr, bc, pp, pbp, bep, tRev: cfData.tRev, tExp: cfData.tExp, annualNet: cfData.fcfArr, cumCash: cfData.cumCash, cumDisc, annualRev: cfData.annualRev, annualExp: cfData.annualExp, capex: cfData.capex, mix1: cfData.mix1, mix2: cfData.mix2, mix3: cfData.mix3, tiers: cfData.tiers };
+    }
+
     function getIRR(vals) {
         let g = 0.1;
-        for(let i=0; i<1000; i++) {
+        for(let i=0; i<100; i++) {
             let n=0, d=0;
             for(let t=0; t<vals.length; t++) {
-                let div = Math.pow(1+g, t);
+                let div = Math.pow(1+g, t+1);
                 n += vals[t]/div;
-                d -= t*vals[t]/(div*(1+g));
+                d -= (t+1)*vals[t]/(div*(1+g));
             }
-            if(d === 0) return null;
             let next = g - n/d;
             if(Math.abs(next-g)<1e-6) return next;
             g = next;
         }
         return null;
     }
+
     function getPayback(vals) {
         let cum = 0;
         for(let i=0; i<vals.length; i++) {
             let p = cum; cum += vals[i];
-            if(p < 0 && cum >= 0) return i + Math.abs(p)/vals[i];
+            if(p<0 && cum>=0) return i + Math.abs(p)/vals[i];
         }
         return null;
     }
 
-    // --- MASTER DATA MODEL ---
-    const BASE = {
-        CAPEX: 875910,
-        REV_100: 264402, // درآمد سالانه در ظرفیت کامل (بدون تورم) میلیون ریال
-        OPEX: 184000,    // هزینه عملیاتی پایه در سال اول (بدون تورم) میلیون ریال
-        OCC: [0, 40, 60, 75, 85, 85, 85, 85, 85, 85], // ضریب اشغال 10 سال
-        DISCOUNT: 0.35
-    };
+    // --- Rendering Functions ---
+    function renderKPIs(m, dRate, limit) {
+        const irrVal = m.irr !== null ? Math.round(m.irr*100) : -100;
+        const diff = irrVal - dRate;
+        let irrAnimColor = '#ef4444'; 
+        if(diff > 5) irrAnimColor = '#10b981'; else if(diff >= 0) irrAnimColor = '#f59e0b'; 
+        let irrTxt = "ریسک بالا", irrC = "var(--danger)";
+        if(diff > 5) { irrTxt = "بسیار جذاب"; irrC = "var(--success)"; } else if(diff >= 0) { irrTxt = "قابل قبول"; irrC = "var(--warning)"; }
 
-    let state = {
-        m1_e: 60, m1_m: 27, m1_c: 13,
-        m2_dwell: 49,
-        m3_tariff: 50, m3_cost: 50,
-        m4_y2: 40, m4_y3: 60, m4_y4: 75,
-        m5_tiers: 1
-    };
+        const realIrrVal = m.realIrr !== null ? Math.round(m.realIrr*100) : -100;
+        let realIrrAnimColor = '#ef4444';
+        if(realIrrVal >= 10) realIrrAnimColor = '#10b981'; else if(realIrrVal >= 0) realIrrAnimColor = '#f59e0b';
+        let realIrrTxt = "نابودی سرمایه", realIrrC = "var(--danger)";
+        if(realIrrVal >= 10) { realIrrTxt = "سودآوری واقعی"; realIrrC = "var(--success)"; } else if(realIrrVal >= 0) { realIrrTxt = "حفظ ارزش پول"; realIrrC = "var(--warning)"; }
 
-    function getMixYield(e, m, c) {
-        let sum = e + m + c;
-        if(sum === 0) return 0;
-        return ((e/sum)*53844 + (m/sum)*26967 + (c/sum)*84252);
+        let npvTxt = "زیان‌ده", npvC = "var(--danger)";
+        if(m.npv > 0) { npvTxt = "سودآور"; npvC = "var(--secondary)"; }
+
+        const ppDisplay = (m.pp && m.pp <= limit) ? m.pp.toFixed(1) : `>${limit}`;
+        const pbpDisplay = (m.pbp && m.pbp <= limit) ? m.pbp.toFixed(1) : `>${limit}`;
+
+        const r1 = [
+            { t: "سرمایه‌گذاری (CAPEX)", v: fmt.format(m.capex), s: "میلیون ریال", c: "var(--muted)", i: "fa-warehouse" },
+            { t: "مجموع ورودی", v: fmt.format(Math.round(m.tRev)), s: "میلیون ریال", c: "var(--success)", i: "fa-arrow-trend-up" },
+            { t: "مجموع خروجی", v: fmt.format(Math.round(m.tExp)), s: "میلیون ریال", c: "var(--danger)", i: "fa-arrow-trend-down" },
+            { t: "نسبت B/C", v: m.bc.toFixed(2), s: "شاخص کارایی", c: "var(--primary)", i: "fa-scale-balanced" }
+        ];
+
+        const irrItem = { t: "نرخ بازدهی داخلی (اسمی)", v: m.irr!==null ? (m.irr*100).toFixed(1)+"%" : "N/A", s: irrTxt, c: irrC, i: "fa-chart-pie", animColor: irrAnimColor };
+        const realIrrItem = { 
+            t: "بازدهی (واقعی)", v: m.realIrr!==null ? (m.realIrr*100).toFixed(1)+"%" : "N/A", s: realIrrTxt, c: realIrrC, i: "fa-gem", animColor: realIrrAnimColor,
+            tooltip: "این کارت سودآوری واقعی پروژه را پس از کسر کامل اثرات تورم نمایش می‌دهد."
+        };
+
+        const otherR2 = [
+            { t: "ارزش فعلی (NPV)", v: fmt.format(Math.round(m.npv)), s: npvTxt, c: npvC, i: "fa-sack-dollar" },
+            { t: "بازگشت سرمایه (PP)", v: ppDisplay, s: "سال (از شروع)", c: "var(--warning)", i: "fa-hourglass-half" },
+            { t: "حداکثر کسری نقدینگی", v: fmt.format(Math.abs(Math.round(Math.min(...m.cumCash)))), s: "میلیون ریال (نیاز مالی)", c: "var(--danger)", i: "fa-fire-flame-curved" },
+            { t: "ظرفیت اسمی", v: fmt.format(3000 + ((m.tiers-1)*1200)), s: "تُن در هر دوره", c: "#0ea5e9", i: "fa-cubes" }
+        ];
+
+        const card = (d) => `
+            <div class="kpi-card" style="--color:${d.c}">
+                <div class="kpi-bg-icon-wrapper"><i class="fa-solid ${d.i} kpi-bg-icon"></i></div>
+                <div class="kpi-top"><span class="kpi-title">${d.t}</span></div>
+                <div class="kpi-val dir-ltr" style="color:${d.c}; text-shadow:0 0 10px ${d.c}20">${d.v}</div>
+                <div class="kpi-sub">${d.s}</div>
+            </div>`;
+
+        const cardNominalIRR = (d) => `
+            <div class="kpi-card irr-anim-card" style="--color:${d.c}; --anim-color:${d.animColor}">
+                <div class="anim-glow"></div>
+                <div class="kpi-bg-icon-wrapper"><i class="fa-solid ${d.i} kpi-bg-icon"></i></div>
+                <div class="kpi-top"><span class="kpi-title">${d.t}</span></div>
+                <div class="kpi-val dir-ltr" style="color:${d.c}; text-shadow:0 0 10px ${d.c}20">${d.v}</div>
+                <div class="kpi-sub">${d.s}</div>
+            </div>`;
+
+        const cardRealIRR = (d) => `
+            <div class="kpi-card real-irr-card" style="--color:${d.c}; --anim-color:${d.animColor}">
+                <div class="radar-bg-container"><div class="radar-sweep"></div></div>
+                <div class="kpi-bg-icon-wrapper"><i class="fa-solid ${d.i} kpi-bg-icon"></i></div>
+                <div class="kpi-top">
+                    <span class="kpi-title">
+                        ${d.t} 
+                        ${d.tooltip ? `<span class="info-tooltip" data-tooltip="${d.tooltip}"><i class="fa-solid fa-circle-info" style="color:var(--muted); font-size:0.95rem; margin-right:4px"></i></span>` : ''}
+                    </span>
+                </div>
+                <div class="kpi-val dir-ltr" style="color:${d.c}; text-shadow:0 0 10px ${d.c}20">${d.v}</div>
+                <div class="kpi-sub">${d.s}</div>
+            </div>`;
+
+        el('kpiContainer').innerHTML = r1.map(card).join('') + cardNominalIRR(irrItem) + cardRealIRR(realIrrItem) + otherR2.map(card).join('');
     }
-    function getPenalty(d) {
-        if(d <= 30) return 1;
-        if(d <= 60) return (30*1 + (d-30)*1.2)/d;
-        return (30*1 + 30*1.2 + (d-60)*1.725)/d;
-    }
 
-    // --- CHARTS INIT ---
-    let cCash, cBe, cWeight, cRevenue;
+    let cCash, cCost, cBe, cGrowth, cWeight, cRevenue;
+
     function initCharts() {
-        Chart.defaults.font.family = "Vazirmatn"; Chart.defaults.color = "#94a3b8";
-        const years = ["سال 1 (ساخت)", "سال 2", "سال 3", "سال 4", "سال 5", "سال 6", "سال 7", "سال 8", "سال 9", "سال 10"];
+        Chart.defaults.font.family = "Vazirmatn";
+        Chart.defaults.color = "#94a3b8";
         
-        cCash = new Chart(el('cashChart').getContext('2d'), { type: 'bar', data: { labels: years, datasets: [] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'var(--border)' } } } } });
-        cBe = new Chart(el('beChart').getContext('2d'), { type: 'line', data: { labels: years, datasets: [] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } } });
+        cCash = new Chart(el('cashChart').getContext('2d'), { type: 'bar', data: { labels: YEARS_ARR, datasets: [] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true } } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'var(--border)' } } } } });
+        cCost = new Chart(el('costChart').getContext('2d'), { type: 'doughnut', data: { labels: CAPEX_LABELS, datasets: [{ data: BASE_CAPEX_PARTS, borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, cutout: '55%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Vazirmatn', size: 13 }, textShadowBlur: 4, textShadowColor: 'rgba(0,0,0,0.8)', display: (ctx) => { let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0); return (ctx.dataset.data[ctx.dataIndex] * 100 / sum) >= 4; }, formatter: (value, ctx) => { let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0); return (value*100 / sum).toFixed(1)+"%"; } } } }, plugins: [ChartDataLabels] });
+        cBe = new Chart(el('beChart').getContext('2d'), { type: 'line', data: { labels: YEARS_ARR, datasets: [] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true } } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'var(--border)' } } } } });
+        cGrowth = new Chart(el('growthChart').getContext('2d'), { type: 'line', data: { labels: ['۱۴۰۱', '۱۴۰۲', '۱۴۰۳', '۱۴۰۴'], datasets: [{ label: 'تناژ ورودی', data: [171, 2144, 7482, 14450], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', borderWidth: 3, pointBackgroundColor: '#fff', pointBorderColor: '#f59e0b', pointRadius: 6, pointHoverRadius: 8, fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'تناژ (تن)' } } } } });
         
-        const wLabels = ['الکترونیک', 'ماشین‌آلات', 'سایر (شیمیایی/سردخانه‌ای)'];
-        cWeight = new Chart(el('weightDonutChart').getContext('2d'), { type: 'doughnut', data: { labels: wLabels, datasets: [{ data: [60, 27, 13], backgroundColor: ['#0ea5e9', '#94a3b8', '#10b981'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: val => val+"%" } } }, plugins: [ChartDataLabels] });
-        cRevenue = new Chart(el('revenueBarChart').getContext('2d'), { type: 'bar', data: { labels: wLabels, datasets: [ { label: 'درصد وزنی', data: [60, 27, 13], backgroundColor: '#0ea5e9' }, { label: 'درصد درآمدی', data: [0,0,0], backgroundColor: '#f59e0b' } ] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } });
+        const wLabels = ['قطعات الکترونیک', 'ماشین‌آلات صنعتی', 'سایر کالاها'];
+        cWeight = new Chart(el('weightDonutChart').getContext('2d'), { type: 'doughnut', data: { labels: wLabels, datasets: [{ data: [60, 27, 13], backgroundColor: ['#4f46e5', '#0ea5e9', '#94a3b8'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 15 }, plugins: { legend: { position: 'bottom' }, datalabels: { color: '#fff', font: { weight: 'bold' }, textShadowBlur: 4, textShadowColor: 'rgba(0,0,0,0.8)', display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 4, formatter: (val) => val + "%" } } }, plugins: [ChartDataLabels] });
+        cRevenue = new Chart(el('revenueBarChart').getContext('2d'), { type: 'bar', data: { labels: wLabels, datasets: [ { label: 'سهم فیزیکی (%)', data: [60, 27, 13], backgroundColor: '#0ea5e9', borderRadius: 4 }, { label: 'سهم درآمدی (%)', data: [0, 0, 0], backgroundColor: '#f59e0b', borderRadius: 4 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'درصد (%)' } } } } });
     }
 
     function updateChartsTheme() {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const colorText = isDark ? '#f1f5f9' : '#1e293b';
-        [cCash, cBe, cWeight, cRevenue].forEach(c => {
-            if(c.options.scales?.y) c.options.scales.y.grid.color = isDark ? '#334155' : '#e2e8f0';
+        const colorGrid = isDark ? '#334155' : '#e2e8f0'; 
+        [cCash, cCost, cBe, cGrowth, cWeight, cRevenue].forEach(c => {
+            if(c.options.scales?.y) c.options.scales.y.grid.color = colorGrid;
             if(c.options.plugins?.legend?.labels) c.options.plugins.legend.labels.color = colorText;
             c.update();
         });
     }
 
-    // --- THE MASTER PIPELINE ---
-    function runMasterCalculation() {
-        // 1. کالبد (M5)
-        let maxCap = 5424 + (state.m5_tiers - 1) * 1200;
-        let totalCapex = BASE.CAPEX + (state.m5_tiers - 1) * 50000;
-        
-        // 2. نرمال‌سازی کالا و درآمد (M1, M2)
-        let sumMix = state.m1_e + state.m1_m + state.m1_c;
-        let pctE = sumMix>0 ? state.m1_e/sumMix : 0;
-        let pctM = sumMix>0 ? state.m1_m/sumMix : 0;
-        let pctC = sumMix>0 ? state.m1_c/sumMix : 0;
-
-        let baseMixYield = getMixYield(60.27, 27.0, 12.73);
-        let basePen = getPenalty(49);
-        let currentYieldRiyal = getMixYield(state.m1_e, state.m1_m, state.m1_c) * getPenalty(state.m2_dwell);
-        let yieldMultiplier = currentYieldRiyal / (baseMixYield * basePen);
-        
-        let adjustedBaseRev = BASE.REV_100 * (maxCap / 5424) * yieldMultiplier;
-
-        // 3. جریان نقدینگی (M3, M4)
-        let occArray = [0, state.m4_y2, state.m4_y3, state.m4_y4, 85, 85, 85, 85, 85, 85];
-        let fcf = []; let revs = []; let exps = [];
-        let cumCashData = []; let cumDiscData = []; let cum = 0; let npv = 0;
-        let isDead = false; let deathYear = "حاشیه امن"; let pvRev = 0; let pvExp = 0;
-
-        for(let t=0; t<10; t++) {
-            let rev = 0; let exp = 0;
-            if(t === 0) { // Year 1 (Construction)
-                rev = 0; exp = 0; fcf.push(-totalCapex);
-                pvExp += totalCapex;
-            } else {
-                let occ = occArray[t] / 100;
-                let revInf = Math.pow(1 + state.m3_tariff/100, t-1);
-                let costInf = Math.pow(1 + state.m3_cost/100, t-1);
-                
-                rev = adjustedBaseRev * occ * revInf;
-                exp = BASE.OPEX * costInf;
-                let net = rev - exp;
-                fcf.push(net);
-                
-                if (net < 0 && t > 2 && !isDead) { deathYear = `سال ${t+1}`; isDead = true; } // بعد از خاک‌خوری
-                
-                let df = Math.pow(1 + BASE.DISCOUNT, t);
-                pvRev += rev/df; pvExp += exp/df;
-            }
-            revs.push(rev); exps.push(exp);
-            
-            cum += fcf[t]; cumCashData.push(cum);
-            let df = Math.pow(1 + BASE.DISCOUNT, t);
-            npv += fcf[t]/df; cumDiscData.push(npv);
-        }
-
-        let irr = getIRR(fcf);
-        let realIrr = irr !== null ? ((1 + irr) / (1 + state.m3_cost/100)) - 1 : null;
-        let pp = getPayback(fcf);
-        let bc = pvRev / pvExp;
-
-        // --- UPDATE UI DASHBOARD ---
-        el('kpi-yield').innerText = fmt.format(Math.round(currentYieldRiyal));
-        el('kpi-strat').innerText = (pctE + pctC) > 0.6 ? "High-Tech" : "Industrial";
-        el('kpi-strat').style.color = (pctE + pctC) > 0.6 ? "var(--success)" : "var(--warning)";
-        el('kpi-cap').innerText = fmt.format(maxCap);
-        el('kpi-capex').innerText = fmt.format(totalCapex);
-        el('kpi-death').innerText = deathYear;
-        el('kpi-death').style.color = isDead ? "var(--danger)" : "var(--success)";
-
-        // KPI Cards
-        const kpis = [
-            { t: "سرمایه‌گذاری (CAPEX)", v: fmt.format(totalCapex), s: "میلیون ریال", c: "var(--muted)", i: "fa-warehouse" },
-            { t: "ارزش فعلی خالص (NPV)", v: fmt.format(Math.round(npv)), s: npv>0?"سودآور":"زیان‌ده", c: npv>0?"var(--success)":"var(--danger)", i: "fa-sack-dollar" },
-            { t: "نرخ بازده اسمی (IRR)", v: irr!==null ? (irr*100).toFixed(1)+"%" : "N/A", s: (irr>BASE.DISCOUNT)?"جذاب":"مردود", c: "var(--warning)", i: "fa-chart-pie" },
-            { t: "بازدهی واقعی (پس از تورم)", v: realIrr!==null ? (realIrr*100).toFixed(1)+"%" : "N/A", s: "Real IRR", c: realIrr>0?"var(--success)":"var(--danger)", i: "fa-gem" },
-            { t: "نسبت منفعت به هزینه (B/C)", v: bc.toFixed(2), s: "کارایی", c: "var(--primary)", i: "fa-scale-balanced" }
-        ];
-        el('kpiContainer').innerHTML = kpis.map(d => `<div class="kpi-card" style="--color:${d.c}"><div class="kpi-bg-icon-wrapper"><i class="fa-solid ${d.i} kpi-bg-icon"></i></div><div class="kpi-top"><span class="kpi-title">${d.t}</span></div><div class="kpi-val dir-ltr" style="color:${d.c}">${d.v}</div><div class="kpi-sub">${d.s}</div></div>`).join('');
-
-        // Update Cargo Mix Charts
-        cWeight.data.datasets[0].data = [Math.round(pctE*100), Math.round(pctM*100), Math.round(pctC*100)];
-        let revE = pctE * 53844; let revM = pctM * 26967; let revC = pctC * 84252; let totR = revE+revM+revC;
-        cRevenue.data.datasets[0].data = [Math.round(pctE*100), Math.round(pctM*100), Math.round(pctC*100)];
-        cRevenue.data.datasets[1].data = [Math.round(revE/totR*100), Math.round(revM/totR*100), Math.round(revC/totR*100)];
-
-        // Update Financial Charts
+    function updateCharts(m, limit) {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        cCash.data.datasets = [
-            { type: 'line', label: 'جریان نقد خالص', data: fcf, borderColor: isDark?'#a78bfa':'#4f46e5', borderWidth: 3, backgroundColor: isDark?'rgba(167,139,250,0.2)':'rgba(79,70,229,0.2)', fill: true, tension: 0.4, order: 0 },
-            { type: 'bar', label: 'درآمدها', data: revs, backgroundColor: isDark?'#34d399':'#10b981', borderRadius: 4, order: 1 },
-            { type: 'bar', label: 'هزینه‌ها', data: exps, backgroundColor: isDark?'#f87171':'#ef4444', borderRadius: 4, order: 2 }
-        ];
-        cBe.data.datasets = [
-            { label: 'بازگشت سرمایه (تجمعی ساده)', data: cumCashData, borderColor: '#f59e0b', borderWidth: 3, fill: false },
-            { label: 'NPV (تجمعی تنزیل‌شده)', data: cumDiscData, borderColor: '#0ea5e9', borderDash: [5,5], borderWidth: 2, fill: false },
-            { label: 'صفر', data: Array(10).fill(0), borderColor: '#ef4444', borderWidth: 1 }
-        ];
         
-        cWeight.update(); cRevenue.update(); cCash.update(); cBe.update();
-        renderMatrix(adjustedBaseRev, occArray);
+        cCash.data.labels = YEARS_ARR.slice(0, limit);
+        cCash.data.datasets = [
+            { type: 'line', label: 'جریان نقد خالص', data: m.annualNet, borderColor: isDark ? '#a78bfa' : '#4f46e5', borderWidth: 3, backgroundColor: isDark ? 'rgba(167, 139, 250, 0.2)' : 'rgba(79, 70, 229, 0.2)', fill: true, tension: 0.4, order: 0, pointBackgroundColor: isDark ? '#1e293b' : '#fff' },
+            { type: 'bar', label: 'درآمدها', data: m.annualRev, backgroundColor: isDark ? '#34d399' : '#10b981', borderRadius: 4, order: 1, barPercentage: 0.6 },
+            { type: 'bar', label: 'هزینه‌ها', data: m.annualExp, backgroundColor: isDark ? '#f87171' : '#ef4444', borderRadius: 4, order: 2, barPercentage: 0.6 }
+        ];
+        cCash.update();
+
+        // Mod 6: Update CAPEX Structure Chart based on Tiers
+        let newCapexParts = [...BASE_CAPEX_PARTS];
+        newCapexParts[2] += (m.tiers - 1) * 50000; // Adding Racking Cost to Equipment
+        cCost.data.datasets[0].data = newCapexParts;
+        cCost.data.datasets[0].backgroundColor = isDark ? ['#6366f1', '#38bdf8', '#34d399', '#fbbf24', '#f87171', '#a855f7', '#ec4899'] : ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#9333ea', '#db2777'];
+        cCost.update();
+
+        cBe.data.labels = YEARS_ARR.slice(0, limit);
+        cBe.data.datasets = [
+            { label: 'PP (جریان تجمعی)', data: m.cumCash, borderColor: isDark ? '#fbbf24' : '#f59e0b', borderWidth: 3, fill: false },
+            { label: 'DPBP', data: m.cumDisc, borderColor: isDark ? '#38bdf8' : '#0ea5e9', borderDash: [5,5], borderWidth: 2, fill: false },
+            { label: 'صفر (نقطه سر به سر)', data: Array(limit).fill(0), borderColor: isDark ? '#f87171' : '#ef4444', borderWidth: 1 }
+        ];
+        cBe.update();
+
+        // Mod 1: Cargo Mix Dynamic Update
+        cWeight.data.datasets[0].data = [m.mix1, m.mix2, m.mix3];
+        
+        let y1 = m.mix1 * 54048;
+        let y2 = m.mix2 * 26967;
+        let y3 = m.mix3 * 60000;
+        let totY = y1 + y2 + y3;
+        
+        cRevenue.data.datasets[0].data = [m.mix1, m.mix2, m.mix3];
+        cRevenue.data.datasets[1].data = [(y1/totY)*100, (y2/totY)*100, (y3/totY)*100];
+        
+        cWeight.update();
+        cRevenue.update();
     }
 
-    // --- SENSITIVITY MATRIX (M3) ---
-    function renderMatrix(adjustedBaseRev, occArray) {
-        let steps = [-0.20, -0.10, 0, 0.10, 0.20];
-        let baseTariff = state.m3_tariff / 100;
-        let baseCost = state.m3_cost / 100;
+    function renderMatrix(rVal, cVal, limit, infRVal, infCVal, tiers, mix1, mix2, dwell, occ2, occ3) {
+        let steps = [-0.20, -0.15, -0.10, -0.05, 0, 0.05, 0.10, 0.15, 0.20]; 
+        if (window.innerWidth <= 768) steps = [-0.20, -0.10, 0, 0.10, 0.20]; 
+
+        const currentD = parseInt(el('discRange').value);
         
-        let h = '<thead><tr><th>تعرفه ↓ \\ تورم →</th>';
+        let h = '<thead><tr><th>درآمد ↓ \\ هزینه →</th>';
         steps.forEach(s => h += `<th>${s>0?'+':''}${Math.round(s*100)}%</th>`);
         h += '</tr></thead><tbody>';
         
         steps.forEach(rs => {
-            let t_growth = baseTariff + rs;
             h += `<tr><th>${rs>0?'+':''}${Math.round(rs*100)}%</th>`;
             steps.forEach(cs => {
-                let c_inf = baseCost + cs;
-                let m_fcf = [-(BASE.CAPEX + (state.m5_tiers - 1) * 50000)];
-                for(let t=1; t<10; t++) {
-                    let rev = adjustedBaseRev * (occArray[t]/100) * Math.pow(1 + t_growth, t-1);
-                    let exp = BASE.OPEX * Math.pow(1 + c_inf, t-1);
-                    m_fcf.push(rev - exp);
-                }
-                let irr = getIRR(m_fcf);
-                let val = irr !== null ? Math.round(irr*100) : -100;
+                const tr = rVal + (rs*100);
+                const tc = cVal + (cs*100);
+                
+                const cf = generateCashFlow(tr, tc, tiers, mix1, mix2, dwell, occ2, occ3, infRVal, infCVal, limit);
+                const m = calcMetrics(cf, currentD);
+                
+                const val = m.irr ? Math.round(m.irr*100) : 0;
                 
                 let cls = 'matrix-cell ';
-                if(val < BASE.DISCOUNT*100) cls += 'bg-red';
-                else if(val <= BASE.DISCOUNT*100 + 5) cls += 'bg-orange';
+                if(val < currentD) cls += 'bg-red';
+                else if(val <= currentD + 5) cls += 'bg-orange';
                 else cls += 'bg-green';
                 
-                let border = (rs===0 && cs===0) ? '2px solid var(--dark)' : '1px solid transparent';
+                const border = (Math.abs(rs)<0.01 && Math.abs(cs)<0.01) ? '2px solid var(--primary)' : '1px solid transparent';
                 h += `<td class="${cls}" data-val="${val}%" style="border:${border}">${val}%</td>`;
-            });
+            }); 
             h += '</tr>';
-        });
+        }); 
         el('matrixTable').innerHTML = h + '</tbody>';
     }
 
-    // --- EVENT LISTENERS ---
-    function updateMaster() {
-        // M1
-        let e = parseInt(el('m1-e').value); let m = parseInt(el('m1-m').value); let c = parseInt(el('m1-c').value);
-        let sum = e + m + c; sum = sum === 0 ? 1 : sum;
-        state.m1_e = e; state.m1_m = m; state.m1_c = c;
-        el('val-m1-e').innerText = Math.round((e/sum)*100) + '%';
-        el('val-m1-m').innerText = Math.round((m/sum)*100) + '%';
-        el('val-m1-c').innerText = Math.round((c/sum)*100) + '%';
+    function update() {
+        // Read All Sliders
+        const r = parseInt(el('revRange').value);
+        const c = parseInt(el('costRange').value);
+        const d = parseInt(el('discRange').value);
+        const p = parseInt(el('periodRange').value);
+        const infC = parseInt(el('infRange').value);
+        const infR = parseInt(el('infRRange').value);
+        const tiers = parseInt(el('tiersRange').value);
+        
+        let mix1 = parseInt(el('mix1Range').value);
+        let mix2 = parseInt(el('mix2Range').value);
+        if (mix1 + mix2 > 100) { mix2 = 100 - mix1; el('mix2Range').value = mix2; }
+        
+        const dwell = parseInt(el('dwellRange').value);
+        const occ2 = parseInt(el('occ2Range').value);
+        const occ3 = parseInt(el('occ3Range').value);
 
-        // M2
-        state.m2_dwell = parseInt(el('m2-dwell').value);
-        el('val-m2-dwell').innerText = state.m2_dwell;
+        // Update Slider UI Labels
+        el('valTiers').innerText = tiers;
+        el('valMix1').innerText = mix1 + '%';
+        el('valMix2').innerText = mix2 + '%';
+        el('valDwell').innerText = dwell + ' روز';
+        el('valOcc2').innerText = occ2 + '%';
+        el('valOcc3').innerText = occ3 + '%';
+        el('infRVal').innerText = infR + '%';
+        el('infVal').innerText = infC + '%';
+        
+        const rvEl = el('revVal');
+        rvEl.innerText = (r>0?'+':'')+r+'%';
+        rvEl.className = 'val-tag ' + (r>0 ? 'val-pos' : r<0 ? 'val-neg' : 'val-neu');
 
-        // M3
-        state.m3_tariff = parseInt(el('m3-rev').value);
-        state.m3_cost = parseInt(el('m3-cost').value);
-        el('val-m3-rev').innerText = state.m3_tariff + '%';
-        el('val-m3-cost').innerText = state.m3_cost + '%';
+        const cvEl = el('costVal');
+        cvEl.innerText = (c>0?'+':'')+c+'%';
+        cvEl.className = 'val-tag ' + (c>0 ? 'val-neg' : c<0 ? 'val-pos' : 'val-neu'); 
 
-        // M4
-        state.m4_y2 = parseInt(el('m4-y2').value);
-        state.m4_y3 = parseInt(el('m4-y3').value);
-        state.m4_y4 = parseInt(el('m4-y4').value);
-        el('val-m4-y2').innerText = state.m4_y2 + '%';
-        el('val-m4-y3').innerText = state.m4_y3 + '%';
-        el('val-m4-y4').innerText = state.m4_y4 + '%';
+        el('discVal').innerText = d+'%';
+        el('periodVal').innerText = p + ' سال';
 
-        // M5
-        state.m5_tiers = parseInt(el('m5-tier').value);
-        el('val-m5-tier').innerText = state.m5_tiers;
-
-        runMasterCalculation();
+        // Master Engine Execution
+        const cf = generateCashFlow(r, c, tiers, mix1, mix2, dwell, occ2, occ3, infR, infC, p);
+        const m = calcMetrics(cf, d);
+        
+        // Render
+        renderKPIs(m, d, p);
+        updateCharts(m, p);
+        renderMatrix(r, c, p, infR, infC, tiers, mix1, mix2, dwell, occ2, occ3);
     }
 
-    // Init
-    window.addEventListener('DOMContentLoaded', () => {
-        initCharts();
-        updateMaster();
+    function resetDefaults() {
+        el('tiersRange').value = 1;
+        el('mix1Range').value = 60;
+        el('mix2Range').value = 27;
+        el('dwellRange').value = 45;
+        el('occ2Range').value = 40;
+        el('occ3Range').value = 60;
+        el('revRange').value = 0;
+        el('costRange').value = 0;
+        el('infRRange').value = 50;
+        el('infRange').value = 50;
+        el('discRange').value = 35;
+        el('periodRange').value = 10;
+        update();
+    }
+
+    // Attach Event Listeners
+    ['tiersRange', 'mix1Range', 'mix2Range', 'dwellRange', 'occ2Range', 'occ3Range', 'revRange', 'costRange', 'infRRange', 'infRange', 'discRange', 'periodRange'].forEach(id => {
+        el(id).addEventListener('input', update);
     });
+
+    initCharts();
+    update();
+    updateChartsTheme();
   </script>
 </body>
 </html>
