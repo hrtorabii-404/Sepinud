@@ -579,23 +579,184 @@
       .actions { flex-direction: column-reverse; align-items: stretch; }
       .btn { width: 100%; }
     }
+  
+    /* UX redesign v2: cleaner header, compact options, friendly scoring */
+    .topbar {
+      display: grid;
+      grid-template-columns: 180px 1fr 250px;
+      align-items: center;
+      gap: 18px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(223,231,226,.88);
+      border-radius: 26px;
+      padding: 14px 18px;
+      box-shadow: 0 18px 48px rgba(15,75,63,.08);
+      backdrop-filter: blur(14px);
+    }
+    .header-logo { display:flex; align-items:center; }
+    .header-logo-right { justify-content:flex-start; }
+    .header-logo-left { justify-content:flex-end; gap: 12px; }
+    .brand-title { text-align:center; min-width: 0; }
+    .brand-title h1 {
+      margin: 0;
+      color: var(--primary);
+      font-size: clamp(18px, 2.2vw, 27px);
+      line-height: 1.55;
+      font-weight: 950;
+      letter-spacing: -.4px;
+    }
+    .brand-title p {
+      margin: 6px auto 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 13px;
+      max-width: 760px;
+    }
+    .brand-title p.compact { margin: 0; height: 0; overflow: hidden; }
+    .logo-abbasabad { width: 58px; height: 58px; }
+    .logo-sepinoud { width: 220px; max-height: 58px; }
+    .logo-separator, .brand-logos, .brand-mark { display:none !important; }
+
+    .hero {
+      padding: 28px 34px;
+      background:
+        linear-gradient(135deg, rgba(15,75,63,.95), rgba(23,107,91,.90)),
+        radial-gradient(circle at 18% 18%, rgba(200,155,60,.28), transparent 28%);
+    }
+    .hero h2 { text-align:center; margin-bottom: 10px; font-size: clamp(22px, 2.6vw, 32px); }
+    .hero p { max-width: 900px; margin: 0 auto; text-align:center; }
+    .content { padding: 20px 26px 26px; }
+    .start-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .start-info-card {
+      border: 1px solid rgba(223,231,226,.95);
+      background: #fbfdfc;
+      border-radius: 18px;
+      padding: 14px;
+      line-height: 1.75;
+    }
+    .start-info-card strong { display:block; color: var(--primary); margin-bottom: 4px; font-size: 13px; }
+    .start-info-card span { color: var(--muted); font-size: 12px; }
+
+    .options { gap: 7px; grid-template-columns: 1fr; }
+    .option {
+      padding: 9px 12px;
+      min-height: 42px;
+      border-radius: 13px;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    .option .dot { width: 18px; height: 18px; min-width: 18px; }
+    .option.selected { box-shadow: 0 8px 20px rgba(15,75,63,.06); }
+    .question-title { font-size: clamp(18px, 1.75vw, 24px); line-height: 1.55; }
+    .question-help { margin-bottom: 12px; font-size: 12.5px; }
+    .field { padding: 10px 12px; min-height: 42px; border-radius: 13px; font-size: 14px; }
+    textarea.field { min-height: 92px; }
+
+    .score-guide {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 6px;
+      background: rgba(15,75,63,.045);
+      border: 1px solid rgba(15,75,63,.13);
+      border-radius: 16px;
+      padding: 8px;
+      margin-bottom: 12px;
+    }
+    .score-guide span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      min-height: 30px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.84);
+      color: #52635c;
+      font-size: 11px;
+      line-height: 1.35;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .score-guide b { color: var(--primary); }
+    .score-line {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .score-chip {
+      width: 38px;
+      height: 34px;
+      border: 1px solid #d9e3dd;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--primary);
+      font-family: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .18s ease;
+      box-shadow: 0 3px 10px rgba(15,75,63,.03);
+    }
+    .score-chip:hover { transform: translateY(-1px); border-color: rgba(15,75,63,.35); }
+    .score-chip.selected { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 8px 18px rgba(15,75,63,.18); }
+    .ratings { display:block; }
+    .matrix-row {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+    }
+    .matrix-label { margin-bottom: 0; font-size: 13.5px; line-height: 1.55; }
+    .matrix-scale { display:flex; grid-template-columns:none !important; gap: 6px; flex-wrap: nowrap; }
+    .matrix-scale button { width: 34px; height: 32px; padding:0; border-radius: 999px; }
+    .matrix-choice-scale { display: grid !important; gap: 6px; }
+    .matrix-choice-scale button { width: auto !important; height: auto !important; min-height: 32px; padding: 7px 8px !important; border-radius: 10px !important; font-size: 12px; white-space: nowrap; }
+    .actions { padding-top: 10px; margin-top: 14px; }
+    .progress-wrap { margin-bottom: 14px; }
+    .progress { height: 7px; }
+
+    @media (min-width: 980px) {
+      .options.compact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .topbar { grid-template-columns: 52px 1fr 120px; gap: 8px; padding: 10px; border-radius: 20px; }
+      .brand-title h1 { font-size: 13.5px; line-height: 1.55; }
+      .brand-title p { display: none; }
+      .logo-abbasabad { width: 42px; height: 42px; }
+      .logo-sepinoud { width: 112px; max-height: 42px; }
+      .header-logo-left { flex-direction: column; align-items:flex-end; gap: 6px; }
+      .admin-link { padding: 7px 10px; font-size: 11px; }
+      .hero { padding: 22px 18px; }
+      .content { padding: 16px 14px 20px; }
+      .start-info-grid { grid-template-columns: 1fr; }
+      .score-guide { grid-template-columns: repeat(2, 1fr); }
+      .matrix-row { grid-template-columns: 1fr; gap: 8px; }
+      .matrix-scale { justify-content: space-between; }
+      .score-chip, .matrix-scale button { width: 32px; height: 30px; }
+    }
   </style>
 </head>
 <body>
   <div class="app-shell">
     <div class="topbar">
-      <div class="brand">
-        <div class="brand-logos" aria-label="لوگوهای کارفرما و مشاور">
-          <img class="logo logo-abbasabad" src="logo-abbasabad.png" alt="لوگوی شرکت نوسازی اراضی عباس‌آباد">
-          <span class="logo-separator"></span>
-          <img class="logo logo-sepinoud" src="logo-sepinoud.png" alt="لوگوی شرکت مشاور سپینود تدبیر شریف">
-        </div>
-        <div>
-          <h1>پایش وضعیت و بازتنظیم اقتصادی پروژه‌های سرمایه‌گذاری اراضی عباس‌آباد</h1>
-          <p>فرم شاخه‌ای ویژه پروژه‌های بهره‌بردار، در حال ساخت و پیش‌بهره‌برداری</p>
-        </div>
+      <div class="header-logo header-logo-right">
+        <img class="logo logo-abbasabad" src="logo-abbasabad.png" alt="لوگوی شرکت نوسازی اراضی عباس‌آباد">
       </div>
-      <button class="admin-link" id="adminModeBtn" type="button">ورود ادمین</button>
+      <div class="brand-title">
+        <h1>پرسشنامه پایش وضعیت و بازتنظیم اقتصادی پروژه‌های سرمایه‌گذاری اراضی عباس‌آباد</h1>
+        <p id="headerSubtitle">ویژه پروژه‌های در حال بهره‌برداری، در حال ساخت و پیش‌بهره‌برداری در شرایط رکود، نااطمینانی و تغییرات بازار</p>
+      </div>
+      <div class="header-logo header-logo-left">
+        <img class="logo logo-sepinoud" src="logo-sepinoud.png" alt="لوگوی شرکت مشاور سپینود تدبیر شریف">
+        <button class="admin-link" id="adminModeBtn" type="button">ورود ادمین</button>
+      </div>
     </div>
 
     <main class="card" id="appCard">
@@ -621,10 +782,12 @@
           <div class="section-label">شروع پرسشنامه</div>
           <h3 class="question-title">پیش از شروع</h3>
           <p class="question-help">
-            لطفاً فرم را با اطلاعات واقعی پروژه تکمیل کنید. سؤال‌های تک‌گزینه‌ای پس از انتخاب گزینه به‌صورت خودکار به مرحله بعد می‌روند. در سؤال‌های چندگزینه‌ای و متنی، پس از تکمیل پاسخ، دکمه «تأیید و ادامه» را بزنید.
+            تکمیل این فرم حدود ۱۰ تا ۱۵ دقیقه زمان می‌برد. سؤال‌های تک‌گزینه‌ای پس از انتخاب گزینه، خودکار به مرحله بعد می‌روند. در سؤال‌های چندگزینه‌ای، متنی و امتیازی، پس از تکمیل پاسخ دکمه «تأیید و ادامه» را بزنید.
           </p>
-          <div class="warning-box">
-            پیشنهاد می‌شود تکمیل فرم توسط مدیر پروژه، مدیر بهره‌برداری، مدیر مالی یا فردی انجام شود که به وضعیت اقتصادی و اجرایی پروژه اشراف دارد.
+          <div class="start-info-grid">
+            <div class="start-info-card"><strong>هدف</strong><span>شناخت وضعیت واقعی پروژه و طراحی مسیر تصمیم‌گیری قابل دفاع</span></div>
+            <div class="start-info-card"><strong>مخاطب</strong><span>مدیر پروژه، مدیر بهره‌برداری، مدیر مالی یا نماینده مطلع سرمایه‌گذار</span></div>
+            <div class="start-info-card"><strong>خروجی</strong><span>تحلیل پروژه‌ها، داشبورد مدیریتی و اولویت‌بندی راهکارها</span></div>
           </div>
           <div class="actions">
             <span></span>
@@ -787,26 +950,26 @@
       },
       {
         id: "phone", branch: "common", section: "اطلاعات عمومی پروژه", type: "text", required: true,
-        title: "شماره تماس یا ایمیل برای پیگیری احتمالی چیست؟", placeholder: "شماره موبایل / تلفن / ایمیل"
+        title: "شماره تماس برای پیگیری احتمالی چیست؟", placeholder: "شماره موبایل یا تلفن مستقیم
       },
       {
-        id: "projectType", branch: "common", section: "اطلاعات عمومی پروژه", type: "multi", max: 4, required: true,
-        title: "نوع اصلی پروژه چیست؟", help: "حداکثر ۴ گزینه را انتخاب کنید.",
-        options: ["تفریحی و سرگرمی", "فرهنگی و آموزشی", "گردشگری و تجربه‌محور", "کودک و خانواده", "مرکز خرید / فروشگاهی", "رستوران، کافه و غذا", "رویداد، نمایشگاهی و مناسبتی", "ورزشی و سلامت", "خدمات شهری / پارکینگ / پشتیبان", "اقامتی / هتل / پذیرایی", "ترکیبی از چند مورد", "سایر"]
+        id: "projectType", branch: "common", section: "اطلاعات عمومی پروژه", type: "multi", required: true,
+        title: "نوع اصلی پروژه چیست؟", help: "گزینه‌های مرتبط را انتخاب کنید."},{,
+        options: ["تفریح، فرهنگ و آموزش", "گردشگری و تجربه", "خانواده و کودک", "خرید و بازار", "غذا و پذیرایی", "رویداد و نمایشگاه", "ورزش و سلامت", "خدمات پشتیبان", "چندمنظوره / ترکیبی", "سایر"]
       },
       {
-        id: "audience", branch: "common", section: "اطلاعات عمومی پروژه", type: "multi", max: 4, required: true,
-        title: "مخاطب اصلی پروژه کدام گروه است؟", help: "حداکثر ۴ گزینه را انتخاب کنید.",
-        options: ["خانواده‌ها", "کودکان و نوجوانان", "بانوان", "جوانان", "گردشگران شهری", "مراجعه‌کنندگان عمومی", "کارکنان و جمعیت اداری اطراف", "مستأجران / غرفه‌داران / بهره‌برداران جزء", "گروه‌های آموزشی و فرهنگی", "شرکت‌ها و برگزارکنندگان رویداد", "سایر"]
+        id: "audience", branch: "common", section: "اطلاعات عمومی پروژه", type: "multi", required: true,
+        title: "مخاطب اصلی پروژه کدام گروه است؟", help: "گزینه‌های مرتبط را انتخاب کنید."},{,
+        options: ["خانواده و کودک", "جوانان", "بانوان", "گردشگران و مراجعه‌کنندگان عمومی", "کارکنان و جمعیت اداری اطراف", "مستأجران / غرفه‌داران", "گروه‌های آموزشی و فرهنگی", "شرکت‌ها و برگزارکنندگان رویداد", "سایر"]
       },
       {
         id: "peakDependency", branch: "common", section: "اطلاعات عمومی پروژه", type: "rating", required: true,
         title: "پروژه شما چقدر به ایام پیک مانند نوروز، تعطیلات، آخر هفته و رویدادها وابسته است؟"
       },
       {
-        id: "revenueModel", branch: "common", section: "اطلاعات عمومی پروژه", type: "multi", max: 5, required: true,
-        title: "مدل اصلی درآمد پروژه چیست؟", help: "گزینه‌های اصلی را انتخاب کنید.",
-        options: ["فروش بلیت", "فروش کالا", "غذا و نوشیدنی", "اجاره غرفه / واحد / فضا", "خدمات آموزشی، فرهنگی یا تفریحی", "برگزاری رویداد", "تبلیغات و اسپانسرینگ", "پارکینگ یا خدمات پشتیبان", "بهره‌برداری از تجهیزات تخصصی", "هنوز وارد درآمدزایی نشده‌ایم", "سایر"]
+        id: "revenueModel", branch: "common", section: "اطلاعات عمومی پروژه", type: "multi", required: true,
+        title: "مدل اصلی درآمد پروژه چیست؟", help: "گزینه‌های مرتبط را انتخاب کنید."},{,
+        options: ["بلیت و خدمات ورودی", "فروش کالا", "غذا و نوشیدنی", "اجاره فضا / غرفه / واحد", "خدمات آموزشی، فرهنگی یا تفریحی", "رویداد و برنامه مناسبتی", "تبلیغات و اسپانسرینگ", "پارکینگ و خدمات پشتیبان", "تجهیزات تخصصی", "هنوز درآمدزایی شروع نشده", "سایر"]
       },
       {
         id: "paymentModel", branch: "common", section: "اطلاعات عمومی پروژه", type: "single", required: true,
@@ -1193,6 +1356,13 @@
 
     const ratingLabels = ["نامرتبط", "بسیار کم", "کم", "متوسط", "زیاد", "حیاتی"];
 
+    function makeScoreGuide() {
+      const guide = document.createElement("div");
+      guide.className = "score-guide";
+      guide.innerHTML = ratingLabels.map((label, i) => `<span><b>${i}</b>${label}</span>`).join("");
+      return guide;
+    }
+
     let currentIndex = 0;
     let answers = {};
     let started = false;
@@ -1252,6 +1422,7 @@
     }
 
     function render() {
+      updateHeaderForMode("form");
       const list = visibleQuestions();
       const q = list[currentIndex];
       if (!q) return renderSubmit();
@@ -1301,7 +1472,7 @@
 
       if (q.type === "single") {
         const wrap = document.createElement("div");
-        wrap.className = "options";
+        wrap.className = "options" + ((q.options?.length || 0) > 6 ? " compact-grid" : "");
         q.options.forEach(opt => {
           const label = optionLabel(opt);
           const value = optionValue(opt);
@@ -1328,7 +1499,7 @@
       if (q.type === "multi") {
         const selected = Array.isArray(saved) ? saved : [];
         const wrap = document.createElement("div");
-        wrap.className = "options";
+        wrap.className = "options" + ((q.options?.length || 0) > 6 ? " compact-grid" : "");
         q.options.forEach(opt => {
           const label = optionLabel(opt);
           const value = optionValue(opt);
@@ -1356,17 +1527,19 @@
       }
 
       if (q.type === "rating") {
+        answerArea.appendChild(makeScoreGuide());
         const wrap = document.createElement("div");
-        wrap.className = "ratings";
+        wrap.className = "score-line";
         for (let i = 0; i <= 5; i++) {
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.className = "rating-btn" + (Number(saved) === i ? " selected" : "");
-          btn.innerHTML = `<strong>${i}</strong><span>${ratingLabels[i]}</span>`;
+          btn.className = "score-chip" + (Number(saved) === i ? " selected" : "");
+          btn.textContent = i;
+          btn.title = ratingLabels[i];
           btn.addEventListener("click", () => {
             answers[q.id] = i;
             renderAnswer(q);
-            setTimeout(nextQuestion, 260);
+            setTimeout(nextQuestion, 220);
           });
           wrap.appendChild(btn);
         }
@@ -1375,6 +1548,7 @@
       }
 
       if (q.type === "matrixRating") {
+        answerArea.appendChild(makeScoreGuide());
         const obj = saved && typeof saved === "object" ? saved : {};
         const wrap = document.createElement("div");
         wrap.className = "matrix";
@@ -1411,7 +1585,7 @@
           const rowDiv = document.createElement("div");
           rowDiv.className = "matrix-row";
           const scale = document.createElement("div");
-          scale.className = "matrix-scale";
+          scale.className = "matrix-scale matrix-choice-scale";
           scale.style.gridTemplateColumns = `repeat(${q.choices.length}, 1fr)`;
           q.choices.forEach(choice => {
             const btn = document.createElement("button");
@@ -1471,6 +1645,7 @@
     }
 
     function renderSubmit() {
+      updateHeaderForMode("form");
       questionScreen.classList.add("hidden");
       submitScreen.classList.remove("hidden");
       progressWrap.classList.remove("hidden");
@@ -1598,7 +1773,21 @@
     /*******************************************************************
      * 3) Admin dashboard
      *******************************************************************/
+    function updateHeaderForMode(mode) {
+      const adminBtn = el("adminModeBtn");
+      const subtitle = el("headerSubtitle");
+      const isStart = mode === "start";
+      adminBtn?.classList.toggle("hidden", !isStart);
+      subtitle?.classList.toggle("compact", !isStart);
+      if (subtitle) {
+        subtitle.textContent = isStart
+          ? "ویژه پروژه‌های در حال بهره‌برداری، در حال ساخت و پیش‌بهره‌برداری در شرایط رکود، نااطمینانی و تغییرات بازار"
+          : "";
+      }
+    }
+
     function showAdminMode() {
+      updateHeaderForMode("admin");
       el("formView").classList.add("hidden");
       el("heroBlock").classList.add("hidden");
       el("adminView").classList.remove("hidden");
@@ -1606,6 +1795,7 @@
     }
 
     function showInvestorMode() {
+      updateHeaderForMode(started ? "form" : "start");
       el("adminView").classList.add("hidden");
       el("formView").classList.remove("hidden");
       el("heroBlock").classList.remove("hidden");
@@ -1753,6 +1943,7 @@
      * 4) Event wiring
      *******************************************************************/
     el("startBtn").addEventListener("click", () => {
+      updateHeaderForMode("form");
       started = true;
       currentIndex = 0;
       render();
@@ -1789,6 +1980,7 @@
       }
     });
 
+    updateHeaderForMode("start");
     if (location.search.includes("admin=1")) showAdminMode();
   </script>
 </body>
