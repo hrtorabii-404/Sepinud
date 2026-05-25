@@ -1616,8 +1616,16 @@
       try {
         await signInWithPopup(auth, provider);
       } catch (err) {
-        alert("ورود ادمین با خطا مواجه شد. تنظیمات Firebase Auth را بررسی کنید.");
         console.error(err);
+        const code = err?.code || "unknown";
+        const message = err?.message || "جزئیات خطا در Console مرورگر قابل مشاهده است.";
+        alert(`ورود ادمین با خطا مواجه شد.
+
+کد خطا: ${code}
+
+پیام خطا: ${message}
+
+احتمال‌های اصلی: Google provider فعال نیست، دامنه سایت در Authorized domains ثبت نشده، یا فایل از مسیر file:// باز شده است.`);
       }
     }
 
