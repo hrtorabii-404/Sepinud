@@ -741,6 +741,24 @@
       .matrix-scale { justify-content: space-between; }
       .score-chip, .matrix-scale button { width: 32px; height: 30px; }
     }
+  
+    .admin-footnote {
+      display: block;
+      margin: 12px auto 0;
+      border: 0;
+      background: transparent;
+      color: rgba(102,115,109,.38);
+      font-size: 10px;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 2px 6px;
+      line-height: 1.2;
+    }
+    .admin-footnote:hover { color: rgba(15,75,63,.75); }
+    #startScreen .actions { position: static; background: transparent; border-top: 0; backdrop-filter: none; }
+    #questionScreen .actions, #submitScreen .actions {
+      box-shadow: 0 -12px 26px rgba(255,255,255,.72);
+    }
   </style>
 </head>
 <body>
@@ -755,14 +773,13 @@
       </div>
       <div class="header-logo header-logo-left">
         <img class="logo logo-sepinoud" src="logo-sepinoud.png" alt="لوگوی شرکت مشاور سپینود تدبیر شریف">
-        <button class="admin-link" id="adminModeBtn" type="button">ورود ادمین</button>
       </div>
     </div>
 
     <main class="card" id="appCard">
       <section class="hero" id="heroBlock">
         
-        <h2>پرسشنامه پایش وضعیت و بازتنظیم اقتصادی پروژه‌های سرمایه‌گذاری اراضی عباس‌آباد</h2>
+        <h2>هدف از تکمیل پرسشنامه</h2>
         <p>
           این پرسشنامه با هدف شناخت دقیق‌تر وضعیت اقتصادی، اجرایی و قراردادی پروژه‌ها تهیه شده است.
           تکمیل فرم به‌معنای تصمیم قطعی درباره تغییر قرارداد یا اعطای امتیاز نیست؛ اطلاعات ثبت‌شده در کنار اسناد پشتیبان و مصاحبه‌های تکمیلی، مبنای تحلیل مشاور قرار می‌گیرد.
@@ -791,8 +808,9 @@
           </div>
           <div class="actions">
             <span></span>
-            <button class="btn btn-primary" id="startBtn" type="button">شروع پرسشنامه</button>
+            <button class="btn btn-primary" id="startBtn" type="button" onclick="window.startQuestionnaire && window.startQuestionnaire()">شروع پرسشنامه</button>
           </div>
+          <button class="admin-footnote" id="adminModeBtn" type="button" aria-label="ورود ادمین">مدیریت</button>
         </div>
 
         <div id="questionScreen" class="hidden">
@@ -1776,8 +1794,10 @@
     function updateHeaderForMode(mode) {
       const adminBtn = el("adminModeBtn");
       const subtitle = el("headerSubtitle");
+      const hero = el("heroBlock");
       const isStart = mode === "start";
       adminBtn?.classList.toggle("hidden", !isStart);
+      hero?.classList.toggle("hidden", !isStart);
       subtitle?.classList.toggle("compact", !isStart);
       if (subtitle) {
         subtitle.textContent = isStart
@@ -1798,7 +1818,6 @@
       updateHeaderForMode(started ? "form" : "start");
       el("adminView").classList.add("hidden");
       el("formView").classList.remove("hidden");
-      el("heroBlock").classList.remove("hidden");
       history.replaceState(null, "", location.pathname);
     }
 
@@ -1942,12 +1961,15 @@
     /*******************************************************************
      * 4) Event wiring
      *******************************************************************/
-    el("startBtn").addEventListener("click", () => {
+    window.startQuestionnaire = function startQuestionnaire() {
       updateHeaderForMode("form");
       started = true;
       currentIndex = 0;
+      startScreen.classList.add("hidden");
+      questionScreen.classList.remove("hidden");
       render();
-    });
+    };
+    el("startBtn")?.addEventListener("click", window.startQuestionnaire);
     nextBtn.addEventListener("click", nextQuestion);
     backBtn.addEventListener("click", prevQuestion);
     el("submitBackBtn").addEventListener("click", () => {
