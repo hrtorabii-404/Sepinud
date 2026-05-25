@@ -26,6 +26,109 @@
     .admin-footnote{display:block;margin:12px auto 0;border:0;background:transparent;color:rgba(102,115,109,.38);font-size:10px;font-family:inherit;cursor:pointer;padding:2px 6px;line-height:1.2} .admin-footnote:hover{color:rgba(15,75,63,.75)} .error{color:var(--danger);margin-top:12px;font-weight:850;line-height:1.8;display:none} .success-box,.warning-box{border-radius:18px;padding:15px 17px;line-height:1.9;margin-top:14px} .success-box{background:rgba(20,122,80,.08);border:1px solid rgba(20,122,80,.24);color:#0f5f3f} .warning-box{background:rgba(200,155,60,.10);border:1px solid rgba(200,155,60,.28);color:#694e12} .hidden{display:none!important}
     .dashboard-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px} .metric-card{background:#fbfdfc;border:1px solid var(--line);border-radius:18px;padding:14px} .metric-card .num{font-size:25px;font-weight:950;color:var(--primary);margin-bottom:3px} .metric-card .label{color:var(--muted);line-height:1.6;font-size:12px} .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px} .chip{background:rgba(15,75,63,.08);border:1px solid rgba(15,75,63,.18);color:var(--primary);padding:7px 10px;border-radius:999px;font-size:12px;font-weight:850} .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:18px;margin-top:16px} table{width:100%;border-collapse:collapse;min-width:900px;background:white} th,td{text-align:right;padding:11px;border-bottom:1px solid var(--line);vertical-align:top;font-size:13px;line-height:1.7} th{background:#f3f7f5;color:var(--primary);font-weight:950;position:sticky;top:0}
     @media(max-width:760px){.app{width:min(100% - 16px,1080px);padding-top:8px}.topbar{grid-template-columns:48px 1fr 112px;gap:8px;padding:10px;border-radius:20px}.brand-title h1{font-size:13.5px;line-height:1.55}.brand-title p{display:none}.logo-abb{width:42px;height:42px}.logo-sep{width:106px;max-height:42px}.hero{padding:22px 18px}.content{padding:16px 14px 20px}.start-info{grid-template-columns:1fr}.score-guide{grid-template-columns:repeat(2,1fr)}.matrix-row{grid-template-columns:1fr;gap:8px}.matrix-scale{justify-content:space-between}.score-chip,.matrix-scale button{width:32px;height:30px}.actions{flex-direction:column-reverse;align-items:stretch}.btn{width:100%}.dashboard-grid{grid-template-columns:1fr 1fr}}
+  
+    /* Interactive top score pills */
+    .score-guide.clickable { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .score-guide-btn {
+      border: 1px solid rgba(15,75,63,.14);
+      background: rgba(255,255,255,.88);
+      color: #52635c;
+      min-height: 40px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 12px;
+      line-height: 1.35;
+      cursor: pointer;
+      transition: .18s ease;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .score-guide-btn:hover { transform: translateY(-1px); border-color: rgba(15,75,63,.35); background: #fff; }
+    .score-guide-btn.selected {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 10px 20px rgba(15,75,63,.18);
+    }
+    .score-guide-btn b { font-size: 13px; color: var(--primary); }
+    .score-guide-btn.selected b { color: #fff; }
+    .rating-top-only { margin-bottom: 0; }
+
+    /* Done screen redesign */
+    .done-screen-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 8px 0 10px;
+    }
+    .done-icon-wrap { display: flex; justify-content: center; margin-bottom: 14px; }
+    .done-icon {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      font-weight: 900;
+      box-shadow: 0 18px 32px rgba(15,75,63,.18);
+    }
+    .done-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(20,122,80,.08);
+      color: var(--success);
+      border: 1px solid rgba(20,122,80,.18);
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+    .done-title {
+      margin: 0 0 10px;
+      color: var(--primary);
+      font-size: clamp(23px, 2.1vw, 30px);
+      line-height: 1.6;
+      font-weight: 950;
+    }
+    .done-subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+    .done-card {
+      background: linear-gradient(180deg, rgba(15,75,63,.05), rgba(15,75,63,.02));
+      border: 1px solid rgba(15,75,63,.10);
+      border-radius: 22px;
+      padding: 20px 22px;
+      box-shadow: 0 12px 28px rgba(15,75,63,.05);
+      margin-bottom: 14px;
+    }
+    .done-card p {
+      margin: 0;
+      color: var(--primary);
+      line-height: 2;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .done-note { color: var(--muted); font-size: 12.5px; line-height: 1.9; }
+
+    @media (max-width: 760px) {
+      .score-guide.clickable { grid-template-columns: repeat(2, 1fr); }
+      .score-guide-btn { min-height: 38px; font-size: 11.5px; }
+      .done-icon { width: 64px; height: 64px; font-size: 28px; }
+      .done-card { padding: 16px; }
+      .done-card p { font-size: 14px; }
+    }
+
   </style>
 </head>
 <body>
@@ -43,7 +146,32 @@
         <div id="startScreen"><div class="section-label">شروع پرسشنامه</div><h3 class="question-title">پیش از شروع</h3><p class="question-help">تکمیل این فرم حدود ۱۰ تا ۱۵ دقیقه زمان می‌برد. سؤال‌های تک‌گزینه‌ای پس از انتخاب گزینه، خودکار به مرحله بعد می‌روند. در سؤال‌های چندگزینه‌ای، متنی و امتیازی، پس از تکمیل پاسخ دکمه «تأیید و ادامه» را بزنید.</p><div class="start-info"><div class="start-card"><strong>هدف</strong><span>شناخت وضعیت واقعی پروژه و طراحی مسیر تصمیم‌گیری قابل دفاع</span></div><div class="start-card"><strong>مخاطب</strong><span>مدیر پروژه، مدیر بهره‌برداری، مدیر مالی یا نماینده مطلع سرمایه‌گذار</span></div><div class="start-card"><strong>خروجی</strong><span>تحلیل پروژه‌ها، داشبورد مدیریتی و اولویت‌بندی راهکارها</span></div></div><div class="actions"><span></span><button class="btn btn-primary" id="startBtn" type="button">شروع پرسشنامه</button></div><button class="admin-footnote" id="adminModeBtn" type="button">مدیریت</button></div>
         <div id="questionScreen" class="hidden"><div class="section-label" id="sectionLabel"></div><h3 class="question-title" id="questionTitle"></h3><p class="question-help" id="questionHelp"></p><div id="answerArea"></div><div class="error" id="errorBox"></div><div class="actions"><button class="btn btn-secondary" id="backBtn" type="button">بازگشت</button><button class="btn btn-primary" id="nextBtn" type="button">تأیید و ادامه</button></div></div>
         <div id="submitScreen" class="hidden"><div class="section-label">ثبت نهایی</div><h3 class="question-title">مرور و ثبت پاسخ‌ها</h3><p class="question-help">پاسخ‌ها آماده ثبت در پایگاه داده هستند.</p><div class="warning-box" id="summaryBox"></div><div class="error" id="submitError"></div><div class="actions"><button class="btn btn-secondary" id="submitBackBtn" type="button">بازگشت</button><button class="btn btn-primary" id="submitBtn" type="button">ثبت نهایی پاسخ‌ها</button></div></div>
-        <div id="doneScreen" class="hidden"><div class="section-label">ثبت شد</div><h3 class="question-title">پاسخ‌های شما با موفقیت ثبت شد.</h3><div class="success-box">از همکاری شما سپاسگزاریم. اطلاعات ثبت‌شده همراه با مصاحبه‌های تکمیلی و اسناد پشتیبان، مبنای تحلیل مشاور اقتصادی و مالی قرار خواهد گرفت.</div></div>
+        <div id="doneScreen" class="hidden">
+          <div class="done-screen-wrap">
+            <div class="done-icon-wrap">
+              <div class="done-icon">✓</div>
+            </div>
+
+            <div class="done-badge">ثبت نهایی انجام شد</div>
+
+            <h3 class="done-title">پاسخ‌های شما با موفقیت ثبت شد</h3>
+
+            <p class="done-subtitle">
+              از همکاری و پاسخ‌گویی دقیق شما صمیمانه سپاسگزاریم.
+            </p>
+
+            <div class="done-card">
+              <p>
+                اطلاعات ثبت‌شده همراه با مصاحبه‌های تکمیلی و اسناد پشتیبان،
+                مبنای تحلیل مشاور اقتصادی و مالی قرار خواهد گرفت.
+              </p>
+            </div>
+
+            <div class="done-note">
+              در صورت نیاز، برای هماهنگی‌های بعدی از طریق اطلاعات تماس ثبت‌شده با شما ارتباط گرفته خواهد شد.
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="content hidden" id="adminView">
@@ -65,7 +193,24 @@ const optionLabel=o=>typeof o==="string"?o:o.label;
 const optionValue=o=>typeof o==="string"?o:o.value;
 let answers={},currentIndex=0,started=false,responsesCache=[];
 
-function makeScoreGuide(){const d=document.createElement("div");d.className="score-guide";d.innerHTML=ratingLabels.map((x,i)=>`<span><b>${i}</b>${x}</span>`).join("");return d;}
+function makeScoreGuide({interactive=false,selected=null,onSelect=null}={}){
+  const d=document.createElement("div");
+  d.className="score-guide"+(interactive?" clickable rating-top-only":"");
+  if(interactive){
+    ratingLabels.forEach((x,i)=>{
+      const b=document.createElement("button");
+      b.type="button";
+      b.className="score-guide-btn"+(Number(selected)===i?" selected":"");
+      b.innerHTML=`<b>${i}</b><span>${x}</span>`;
+      b.title=`${i} - ${x}`;
+      b.addEventListener("click",()=>{if(typeof onSelect==="function")onSelect(i);});
+      d.appendChild(b);
+    });
+  }else{
+    d.innerHTML=ratingLabels.map((x,i)=>`<span><b>${i}</b>${x}</span>`).join("");
+  }
+  return d;
+}
 function getRouteFromStatus(s){if(["operation_full","operation_limited","pilot"].includes(s))return"operation";if(["construction","equipment","stopped","not_started"].includes(s))return"construction";if(s==="mixed")return"mixed";return"common";}
 function getRoute(){return getRouteFromStatus(answers.projectStatus)}
 function getRouteLabel(){const r=getRoute();return r==="operation"?"مسیر بهره‌برداری":r==="construction"?"مسیر ساخت / تجهیز":r==="mixed"?"مسیر ترکیبی":"مسیر عمومی"}
@@ -73,12 +218,12 @@ function isVisible(q){const r=getRoute();if(q.branch==="common")return true;if(!
 function visibleQuestions(){return Q.filter(isVisible)}
 function updateHeaderForMode(mode){const isStart=mode==="start";el("heroBlock")?.classList.toggle("hidden",!isStart);el("adminModeBtn")?.classList.toggle("hidden",!isStart);el("headerSubtitle")?.classList.toggle("compact",!isStart);}
 function startQuestionnaire(){started=true;currentIndex=0;el("startScreen").classList.add("hidden");el("submitScreen").classList.add("hidden");el("doneScreen").classList.add("hidden");el("questionScreen").classList.remove("hidden");el("progressWrap").classList.remove("hidden");updateHeaderForMode("form");render();}
-function render(){updateHeaderForMode("form");const list=visibleQuestions(),q=list[currentIndex];if(!q)return renderSubmit();el("startScreen").classList.add("hidden");el("submitScreen").classList.add("hidden");el("doneScreen").classList.add("hidden");el("questionScreen").classList.remove("hidden");el("progressWrap").classList.remove("hidden");el("stepCounter").textContent=`مرحله ${currentIndex+1} از ${list.length}`;el("routeBadge").textContent=getRouteLabel();el("progressBar").style.width=`${Math.round(((currentIndex+1)/list.length)*100)}%`;el("sectionLabel").textContent=q.section;el("questionTitle").textContent=q.title;el("questionHelp").textContent=q.help||"";el("questionHelp").style.display=q.help?"block":"none";el("errorBox").style.display="none";el("backBtn").disabled=currentIndex===0;el("nextBtn").classList.toggle("hidden",q.type==="single");renderAnswer(q);}
+function render(){updateHeaderForMode("form");const list=visibleQuestions(),q=list[currentIndex];if(!q)return renderSubmit();el("startScreen").classList.add("hidden");el("submitScreen").classList.add("hidden");el("doneScreen").classList.add("hidden");el("questionScreen").classList.remove("hidden");el("progressWrap").classList.remove("hidden");el("stepCounter").textContent=`مرحله ${currentIndex+1} از ${list.length}`;el("routeBadge").textContent=getRouteLabel();el("progressBar").style.width=`${Math.round(((currentIndex+1)/list.length)*100)}%`;el("sectionLabel").textContent=q.section;el("questionTitle").textContent=q.title;const hideMatrixHelp=q.type==="matrixRating";el("questionHelp").textContent=hideMatrixHelp?"":(q.help||"");el("questionHelp").style.display=(!hideMatrixHelp&&q.help)?"block":"none";el("errorBox").style.display="none";el("backBtn").disabled=currentIndex===0;el("nextBtn").classList.toggle("hidden",q.type==="single");renderAnswer(q);}
 function renderAnswer(q){const area=el("answerArea");area.innerHTML="";const saved=answers[q.id];
 if(q.type==="text"||q.type==="longtext"){const input=document.createElement(q.type==="longtext"?"textarea":"input");input.className="field";input.placeholder=q.placeholder||"پاسخ خود را وارد کنید";input.value=saved||"";input.addEventListener("input",()=>answers[q.id]=input.value.trim());area.appendChild(input);setTimeout(()=>input.focus(),50);return;}
 if(q.type==="single"){const wrap=document.createElement("div");wrap.className="options"+((q.options?.length||0)>6?" compact-grid":"");q.options.forEach(opt=>{const label=optionLabel(opt),value=optionValue(opt);const item=document.createElement("div");item.className="option"+(saved===value?" selected":"");item.innerHTML=`<span>${label}</span><span class="dot"></span>`;item.addEventListener("click",()=>{answers[q.id]=value;if(q.id==="projectStatus"){for(const k of Object.keys(answers))if(/^[AB]\d/.test(k))delete answers[k];currentIndex=visibleQuestions().findIndex(x=>x.id==="projectStatus");}setTimeout(nextQuestion,170);});wrap.appendChild(item);});area.appendChild(wrap);return;}
 if(q.type==="multi"){const selected=Array.isArray(saved)?saved:[];const wrap=document.createElement("div");wrap.className="options"+((q.options?.length||0)>6?" compact-grid":"");q.options.forEach(opt=>{const label=optionLabel(opt),value=optionValue(opt);const item=document.createElement("div");item.className="option"+(selected.includes(value)?" selected":"");item.innerHTML=`<span>${label}</span><span class="dot checkbox-dot"></span>`;item.addEventListener("click",()=>{const now=Array.isArray(answers[q.id])?[...answers[q.id]]:[];const idx=now.indexOf(value);if(idx>=0)now.splice(idx,1);else{if(q.max&&now.length>=q.max)return showError(`حداکثر ${q.max} گزینه قابل انتخاب است.`);now.push(value);}answers[q.id]=now;renderAnswer(q);});wrap.appendChild(item);});area.appendChild(wrap);return;}
-if(q.type==="rating"){area.appendChild(makeScoreGuide());const wrap=document.createElement("div");wrap.className="score-line";for(let i=0;i<=5;i++){const b=document.createElement("button");b.type="button";b.className="score-chip"+(Number(saved)===i?" selected":"");b.textContent=i;b.title=ratingLabels[i];b.addEventListener("click",()=>{answers[q.id]=i;renderAnswer(q);});wrap.appendChild(b);}area.appendChild(wrap);return;}
+if(q.type==="rating"){const guide=makeScoreGuide({interactive:true,selected:saved,onSelect:(value)=>{answers[q.id]=value;renderAnswer(q);}});area.appendChild(guide);return;}
 if(q.type==="matrixRating"){area.appendChild(makeScoreGuide());const obj=saved&&typeof saved==="object"?saved:{};const wrap=document.createElement("div");wrap.className="matrix";q.rows.forEach(row=>{const rowDiv=document.createElement("div");rowDiv.className="matrix-row";const scale=document.createElement("div");scale.className="matrix-scale";for(let i=0;i<=5;i++){const b=document.createElement("button");b.type="button";b.textContent=i;b.className=Number(obj[row])===i?"selected":"";b.addEventListener("click",()=>{answers[q.id]={...(answers[q.id]||{}),[row]:i};renderAnswer(q);});scale.appendChild(b);}rowDiv.innerHTML=`<div class="matrix-label">${escapeHtml(row)}</div>`;rowDiv.appendChild(scale);wrap.appendChild(rowDiv);});area.appendChild(wrap);return;}
 if(q.type==="matrixChoice"){const obj=saved&&typeof saved==="object"?saved:{};const wrap=document.createElement("div");wrap.className="matrix";q.rows.forEach(row=>{const rowDiv=document.createElement("div");rowDiv.className="matrix-row";const scale=document.createElement("div");scale.className="matrix-scale matrix-choice-scale";scale.style.gridTemplateColumns=`repeat(${q.choices.length},1fr)`;q.choices.forEach(choice=>{const b=document.createElement("button");b.type="button";b.textContent=choice;b.className=obj[row]===choice?"selected":"";b.addEventListener("click",()=>{answers[q.id]={...(answers[q.id]||{}),[row]:choice};renderAnswer(q);});scale.appendChild(b);});rowDiv.innerHTML=`<div class="matrix-label">${escapeHtml(row)}</div>`;rowDiv.appendChild(scale);wrap.appendChild(rowDiv);});area.appendChild(wrap);}
 }
