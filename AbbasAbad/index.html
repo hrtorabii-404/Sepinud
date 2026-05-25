@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>پرسشنامه پایش وضعیت و بازتنظیم اقتصادی پروژه‌های سرمایه‌گذاری اراضی عباس‌آباد</title>
   <style>
+    @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+
     :root {
       --bg: #eef3ef;
       --card: #ffffff;
@@ -25,7 +27,7 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Tahoma, Arial, sans-serif;
+      font-family: Vazirmatn, Tahoma, Arial, sans-serif;
       background:
         radial-gradient(circle at top right, rgba(200,155,60,0.18), transparent 34%),
         linear-gradient(145deg, #edf4ef 0%, #f8faf8 52%, #e9f0ec 100%);
@@ -507,10 +509,69 @@
 
     .hidden { display: none !important; }
 
+
+    /* Final compact Abbasabad / Sepinoud visual refinements */
+    .brand { align-items: center; }
+    .brand-mark { display: none; }
+    .brand-logos {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,.86);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 10px 28px rgba(15,75,63,.08);
+      min-width: 330px;
+    }
+    .logo { display: block; object-fit: contain; }
+    .logo-abbasabad { width: 54px; height: 54px; }
+    .logo-sepinoud { width: 210px; max-height: 54px; }
+    .logo-separator {
+      width: 1px;
+      height: 42px;
+      background: var(--line);
+    }
+    .hero { padding: 26px 32px; }
+    .hero h2 { font-size: clamp(22px, 2.4vw, 30px); margin-bottom: 8px; }
+    .hero p { line-height: 1.85; font-size: 14px; }
+    .content { padding: 22px 28px 28px; }
+    .progress-wrap { margin-bottom: 18px; }
+    .question-title { font-size: clamp(19px, 1.9vw, 25px); line-height: 1.55; margin-bottom: 6px; }
+    .question-help { line-height: 1.75; margin-bottom: 14px; font-size: 13px; }
+    .options { gap: 8px; }
+    .option { padding: 10px 13px; border-radius: 14px; line-height: 1.55; font-size: 14px; }
+    .option .dot { width: 20px; height: 20px; min-width: 20px; }
+    .field { padding: 12px 14px; border-radius: 14px; font-size: 14px; }
+    textarea.field { min-height: 104px; }
+    .ratings { gap: 8px; }
+    .rating-btn { padding: 10px 6px; border-radius: 14px; }
+    .matrix { gap: 8px; }
+    .matrix-row { padding: 11px; border-radius: 14px; }
+    .matrix-label { margin-bottom: 8px; line-height: 1.6; font-size: 14px; }
+    .matrix-scale { gap: 6px; }
+    .matrix-scale button { padding: 8px 3px; border-radius: 10px; }
+    .actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      background: rgba(255,255,255,.94);
+      border-top: 1px solid var(--line);
+      padding: 12px 0 0;
+      margin-top: 16px;
+      backdrop-filter: blur(12px);
+    }
+    .btn { padding: 12px 18px; border-radius: 14px; font-size: 14px; }
+    .section-label { margin-bottom: 6px; font-size: 12px; }
+
     @media (max-width: 760px) {
       .app-shell { width: min(100% - 18px, 1040px); padding-top: 12px; }
       .topbar { align-items: flex-start; }
+      .brand { flex-direction: column; align-items: flex-start; }
       .brand h1 { font-size: 14px; }
+      .brand-logos { width: 100%; min-width: unset; justify-content: space-between; gap: 8px; padding: 7px 9px; }
+      .logo-abbasabad { width: 44px; height: 44px; }
+      .logo-sepinoud { width: min(220px, calc(100vw - 140px)); max-height: 46px; }
       .hero { padding: 26px 22px; }
       .content { padding: 22px 18px 24px; }
       .ratings, .matrix-scale { grid-template-columns: repeat(3, 1fr); }
@@ -524,7 +585,11 @@
   <div class="app-shell">
     <div class="topbar">
       <div class="brand">
-        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-logos" aria-label="لوگوهای کارفرما و مشاور">
+          <img class="logo logo-abbasabad" src="logo-abbasabad.png" alt="لوگوی شرکت نوسازی اراضی عباس‌آباد">
+          <span class="logo-separator"></span>
+          <img class="logo logo-sepinoud" src="logo-sepinoud.png" alt="لوگوی شرکت مشاور سپینود تدبیر شریف">
+        </div>
         <div>
           <h1>پایش وضعیت و بازتنظیم اقتصادی پروژه‌های سرمایه‌گذاری اراضی عباس‌آباد</h1>
           <p>فرم شاخه‌ای ویژه پروژه‌های بهره‌بردار، در حال ساخت و پیش‌بهره‌برداری</p>
@@ -535,7 +600,7 @@
 
     <main class="card" id="appCard">
       <section class="hero" id="heroBlock">
-        <div class="eyebrow">نسخه آزمایشی فرم آنلاین</div>
+        
         <h2>پرسشنامه پایش وضعیت و بازتنظیم اقتصادی پروژه‌های سرمایه‌گذاری اراضی عباس‌آباد</h2>
         <p>
           این پرسشنامه با هدف شناخت دقیق‌تر وضعیت اقتصادی، اجرایی و قراردادی پروژه‌ها تهیه شده است.
@@ -678,19 +743,20 @@
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyCqxxdeX0_xGa6Qe9PuXMhcPXMWymI4lMA",
+      authDomain: "abbasabad-8348c.firebaseapp.com",
+      projectId: "abbasabad-8348c",
+      storageBucket: "abbasabad-8348c.firebasestorage.app",
+      messagingSenderId: "854529811858",
+      appId: "1:854529811858:web:c402d265c26fa70fa78d4b",
+      measurementId: "G-X6QBVT3VQS"
     };
 
     const COLLECTION_NAME = "abbasabad_investor_questionnaire_responses";
 
     // UI-level admin emails. Security must be enforced in Firestore Rules too.
     const ADMIN_EMAILS = [
-      "admin@example.com"
+      "hrtorabi404@gmail.com"
     ];
 
     const app = initializeApp(firebaseConfig);
