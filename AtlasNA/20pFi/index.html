@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد پروژه‌های پیشنهادی عرصه‌های نمک‌آبرود</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .chart-container {
+            position: relative;
+            height: 40vh;
+            width: 100%;
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 0.5rem center;
+            background-size: 1.5em 1.5em;
+            padding-left: 2.5rem;
+        }
+        .table-v-align td {
+            vertical-align: middle;
+        }
+        /* Tooltip Styles */
+        .tooltip {
+            position: absolute;
+            text-align: right;
+            padding: 10px 12px;
+            font-size: 13px;
+            background: #1e293b;
+            color: white;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1000; /* Ensure tooltip is on top */
+            max-width: 300px;
+            line-height: 1.6;
+        }
+        .treemap-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4px;
+            color: #1e293b;
+            font-size: 13px;
+            font-weight: 500;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            word-break: break-word;
+            box-sizing: border-box;
+        }
+        .zone-label {
+             display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0,0,0,0.6);
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            height: 100%;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .logo {
+            height: 110px;
+            width: auto;
+            object-fit: contain;
+        }
+        .logo.center {
+            height: 230px;
+        }
+        .logo.right {
+             height: 130px;
+        }
+        /* Map Styles */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
+        .accordion-icon { transition: transform 0.3s ease; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+        #map-surface {
+            position: relative;
+            width: 100%;
+            height: 0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: opacity 0.4s ease-in-out;
+        }
+        #map-surface.loading { opacity: 0.5; }
+        #map-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #f44336;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 10;
+        }
+        #map-marker::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #f44336;
+            transform: translate(-50%, -50%);
+            animation: pulse 1.5s infinite;
+            z-index: -1;
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
+        #details-panel {
+            transition: opacity 0.3s ease-in-out, max-height 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #details-panel.visible {
+            max-height: 1000px; /* Large enough to not clip content */
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 p-4 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-10 text-center">
+            <div class="logo-container mb-6">
+                <img src="https://uploadkon.ir/uploads/70c214_25sepiLogoo.png" alt="لوگو ایده پرداز محیط" class="logo">
+                <img src="https://uploadkon.ir/uploads/df5427_25NA-LOGO-copy.png" alt="لوگو نمک آبرود" class="logo center">
+                <img src="https://uploadkon.ir/uploads/611127_25OMS-LOGO-copy.png" alt="لوگو عمران مسکن شمال" class="logo right">
+            </div>
+        </header>
+
+        <div class="container mx-auto">
+            <!-- Header -->
+            <header class="text-center mb-8">
+                <h1 class="text-3xl lg:text-4xl font-bold text-slate-800">داشبورد تحلیلی پروژه‌های سرمایه‌گذاری نمک‌آبرود</h1>
+                <p class="text-slate-500 mt-2">نمایش اطلاعات کلیدی و نمودارهای پویا بر اساس داده‌های جدید</p>
+            </header>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="card p-4">
+                    <label for="area-filter" class="block text-sm font-medium text-slate-600 mb-2">فیلتر بر اساس عرصه</label>
+                    <select id="area-filter" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition">
+                        <option value="all">همه عرصه‌ها</option>
+                    </select>
+                </div>
+                <div class="card p-4">
+                    <label for="zone-filter" class="block text-sm font-medium text-slate-600 mb-2">فیلتر بر اساس کد پهنه</label>
+                    <select id="zone-filter" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition">
+                        <option value="all">همه پهنه‌ها</option>
+                    </select>
+                </div>
+                <div class="card p-4">
+                    <label for="partnership-filter" class="block text-sm font-medium text-slate-600 mb-2">فیلتر بر اساس نوع مشارکت</label>
+                    <select id="partnership-filter" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition">
+                        <option value="all">همه مشارکت‌ها</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Card 1: Total Projects -->
+                <div class="card bg-stone-100 p-6 flex flex-col items-center justify-center text-center">
+                    <div class="bg-stone-200 text-stone-600 p-3 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    </div>
+                    <p id="total-projects" class="text-4xl font-bold text-stone-800">0</p>
+                    <h3 class="text-base font-medium text-stone-500 mt-1">تعداد پروژه‌ها</h3>
+                </div>
+                <!-- Card 2: Total Area -->
+                <div class="card bg-teal-50 p-6 flex flex-col items-center justify-center text-center">
+                    <div class="bg-teal-100 text-teal-600 p-3 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5" /></svg>
+                    </div>
+                    <p id="total-area" class="text-4xl font-bold text-teal-800">0</p>
+                    <h3 class="text-base font-medium text-teal-500 mt-1">مساحت کل پروژه‌ها (مترمربع)</h3>
+                </div>
+                <!-- Card 3: Total Built Area -->
+                <div class="card bg-amber-50 p-6 flex flex-col items-center justify-center text-center">
+                    <div class="bg-amber-100 text-amber-600 p-3 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    </div>
+                    <p id="total-built-area" class="text-4xl font-bold text-amber-800">0</p>
+                    <h3 class="text-base font-medium text-amber-500 mt-1">مجموع زیربنا (مترمربع)</h3>
+                </div>
+                <!-- Card 4: Average Density -->
+                <div class="card bg-indigo-50 p-6 flex flex-col items-center justify-center text-center">
+                    <div class="bg-indigo-100 text-indigo-600 p-3 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.084-1.28-.24-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.084-1.28.24-1.857m12.76-1.857L17 15V9c0-1.355-.446-2.62-1.214-3.624M7.24 16.143L7 15V9c0-1.355.446-2.62 1.214-3.624M12 15V9c0-1.355-.446-2.62-1.214-3.624M12 15c0 2.21 1.79 4 4 4h1m-1-4c0 2.21-1.79 4-4 4H7m5-12c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z" /></svg>
+                    </div>
+                    <p id="avg-density" class="text-4xl font-bold text-indigo-800">0</p>
+                    <h3 class="text-base font-medium text-indigo-500 mt-1">متوسط تراکم پیشنهادی (%)</h3>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="card p-6 lg:col-span-1">
+                    <h3 class="text-xl font-semibold text-slate-700 mb-4">مقایسه مساحت پروژه‌ها در هر عرصه</h3>
+                    <div class="chart-container">
+                        <canvas id="areaComparisonChart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6 lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-slate-700 mb-4">مقایسه زیربنای پیشنهادی پروژه‌ها</h3>
+                    <div class="chart-container" style="height: 60vh;">
+                        <canvas id="builtAreaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Treemap Chart -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-xl font-semibold text-slate-700 mb-4 text-center">نمودار درختی: مساحت پروژه‌ها در هر عرصه</h3>
+                <div id="treemap-chart" style="min-height: 500px;"></div>
+            </div>
+            
+            <!-- Interactive Map -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-xl font-semibold text-slate-700 mb-4 text-center">نقشه تعاملی پروژه‌ها و ضوابط پهنه‌بندی</h3>
+                <div id="map-app" class="flex flex-col md:flex-row bg-gray-100 text-gray-800 rounded-lg overflow-hidden border">
+                    <!-- Sidebar -->
+                    <aside class="w-full md:w-1/3 lg:w-1/4 bg-white shadow-lg p-4 flex flex-col">
+                        <header class="pb-4 border-b mb-4">
+                            <h2 class="text-xl font-bold text-teal-700 text-center">لیست پروژه‌ها</h2>
+                            <p class="text-sm text-gray-500 text-center mt-1">برای مشاهده نقشه، روی هر پهنه یا پروژه کلیک کنید</p>
+                        </header>
+                        <button id="reset-map-btn" class="w-full text-center bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors duration-300 mb-4 font-semibold">
+                            نمایش نقشه کلی شهرک
+                        </button>
+                        <nav id="project-list" class="flex-grow overflow-y-auto custom-scrollbar pr-2"></nav>
+                    </aside>
+            
+                    <!-- Main Content -->
+                    <main class="w-full md:w-2/3 lg:w-3/4 p-4 md:p-6 lg:p-8 bg-gray-50 flex flex-col items-center justify-start">
+                        <div id="map-container" class="relative w-full bg-white rounded-xl shadow-inner p-4 flex items-center justify-center">
+                            <div id="map-surface">
+                                <div id="map-marker"></div>
+                            </div>
+                        </div>
+                        <div id="details-panel" class="w-full mt-4 bg-white rounded-xl shadow-inner p-5">
+                            <!-- Details will be injected here -->
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+
+            <!-- Table -->
+            <div class="card overflow-x-auto">
+                <h3 class="text-xl font-semibold text-slate-700 p-6">لیست کامل پروژه‌ها</h3>
+                <table class="w-full text-sm text-right text-slate-500 table-v-align">
+                    <thead class="text-xs text-slate-700 uppercase bg-slate-200">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">عرصه</th>
+                            <th scope="col" class="px-6 py-3">کد پهنه</th>
+                            <th scope="col" class="px-6 py-3">نام پروژه</th>
+                            <th scope="col" class="px-6 py-3">مساحت پروژه (مترمربع)</th>
+                            <th scope="col" class="px-6 py-3">زیربنا (مترمربع)</th>
+                            <th scope="col" class="px-6 py-3">سطح اشغال (%)</th>
+                            <th scope="col" class="px-6 py-3">طبقات</th>
+                            <th scope="col" class="px-6 py-3">تراکم (%)</th>
+                            <th scope="col" class="px-6 py-3">نوع مشارکت</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projects-table-body">
+                        <!-- Rows will be injected by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer class="text-center mt-12 py-6 border-t border-slate-200">
+            <p class="text-slate-600">
+                تهیه شده در <span id="company-name" class="font-semibold text-sky-700 cursor-pointer">موسسه سپینود شرق</span> - شهریورماه 1404
+            </p>
+        </footer>
+    </div>
+    
+    <div class="tooltip"></div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // =======================================================
+        // بخش ۱: حل مشکل فوکوس
+        // =======================================================
+        // این خط فوکوس را به محض بارگذاری به این صفحه منتقل می‌کند
+        window.focus(); 
+
+        // =======================================================
+        // بخش ۲: مدیریت کلید Backspace
+        // =======================================================
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace') {
+                const isEditable = e.target.isContentEditable || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+                if (!isEditable) {
+                    e.preventDefault();
+                    // این پیام برای بازگشت به فهرست اصلی صحیح است
+                    window.parent.postMessage({ type: 'NAVIGATE_BACK' }, '*');
+                }
+            }
+        });
+
+        // =======================================================
+        // بخش ۳: تمام کدهای دیگر داشبورد شما
+        // =======================================================
+        
+        // --- DATASET ---
+        const projectsData = [
+            { "isProject": true, "area": "عرصه ساحلی", "zoneCode": "G11", "projectName": "مارینا و پلاژ ساحلی", "projectArea": 324691, "proposedBuiltUpArea": 0, "occupancyPercentage": null, "floors": null, "densityPercentage": null, "partnershipType": "BOO", "managementInfo": "پروژه با ریسک پایین و بازگشت سرمایه سریع؛ تمرکز بر درآمدهای پایدار از اجاره غرفه‌ها و خدمات تفریحی روزانه.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Marina/" },
+            { "isProject": true, "area": "عرصه ساحلی", "zoneCode": "G13", "projectName": "ویلاهای لوکس ساحلی", "projectArea": 75680, "proposedBuiltUpArea": 45600, "occupancyPercentage": 30, "floors": 2, "densityPercentage": 60, "partnershipType": "مشارکت در ساخت", "managementInfo": "محصولی لوکس با ارزش افزوده بالا؛ هدف‌گذاری بازار مشتریان خاص و ایجاد برندینگ ممتاز برای شهرک.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Villa/" },
+            { "isProject": true, "area": "عرصه ساحلی", "zoneCode": "G14", "projectName": "سوییتهای ساحلی", "projectArea": 56997, "proposedBuiltUpArea": 68396, "occupancyPercentage": 20, "floors": 6, "densityPercentage": 120, "partnershipType": "JV", "managementInfo": "بهره‌وری بالای زمین با تراکم ساختمانی مناسب؛ جذاب برای خانواده‌ها به دلیل وجود مرکز رفاهی قدرتمند و مشاعات.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Suite/" },
+            { "isProject": true, "area": "عرصه ساحلی", "zoneCode": "G15", "projectName": "هتل ۵ ستاره ساحلی", "projectArea": 60779, "proposedBuiltUpArea": 151948, "occupancyPercentage": 10, "floors": 25, "densityPercentage": 250, "partnershipType": "JV", "managementInfo": "پروژه شاخص و نمادین با پتانسیل درآمدی چندگانه از اقامت، همایش‌ها و رستوران‌های لوکس.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/hotel/" },
+            { "isProject": true, "area": "پارک جنگلی", "zoneCode": "G21", "projectName": "اکوکمپ لینورا (بوستان بنفشه)", "projectArea": 1051323, "proposedBuiltUpArea": 105132, "occupancyPercentage": 5, "floors": 2, "densityPercentage": 10, "partnershipType": "BOT", "managementInfo": "مقصد گردشگری پایدار و منحصربه‌فرد؛ جذاب برای بازار رو به رشد اکوتوریسم و دوست‌داران طبیعت با حداقل مداخله در محیط.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Banafsheh/" },
+            { "isProject": true, "area": "پارک جنگلی", "zoneCode": "G22", "projectName": "اکواوایلد شمشاد (بوستان شمشاد)", "projectArea": 537176, "proposedBuiltUpArea": 53718, "occupancyPercentage": 5, "floors": 2, "densityPercentage": 10, "partnershipType": "BOT", "managementInfo": "جاذبه اصلی گردشگری با ترکیب حیات وحش و هیجان؛ پتانسیل بالای فروش بلیط و جذب بازدیدکننده انبوه.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Shemshad/" },
+            { "isProject": true, "area": "عرصه مسکونی", "zoneCode": "R11", "projectName": "مجتمع مسکونی محله ۷", "projectArea": 30800, "proposedBuiltUpArea": 24640, "occupancyPercentage": 40, "floors": 2, "densityPercentage": 80, "partnershipType": "مشارکت در ساخت", "managementInfo": "پروژه مسکونی ویلایی در یکی از بهترین محلات شهرک با دسترسی مناسب و محیطی آرام.", "link": "#" },
+            { "isProject": true, "area": "عرصه مسکونی", "zoneCode": "R22", "projectName": "مجتمع مسکونی محله ۸", "projectArea": 34272, "proposedBuiltUpArea": 41126, "occupancyPercentage": 40, "floors": 3, "densityPercentage": 120, "partnershipType": "مشارکت در ساخت", "managementInfo": "پروژه مسکونی آپارتمانی با تراکم بهینه و طراحی مدرن، مناسب برای خانواده‌ها.", "link": "#" },
+            { "isProject": true, "area": "عرصه مسکونی", "zoneCode": "R22", "projectName": "مجتمع مسکونی باغ کیوی", "projectArea": 70000, "proposedBuiltUpArea": 84000, "occupancyPercentage": 40, "floors": 3, "densityPercentage": 120, "partnershipType": "مشارکت در ساخت", "managementInfo": "تغییر کاربری باغ کیوی به مجتمع مسکونی با حفظ حداکثری فضای سبز و ایجاد محیطی باغ-مسکونی.", "link": "#" },
+            { "isProject": true, "area": "ورودی شهرک", "zoneCode": "S12/S13", "projectName": "مجموعه ورزشی و شهر بازی مدرن", "projectArea": 434289, "proposedBuiltUpArea": 260573, "occupancyPercentage": 30, "floors": 2, "densityPercentage": 60, "partnershipType": "JV", "managementInfo": "مگا-پروژه با جذابیت گسترده برای تمام سنین؛ جریان‌های درآمدی متنوع از ورزش و سرگرمی با ظرفیت پذیرش بالا.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Shahrbazi/" },
+            { "isProject": true, "area": "مراکز محلات", "zoneCode": "S22", "projectName": "مرکز محله ۱ (تم فرهنگی)", "projectArea": 40000, "proposedBuiltUpArea": 16000, "occupancyPercentage": 20, "floors": 2, "densityPercentage": 40, "partnershipType": "BLT", "managementInfo": "ایجاد یک قطب فرهنگی و اجتماعی برای شهرک؛ دارای ارزش معنوی بالا و جذاب برای حمایت‌های فرهنگی.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/MahalehFarhangi/" },
+            { "isProject": true, "area": "مراکز محلات", "zoneCode": "S22", "projectName": "مرکز محله ۲ (تم پذیرایی)", "projectArea": 15826, "proposedBuiltUpArea": 6330, "occupancyPercentage": 20, "floors": 2, "densityPercentage": 40, "partnershipType": "BLT", "managementInfo": "کانسپت پرطرفدار با پاخور بالا و بازگشت سرمایه سریع از طریق اجاره واحدهای متعدد غذایی.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/MahalehFood/" },
+            { "isProject": true, "area": "مراکز محلات", "zoneCode": "S22", "projectName": "مرکز محله ۳ (تم بازی بزرگسالان)", "projectArea": 25000, "proposedBuiltUpArea": 10000, "occupancyPercentage": 20, "floors": 2, "densityPercentage": 40, "partnershipType": "BLT", "managementInfo": "مرکز سرگرمی مدرن برای نسل جوان؛ پتانسیل درآمدی بالا از بازی‌های نوین و خدمات پذیرایی تماتیک.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/MahalehBozorgsal/" },
+            { "isProject": true, "area": "مراکز محلات", "zoneCode": "S22", "projectName": "مرکز محله ۴ (تم بازی کودکان)", "projectArea": 35000, "proposedBuiltUpArea": 14000, "occupancyPercentage": 20, "floors": 2, "densityPercentage": 40, "partnershipType": "BLT", "managementInfo": "مقصد اصلی خانواده‌ها با پتانسیل تکرار بازدید بالا؛ تمرکز بر ایجاد یک محیط امن، آموزشی و سرگرم‌کننده.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/MahalehKoodak/" },
+            { "isProject": true, "area": "عرصه میانی", "zoneCode": "G31", "projectName": "دهکده گردشگری خوراک", "projectArea": 170000, "proposedBuiltUpArea": 68000, "occupancyPercentage": 20, "floors": 2, "densityPercentage": 40, "partnershipType": "DBFO", "managementInfo": "ترکیب گردشگری و خوراک با هویت فرهنگی قوی؛ قابلیت میزبانی از جشنواره‌های فصلی و جذب گردشگر بین‌المللی.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Khorak/" },
+            { "isProject": true, "area": "عرصه میانی", "zoneCode": "G32", "projectName": "دهکده هنر و صنایع دستی", "projectArea": 279490, "proposedBuiltUpArea": 279490, "occupancyPercentage": 20, "floors": 5, "densityPercentage": 100, "partnershipType": "مشارکت در ساخت", "managementInfo": "مرکز فرهنگی-اقتصادی با پتانسیل فروش و صادرات صنایع دستی؛ ایجاد تجربه‌ای زنده از هنر ایرانی و جهانی.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/SanayeDasti/" },
+            { "isProject": true, "area": "عرصه تله‌کابین", "zoneCode": "S41", "projectName": "تجاری و پارکینگ تله‌کابین", "projectArea": 61512, "proposedBuiltUpArea": 61512, "occupancyPercentage": 25, "floors": 6, "densityPercentage": 100, "partnershipType": "BOLT", "managementInfo": "دروازه ورودی تله‌کابین با مخاطب تضمین‌شده؛ حداکثرسازی درآمد از طریق خدمات تجاری و سرگرمی برای بازدیدکنندگان.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Parking/" },
+            { "isProject": true, "area": "پروژه استراتژیک", "zoneCode": "-", "projectName": "پل سبزآبی (اتصال ورودی به ساحل)", "projectArea": 20000, "proposedBuiltUpArea": 4000, "occupancyPercentage": 10, "floors": 2, "densityPercentage": 20, "partnershipType": "DBOT", "managementInfo": "پروژه‌ای نمادین برای اتصال عرصه‌ها و ایجاد یک جاذبه خطی جدید؛ افزایش ارزش افزوده برای هر دو پایانه ورودی و ساحلی.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Pol/" },
+            { "isProject": true, "area": "پروژه استراتژیک", "zoneCode": "-", "projectName": "پارک ماجراجویی ابرها (بام تله‌کابین)", "projectArea": 50000, "proposedBuiltUpArea": 2500, "occupancyPercentage": 5, "floors": 1, "densityPercentage": 5, "partnershipType": "BOT", "managementInfo": "تجربه ماجراجویی منحصربه‌فرد در بام نمک‌آبرود؛ استفاده بهینه از زیرساخت تله‌کابین با حداقل مداخله در طبیعت.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/ParkAbr/" },
+            { "isProject": true, "area": "ورودی شهرک", "zoneCode": "S11", "projectName": "مرکز سلامت و تندرستی", "projectArea": 114249, "proposedBuiltUpArea": 91399, "occupancyPercentage": 40, "floors": 2, "densityPercentage": 80, "partnershipType": "BOT", "managementInfo": "مقصد جامع گردشگری سلامت در سطح منطقه‌ای؛ هدف‌گذاری بازار لوکس با ارائه خدمات پزشکی و تندرستی پیشرفته.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Darmani/" },
+            { "isProject": true, "area": "ورودی شهرک", "zoneCode": "S13", "projectName": "آرنای سرگرمی‌های دیجیتال نمک‌آبرود", "projectArea": 90000, "proposedBuiltUpArea": 54000, "occupancyPercentage": 30, "floors": 2, "densityPercentage": 60, "partnershipType": "JV", "managementInfo": "پروژه‌ای استراتژیک با ارزش بلندمدت؛ جذب سرمایه، استعداد و شرکت‌های نوآور برای آینده گردشگری منطقه.", "link": "https://hrtorabii-404.github.io/namakabroud-report/Package/Fanavari/" },
+            { "isProject": false, "area": "عرصه ساحلی", "zoneCode": "G12", "projectName": "پلاژها و خدمات ساحلی موجود", "projectArea": 74285, "proposedBuiltUpArea": 0, "occupancyPercentage": null, "floors": null, "densityPercentage": null, "partnershipType": "بهره‌برداری توسط کارفرما", "managementInfo": "تثبیت و بهره‌برداری از خدمات موجود در ساحل برای ارائه خدمات پایه به گردشگران.", "link": "#" }
+        ];
+
+        // بقیه کدهای جاوااسکریپت داشبورد شما بدون تغییر در اینجا قرار می‌گیرد...
+        // ...
+        // (تمام توابع و متغیرهای دیگر)
+        // ...
+        let builtAreaChart, areaComparisonChart;
+        Chart.defaults.font.family = "'Vazirmatn', sans-serif";
+        const tooltip = d3.select(".tooltip");
+        const areaFilter = document.getElementById('area-filter');
+        const zoneFilter = document.getElementById('zone-filter');
+        const partnershipFilter = document.getElementById('partnership-filter');
+        const tableBody = document.getElementById('projects-table-body');
+        const totalProjectsEl = document.getElementById('total-projects');
+        const totalAreaEl = document.getElementById('total-area');
+        const totalBuiltAreaEl = document.getElementById('total-built-area');
+        const avgDensityEl = document.getElementById('avg-density');
+        const areaColorMap = new Map([
+            ["عرصه ساحلی", "#a5f3fc"], ["پارک جنگلی", "#a7f3d0"], ["ورودی شهرک", "#fed7aa"],
+            ["مراکز محلات", "#fde047"], ["عرصه میانی", "#f9a8d4"], ["عرصه تله‌کابین", "#7dd3fc"],
+            ["پروژه استراتژیک", "#d6d3d1"], ["عرصه مسکونی", "#fecaca"]
+        ]);
+        const areaTailwindColorMap = new Map([
+            ["عرصه ساحلی", "bg-cyan-100"], ["پارک جنگلی", "bg-emerald-100"], ["ورودی شهرک", "bg-orange-100"],
+            ["مراکز محلات", "bg-yellow-100"], ["عرصه میانی", "bg-pink-100"], ["عرصه تله‌کابین", "bg-sky-100"],
+            ["پروژه استراتژیک", "bg-stone-100"], ["عرصه مسکونی", "bg-red-100"]
+        ]);
+        const mapSurface = document.getElementById('map-surface');
+        const projectListContainer = document.getElementById('project-list');
+        const resetMapBtn = document.getElementById('reset-map-btn');
+        const mapMarker = document.getElementById('map-marker');
+        const detailsPanel = document.getElementById('details-panel');
+        let activeMapItem = null;
+        const defaultMap = 'https://uploadkon.ir/uploads/aa2602_2501-Mahalat.jpg';
+        const zoneRegulations = {
+            'R1': { title: 'سکونت و اقامت عام شرقی (R1)', description: 'این پهنه هسته اصلی بخش مسکونی شرق شهرک است. شامل ویلاهای ۲ طبقه (R11) تا آپارتمان‌های ۵ طبقه (R15) می‌شود و تراکم در آن به صورت پلکانی افزایش می‌یابد.' },
+            'R2': { title: 'سکونت و اقامت عام غربی (R2)', description: 'این پهنه بخش مسکونی غرب شهرک را پوشش می‌دهد. شامل ویلاهای ۲ طبقه (R21) تا آپارتمان‌های ۴ طبقه (R24) است و تراکم کمتری نسبت به بخش شرقی دارد.' },
+            'R3': { title: 'سکونت و اقامت ویژه (R3)', description: 'پهنه اختصاص یافته به برج‌ها و ساختمان‌های بلندمرتبه. R31 برای اقامت موقت (هتل) و R32 و R33 برای مجتمع‌های مسکونی لوکس و بلندمرتبه طراحی شده است.' },
+            'S1': { title: 'خدمات فراشهری (S1)', description: 'این پهنه در ورودی شهرک قرار دارد و برای خدمات کلان‌مقیاس طراحی شده است. شامل خدمات یادگیری و درمانی (S11)، فراغت (S12)، تفرج (S13) و کسب‌وکار (S14) می‌شود.' },
+            'S2': { title: 'خدمات درون‌شهری (S2)', description: 'این پهنه برای تامین نیازهای داخلی شهرک است. S21 برای خدمات پشتیبان اقامت موقت (فصلی) و S22 برای خدمات پشتیبان اقامت دائم (مراکز محلات) است.' },
+            'S3': { title: 'تاسیسات شهری (S3)', description: 'پهنه اختصاص یافته به زیرساخت‌ها و تاسیسات شهری مانند پست‌های برق، ایستگاه‌های پمپاژ آب و... که تابع ضوابط دستگاه‌های مربوطه است.' },
+            'S4': { title: 'گردشگری متمرکز (S4)', description: 'این پهنه به طور خاص به محدوده تله‌کابین و خدمات مکمل آن مانند پارکینگ، مراکز خرید و رستوران‌ها اختصاص دارد و نیازمند تهیه طرح یکپارچه است.' },
+            'G1': { title: 'حفاظت و اقامت موقت ساحلی (G1)', description: 'پهنه ساحلی که ترکیبی از حفاظت و توسعه است. G11 (حریم دریا) کاملاً حفاظت‌شده، G12 (هتل پارسیان) تثبیت‌شده، و G13 تا G15 برای اقامتگاه‌های ساحلی از ۲ تا ۲۵ طبقه است.' },
+            'G2': { title: 'حفاظت فعال (G2)', description: 'پهنه پارک جنگلی. G21 (بوستان بنفشه) برای گردشگری و تفرج (مانند پارک ماجراجویی) و G22 (بوستان شمشاد) برای اکوتوریسم (مانند گلمپینگ) با حداقل مداخله طراحی شده است.' },
+            'G3': { title: 'محور ویژه میانی (G3)', description: 'این پهنه محور سبز میانی شهرک است. G31 برای فضاهای عمومی و گردشگری خوراک و G32 برای خدمات عمومی و رفاهی با تراکم بیشتر در نظر گرفته شده است.' },
+            'G4': { title: 'حریم هیدرولوژیک (G4)', description: 'پهنه کاملاً حفاظت‌شده مربوط به منابع آبی. G41 بستر و حریم رودخانه است و G42 حریم انهار که برای مسیرهای پیاده و دوچرخه مناسب است.' },
+            'G5': { title: 'کمربند سبز (G5)', description: 'پهنه مرزی شهرک. G51 به عنوان حائل با طبیعت، برای سازه‌های بسیار سبک گردشگری (مانند کلبه) مناسب است و G52 به عنوان حائل با سکونتگاه‌های مجاور، کاملاً حفاظت‌شده و برای فضای سبز عمومی است.' }
+        };
+        const mapProjectData = [
+            { zoneName: 'پهنه G1 - عرصه ساحلی', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2502-G1.jpg', zoneCode: 'G1', zoneArea: '37.2 هکتار', subZones: ['G11', 'G12', 'G13', 'G14', 'G15'], projects: [ { name: 'مارینا و پلاژ ساحلی', code: 'G11', area: '324,691', builtUpArea: 'محوطه‌سازی', location: 'عرصه ساحلی', coords: { top: '10%', left: '65%' } }, { name: 'ویلاهای لوکس ساحلی', code: 'G13', area: '75,680', builtUpArea: '45,600', location: 'عرصه ساحلی', coords: { top: '18%', left: '57%' } }, { name: 'سوییتهای ساحلی', code: 'G14', area: '56,997', builtUpArea: '68,396', location: 'عرصه ساحلی', coords: { top: '20%', left: '63%' } }, { name: 'هتل ۵ ستاره ساحلی', code: 'G15', area: '60,779', builtUpArea: '151,948', location: 'عرصه ساحلی', coords: { top: '12%', left: '35%' } } ] },
+            { zoneName: 'پهنه G2 - پارک جنگلی', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2503-G2.jpg', zoneCode: 'G2', zoneArea: '158.8 هکتار', subZones: ['G21', 'G22'], projects: [ { name: 'اکوکمپ لینورا (بوستان بنفشه)', code: 'G21', area: '1,051,323', builtUpArea: '105,132', location: 'پارک جنگلی', coords: { top: '30%', left: '55%' } }, { name: 'اکواوایلد شمشاد (بوستان شمشاد)', code: 'G22', area: '537,176', builtUpArea: '53,718', location: 'پارک جنگلی', coords: { top: '20%', left: '38%' } } ] },
+            { zoneName: 'پهنه G3 - عرصه میانی', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2504-G3.jpg', zoneCode: 'G3', zoneArea: '53 هکتار', subZones: ['G31', 'G32'], projects: [ { name: 'دهکده گردشگری خوراک', code: 'G31', area: '170,000', builtUpArea: '68,000', location: 'عرصه میانی', coords: { top: '70%', left: '62%' } }, { name: 'دهکده هنر و صنایع دستی', code: 'G32', area: '279,490', builtUpArea: '279,490', location: 'عرصه میانی', coords: { top: '65%', left: '59.5%' } } ] },
+            { zoneName: 'پهنه G4 - حریم هیدرولوژیک', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2505-G4.jpg', zoneCode: 'G4', zoneArea: '17.5 هکتار', subZones: ['G41', 'G42'], projects: [ { name: 'حریم رودخانه و انهار', code: 'G41', description: 'پهنه کاملاً حفاظت‌شده مربوط به منابع آبی...', coords: null } ] },
+            { zoneName: 'پهنه G5 - کمربند سبز', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2506-G5.jpg', zoneCode: 'G5', zoneArea: '39.7 هکتار', subZones: ['G51', 'G52'], projects: [ { name: 'کمربند سبز', code: 'G51', description: 'پهنه مرزی شهرک...', coords: null } ] },
+            { zoneName: 'پهنه S1 - عرصه ورودی', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2507-S1.jpg', zoneCode: 'S1', zoneArea: '72 هکتار', subZones: ['S11', 'S12', 'S13', 'S14'], projects: [ { name: 'مرکز سلامت و تندرستی', code: 'S11', area: '114,249', builtUpArea: '91,399', location: 'ورودی شهرک', coords: { top: '38%', left: '50%' } }, { name: 'مجموعه ورزشی و شهر بازی مدرن', code: 'S12/S13', area: '434,289', builtUpArea: '260,573', location: 'ورودی شهرک', coords: { top: '41%', left: '62%' } }, { name: 'آرنای سرگرمی‌های دیجیتال نمک‌آبرود', code: 'S13', area: '90,000', builtUpArea: '54,000', location: 'ورودی شهرک', coords: { top: '40%', left: '64%' } }, { name: 'شهر کسب و کار', code: 'S14', description: 'پهنه S14 برای خدمات کلان‌مقیاس کسب‌وکار طراحی شده است.', location: 'ورودی شهرک', coords: { top: '40%', left: '71%' } } ] },
+            { zoneName: 'پهنه S2 - مراکز محلات', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2508-S2.jpg', zoneCode: 'S2', zoneArea: '32.5 هکتار', subZones: ['S21', 'S22'], projects: [ { name: 'مرکز محله ۱ (تم فرهنگی)', code: 'S22', area: '40,000', builtUpArea: '16,000', location: 'مراکز محلات', coords: { top: '55%', left: '55%' } }, { name: 'مرکز محله ۲ (تم پذیرایی)', code: 'S22', area: '15,826', builtUpArea: '6,330', location: 'مراکز محلات', coords: { top: '55%', left: '67%' } }, { name: 'مرکز محله ۳ (تم بازی بزرگسالان)', code: 'S22', area: '25,000', builtUpArea: '10,000', location: 'مراکز محلات', coords: { top: '75%', left: '66%' } }, { name: 'مرکز محله ۴ (تم بازی کودکان)', code: 'S22', area: '35,000', builtUpArea: '14,000', location: 'مراکز محلات', coords: { top: '72%', left: '58%' } } ] },
+            { zoneName: 'پهنه S3 - تاسیسات شهری', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2509-S3.jpg', zoneCode: 'S3', zoneArea: '0.9 هکتار', subZones: ['S31'], projects: [ { name: 'تاسیسات شهری', code: 'S31', description: 'پهنه اختصاص یافته به زیرساخت‌ها و تاسیسات شهری...', coords: { top: '66.5%', left: '74%' } } ] },
+            { zoneName: 'پهنه S4 - عرصه تله‌کابین', mapUrl: 'https://uploadkon.ir/uploads/81ba02_2510-S4.jpg', zoneCode: 'S4', zoneArea: '6.2 هکتار', subZones: ['S41'], projects: [ { name: 'تجاری و پارکینگ تله‌کابین', code: 'S41', area: '61,512', builtUpArea: '61,512', location: 'عرصه تله‌کابین', coords: { top: '90%', left: '80%' } } ] },
+            { zoneName: 'پهنه R1 - مسکونی', mapUrl: 'https://uploadkon.ir/uploads/699120_2515-R11.jpg', zoneCode: 'R1', zoneArea: '3.1 هکتار', subZones: ['R11'], projects: [ { name: 'مجتمع مسکونی محله ۷', code: 'R11', area: '30,800', builtUpArea: '30,800', location: 'عرصه مسکونی', coords: { top: '80%', left: '81%' } } ] },
+            { zoneName: 'پهنه R2 - مسکونی', mapUrl: 'https://uploadkon.ir/uploads/04cb20_2514-R22.jpg', zoneCode: 'R2', zoneArea: '10.4 هکتار', subZones: ['R22'], projects: [ { name: 'مجتمع مسکونی محله ۸', code: 'R22', area: '34,272', builtUpArea: '41,750', location: 'عرصه مسکونی', coords: { top: '70%', left: '39%' } }, { name: 'مجتمع مسکونی باغ کیوی', code: 'R22', area: '70,000', builtUpArea: '140,000', location: 'عرصه مسکونی', coords: { top: '80%', left: '47%' } } ] },
+            { zoneName: 'پروژه‌های استراتژیک', mapUrl: defaultMap, projects: [ { name: 'پل سبزآبی (اتصال ورودی به ساحل)', code: '-', area: '20,000', builtUpArea: '4,000', location: 'بین عرصه‌ای', coords: null }, { name: 'پارک ماجراجویی ابرها (بام تله‌کابین)', code: '-', area: '50,000', builtUpArea: '2,500', location: 'بام تله‌کابین', coords: null } ] }
+        ];
+        const areaToZonePrefix = {
+            "عرصه ساحلی": "G1", "پارک جنگلی": "G2", "عرصه میانی": "G3", "ورودی شهرک": "S1",
+            "مراکز محلات": "S2", "عرصه تله‌کابین": "S4", "پروژه استراتژیک": "پروژه‌های استراتژیک", "عرصه مسکونی": "R"
+        };
+        const formatNumber = (num) => num || num === 0 ? num.toLocaleString('fa-IR') : '-';
+        function populateFilters() {
+            areaFilter.innerHTML = '<option value="all">همه عرصه‌ها</option>';
+            zoneFilter.innerHTML = '<option value="all">همه پهنه‌ها</option>';
+            partnershipFilter.innerHTML = '<option value="all">همه مشارکت‌ها</option>';
+            const areas = [...new Set(projectsData.map(p => p.area))];
+            const zoneCodes = [...new Set(projectsData.map(p => p.zoneCode))].filter(z => z !== null && z !== undefined).sort();
+            const partnerships = [...new Set(projectsData.map(p => p.partnershipType))];
+            areas.forEach(area => { const option = document.createElement('option'); option.value = area; option.textContent = area; areaFilter.appendChild(option); });
+            zoneCodes.forEach(zone => { if(zone && zone !== '-') { const option = document.createElement('option'); option.value = zone; option.textContent = zone; zoneFilter.appendChild(option); } });
+            partnerships.forEach(partnership => { const option = document.createElement('option'); option.value = partnership; option.textContent = partnership; partnershipFilter.appendChild(option); });
+        }
+        function updateDashboard() {
+            const selectedArea = areaFilter.value;
+            const selectedZone = zoneFilter.value;
+            const selectedPartnership = partnershipFilter.value;
+            const filteredData = projectsData.filter(p => {
+                const areaMatch = selectedArea === 'all' || p.area === selectedArea;
+                const zoneMatch = selectedZone === 'all' || (p.zoneCode && p.zoneCode.includes(selectedZone));
+                const partnershipMatch = selectedPartnership === 'all' || p.partnershipType === selectedPartnership;
+                return areaMatch && zoneMatch && partnershipMatch;
+            });
+            updateKPIs(filteredData);
+            updateAreaComparisonChart(filteredData);
+            updateBuiltAreaChart(filteredData);
+            updateTreemap(filteredData);
+            updateTable(filteredData);
+            updateMapView(selectedArea, selectedZone);
+        }
+        function updateKPIs(data) {
+            totalProjectsEl.textContent = formatNumber(data.filter(p => p.isProject).length);
+            const totalArea = data.reduce((sum, p) => sum + (p.projectArea || 0), 0);
+            totalAreaEl.textContent = formatNumber(totalArea);
+            const totalBuiltArea = data.reduce((sum, p) => sum + (p.proposedBuiltUpArea || 0), 0);
+            totalBuiltAreaEl.textContent = formatNumber(totalBuiltArea);
+            const densities = data.map(p => p.densityPercentage).filter(d => d !== null && d !== undefined);
+            const avgDensity = densities.length > 0 ? (densities.reduce((a, b) => a + b, 0) / densities.length) : 0;
+            avgDensityEl.textContent = formatNumber(Math.round(avgDensity));
+        }
+        function updateAreaComparisonChart(data) {
+            const ctx = document.getElementById('areaComparisonChart').getContext('2d');
+            const areaData = data.reduce((acc, p) => { if (p.projectArea) { if (!acc[p.area]) { acc[p.area] = 0; } acc[p.area] += p.projectArea; } return acc; }, {});
+            const labels = Object.keys(areaData);
+            const chartData = Object.values(areaData);
+            const totalArea = chartData.reduce((a, b) => a + b, 0);
+            const offsets = chartData.map(value => (totalArea > 0 && (value / totalArea) < 0.05) ? 15 : 0);
+            const backgroundColors = labels.map(label => areaColorMap.get(label) || '#cccccc');
+            if (areaComparisonChart) areaComparisonChart.destroy();
+            areaComparisonChart = new Chart(ctx, {
+                type: 'doughnut', data: { labels: labels, datasets: [{ label: 'مساحت پروژه‌ها (مترمربع)', data: chartData, backgroundColor: backgroundColors, borderColor: '#f1f5f9', borderWidth: 4, offset: offsets }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => `${c.label}: ${formatNumber(c.parsed)} مترمربع` } } } }
+            });
+        }
+        function updateBuiltAreaChart(data) {
+            const ctx = document.getElementById('builtAreaChart').getContext('2d');
+            const sortedData = [...data].filter(p=>p.isProject).sort((a,b) => a.proposedBuiltUpArea - b.proposedBuiltUpArea);
+            const labels = sortedData.map(p => p.projectName);
+            const chartData = sortedData.map(p => p.proposedBuiltUpArea);
+            const backgroundColors = sortedData.map(p => areaColorMap.get(p.area) || '#cccccc');
+            const borderColors = sortedData.map(p => d3.color(areaColorMap.get(p.area) || '#cccccc').darker(0.5));
+            if (builtAreaChart) builtAreaChart.destroy();
+            builtAreaChart = new Chart(ctx, {
+                type: 'bar', data: { labels: labels, datasets: [{ label: 'زیربنای پیشنهادی (مترمربع)', data: chartData, backgroundColor: backgroundColors, borderColor: borderColors, borderWidth: 1, borderRadius: 5, }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, ticks: { stepSize: 25000, callback: (v) => formatNumber(v) } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${formatNumber(c.parsed.x)} مترمربع` } } } }
+            });
+        }
+        function updateTable(data) {
+            tableBody.innerHTML = '';
+            const groupedByArea = data.reduce((acc, p) => { if (!acc[p.area]) acc[p.area] = []; acc[p.area].push(p); return acc; }, {});
+            for (const areaName in groupedByArea) {
+                const projectsInArea = groupedByArea[areaName];
+                projectsInArea.forEach((p, index) => {
+                    const row = document.createElement('tr');
+                    row.className = `${areaTailwindColorMap.get(areaName) || 'bg-slate-50'} border-b border-white hover:bg-opacity-70`;
+                    let cells = '';
+                    if (index === 0) cells += `<td class="px-6 py-4 font-medium text-slate-900" rowspan="${projectsInArea.length}">${p.area}</td>`;
+                    const projectNameCell = p.isProject && p.link !== "#" ? `<a href="${p.link}" target="_blank" class="text-sky-600 hover:text-sky-800 hover:underline">${p.projectName}</a>` : p.projectName;
+                    cells += `<td class="px-6 py-4">${p.zoneCode}</td><td class="px-6 py-4 font-medium text-slate-800">${projectNameCell}</td><td class="px-6 py-4">${formatNumber(p.projectArea)}</td><td class="px-6 py-4">${formatNumber(p.proposedBuiltUpArea)}</td><td class="px-6 py-4">${formatNumber(p.occupancyPercentage)}</td><td class="px-6 py-4">${formatNumber(p.floors)}</td><td class="px-6 py-4">${formatNumber(p.densityPercentage)}</td><td class="px-6 py-4">${p.partnershipType}</td>`;
+                    row.innerHTML = cells;
+                    row.addEventListener('mouseover', (e) => { tooltip.transition().duration(200).style("opacity", .95); tooltip.html(`<strong>نکات مدیریتی:</strong><br/>${p.managementInfo}`).style("left", `${e.pageX + 15}px`).style("top", `${e.pageY - 28}px`); });
+                    row.addEventListener('mouseout', () => tooltip.transition().duration(500).style("opacity", 0));
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+        function updateTreemap(data) {
+            const container = d3.select('#treemap-chart');
+            if (container.empty()) return;
+            container.selectAll("*").remove();
+            const treemapData = { name: "root", children: Array.from(d3.group(data, d => d.area), ([key, value]) => ({ name: key, children: value.map(d => ({ name: d.projectName, value: d.projectArea })) })) };
+            const width = container.node().getBoundingClientRect().width, height = 500;
+            const treemap = d3.treemap().size([width, height]).padding(3).paddingTop(28);
+            const root = d3.hierarchy(treemapData).sum(d => d.value).sort((a, b) => b.value - a.value);
+            treemap(root);
+            const svg = container.append("svg").attr("width", width).attr("height", height).style("font-family", "Vazirmatn");
+            const node = svg.selectAll("g").data(root.descendants()).join("g").attr("transform", d => `translate(${d.x0},${d.y0})`);
+            node.append("rect").attr("width", d => d.x1 - d.x0).attr("height", d => d.y1 - d.y0).attr("fill", d => d.depth === 0 ? "transparent" : (d.depth === 1 ? areaColorMap.get(d.data.name) : d3.color(areaColorMap.get(d.parent.data.name)).brighter(0.6))).attr("rx", 5).style("opacity", 0).transition().duration(800).style("opacity", 1);
+            node.on("mouseover", (e, d) => { if(d.depth < 2) return; tooltip.transition().duration(200).style("opacity", .9); tooltip.html(`<strong>${d.data.name}</strong><br/>مساحت: ${formatNumber(d.value)} م²`).style("left", `${e.pageX+10}px`).style("top", `${e.pageY-28}px`); }).on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
+            node.filter(d => d.depth === 1).append("foreignObject").attr("width", d => d.x1 - d.x0).attr("height", 28).append("xhtml:div").attr("class", "zone-label").html(d => d.data.name);
+            node.filter(d => d.depth === 2).append("foreignObject").attr("width", d => d.x1 - d.x0 - 4).attr("height", d => d.y1 - d.y0 - 4).attr("x", 2).attr("y", 2).style("display", d => (d.x1 - d.x0 < 50 || d.y1 - d.y0 < 40) ? "none" : "block").append("xhtml:div").attr("class", "treemap-label").html(d => `${d.data.name}<br><span style="font-size:11px;opacity:0.7;">(${formatNumber(d.value)} م²)</span>`);
+        }
+        function setMap(url, callback) {
+            hideMapDetails();
+            mapSurface.classList.add('loading');
+            const img = new Image();
+            img.src = url;
+            img.onload = () => { mapSurface.style.paddingTop = `${(img.naturalHeight / img.naturalWidth) * 100}%`; mapSurface.style.backgroundImage = `url('${url}')`; mapSurface.classList.remove('loading'); if (callback) callback(); };
+            img.onerror = () => { console.error('Failed to load image:', url); mapSurface.style.backgroundImage = `url('https://placehold.co/600x400/EEE/31343C?text=Error+Loading+Map')`; mapSurface.style.paddingTop = `${(400 / 600) * 100}%`; mapSurface.classList.remove('loading'); }
+        }
+        function hideMapDetails() { mapMarker.style.display = 'none'; detailsPanel.classList.remove('visible'); }
+        function showProjectDetails(project) {
+            if (project.coords) { mapMarker.style.top = project.coords.top; mapMarker.style.left = project.coords.left; mapMarker.style.display = 'block'; } else { mapMarker.style.display = 'none'; }
+            let projectDetailsHtml = '';
+            if (!project.description) { projectDetailsHtml = `<div class="space-y-2 text-sm"><h4 class="font-semibold text-gray-800 border-b pb-2 mb-3">مشخصات پروژه</h4><p><strong class="font-medium text-gray-500 w-20 inline-block">کد پهنه:</strong> <span class="font-bold text-blue-600">${project.code}</span></p><p><strong class="font-medium text-gray-500 w-20 inline-block">موقعیت:</strong> <span class="text-gray-800">${project.location}</span></p><p><strong class="font-medium text-gray-500 w-20 inline-block">مساحت:</strong> <span class="font-bold text-green-600">${project.area}</span> م.م.</p><p><strong class="font-medium text-gray-500 w-20 inline-block">زیربنا:</strong> <span class="font-bold text-green-600">${project.builtUpArea}</span> م.م.</p></div>`; }
+            const mainZoneCode = project.code ? project.code.substring(0, 2) : null;
+            const regulation = mainZoneCode ? zoneRegulations[mainZoneCode] : null;
+            let regulationHtml = '';
+            if (regulation) { regulationHtml = `<div class="space-y-2 text-sm"><h4 class="font-semibold text-gray-800 border-b pb-2 mb-3">${regulation.title}</h4><p class="text-gray-700 leading-relaxed">${regulation.description}</p></div>`; }
+            let finalHtml = `<h3 class="font-bold text-xl mb-4 text-teal-700">${project.name}</h3><div class="grid grid-cols-1 ${projectDetailsHtml && regulationHtml ? 'md:grid-cols-2' : ''} gap-x-6 gap-y-4">${projectDetailsHtml}${regulationHtml}</div>`;
+            detailsPanel.innerHTML = finalHtml;
+            detailsPanel.classList.add('visible');
+        }
+        function showZoneDetails(zone) {
+            mapMarker.style.display = 'none';
+            const regulation = zone.zoneCode ? zoneRegulations[zone.zoneCode.substring(0,2)] : null;
+            let zoneDetailsHtml = `<div class="space-y-2 text-sm"><h4 class="font-semibold text-gray-800 border-b pb-2 mb-3">مشخصات پهنه</h4><p><strong class="font-medium text-gray-500 w-28 inline-block">مساحت کل پهنه:</strong> <span class="font-bold text-green-600">${zone.zoneArea}</span></p><p><strong class="font-medium text-gray-500 w-28 inline-block">زیر‌پهنه‌ها:</strong> <span class="font-bold text-blue-600">${zone.subZones ? zone.subZones.join('، ') : 'N/A'}</span></p></div>`;
+            let regulationHtml = '';
+            if (regulation) { regulationHtml = `<div class="space-y-2 text-sm"><h4 class="font-semibold text-gray-800 border-b pb-2 mb-3">${regulation.title}</h4><p class="text-gray-700 leading-relaxed">${regulation.description}</p></div>`; }
+            let finalHtml = `<h3 class="font-bold text-xl mb-4 text-teal-700">${zone.zoneName}</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">${zoneDetailsHtml}${regulationHtml}</div>`;
+            detailsPanel.innerHTML = finalHtml;
+            detailsPanel.classList.add('visible');
+        }
+        function updateMapSidebar(visibleZones) {
+            projectListContainer.innerHTML = '';
+            visibleZones.forEach(zone => {
+                const zoneContainer = document.createElement('div');
+                zoneContainer.className = 'mb-2 border-b';
+                const zoneHeader = document.createElement('div');
+                zoneHeader.className = 'flex justify-between items-center p-3 cursor-pointer hover:bg-gray-100 rounded-md transition-colors';
+                zoneHeader.innerHTML = `<span class="font-semibold text-gray-700">${zone.zoneName}</span> <svg class="accordion-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`;
+                const projectsContainer = document.createElement('div');
+                projectsContainer.className = 'accordion-content pr-4';
+                zone.projects.forEach(project => {
+                    const projectItem = document.createElement('a');
+                    projectItem.href = '#';
+                    projectItem.textContent = project.name;
+                    projectItem.className = 'block p-2 text-sm text-gray-600 hover:bg-teal-50 rounded-md';
+                    projectItem.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setMap(zone.mapUrl, () => showProjectDetails(project)); if (activeMapItem) activeMapItem.classList.remove('bg-teal-100', 'font-bold'); projectItem.classList.add('bg-teal-100', 'font-bold'); activeMapItem = projectItem; });
+                    projectsContainer.appendChild(projectItem);
+                });
+                zoneHeader.addEventListener('click', () => {
+                    const icon = zoneHeader.querySelector('.accordion-icon');
+                    const content = zoneHeader.nextElementSibling;
+                    const isOpen = content.style.maxHeight;
+                    document.querySelectorAll('.accordion-content').forEach(el => { if (el !== content) { el.style.maxHeight = null; el.previousElementSibling.querySelector('.accordion-icon').style.transform = 'rotate(0deg)'; }});
+                    content.style.maxHeight = isOpen ? null : `${content.scrollHeight}px`;
+                    icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+                    setMap(zone.mapUrl, () => showZoneDetails(zone));
+                    if (activeMapItem) activeMapItem.classList.remove('bg-teal-100', 'font-bold');
+                    activeMapItem = null;
+                });
+                zoneContainer.appendChild(zoneHeader);
+                zoneContainer.appendChild(projectsContainer);
+                projectListContainer.appendChild(zoneContainer);
+            });
+        }
+        function updateMapView(selectedArea, selectedZone) {
+            let visibleZones = mapProjectData;
+            let mapToShow = defaultMap;
+            let detailsToShow = hideMapDetails;
+            if (selectedZone !== 'all' && selectedZone) { visibleZones = mapProjectData.filter(z => z.zoneCode && z.zoneCode.startsWith(selectedZone.substring(0, 2))); } else if (selectedArea !== 'all') {
+                const prefix = areaToZonePrefix[selectedArea];
+                if (prefix) { visibleZones = mapProjectData.filter(z => { if (prefix === "پروژه‌های استراتژیک") return z.zoneName === prefix; return z.zoneCode && z.zoneCode.startsWith(prefix); }); }
+            }
+            if (visibleZones.length === 1) { mapToShow = visibleZones[0].mapUrl; detailsToShow = () => showZoneDetails(visibleZones[0]); }
+            setMap(mapToShow, detailsToShow);
+            updateMapSidebar(visibleZones);
+            if (visibleZones.length === 1 && (selectedArea !== 'all' || selectedZone !== 'all')) {
+                setTimeout(() => {
+                    const firstAccordion = document.querySelector('#project-list .accordion-content');
+                    if (firstAccordion) {
+                        firstAccordion.style.maxHeight = firstAccordion.scrollHeight + "px";
+                        const icon = firstAccordion.previousElementSibling.querySelector('.accordion-icon');
+                        if (icon) icon.style.transform = 'rotate(180deg)';
+                    }
+                }, 100);
+            }
+        }
+        
+        // --- INITIALIZATION ---
+        populateFilters();
+        updateDashboard();
+        
+        resetMapBtn.addEventListener('click', () => {
+            setMap(defaultMap, hideMapDetails);
+            updateMapSidebar(mapProjectData);
+            areaFilter.value = 'all';
+            zoneFilter.value = 'all';
+            partnershipFilter.value = 'all';
+            updateDashboard();
+        });
+
+        const companyNameEl = document.getElementById('company-name');
+        companyNameEl.addEventListener('mouseover', (e) => {
+            tooltip.transition().duration(200).style("opacity", .95);
+            tooltip.html(`حمیدرضا ترابی<br>hr.torabii@gmail.com`).style("left", `${e.pageX - 150}px`).style("top", `${e.pageY - 70}px`); 
+        });
+        companyNameEl.addEventListener('mouseout', () => tooltip.transition().duration(500).style("opacity", 0));
+
+        new ResizeObserver(updateDashboard).observe(document.getElementById('treemap-chart'));
+        
+        areaFilter.addEventListener('change', updateDashboard);
+        zoneFilter.addEventListener('change', updateDashboard);
+        partnershipFilter.addEventListener('change', updateDashboard);
+
+    });
+    </script>
+
+</body>
+</html>
+    
+</body>
+</html>
