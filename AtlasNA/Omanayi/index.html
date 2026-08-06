@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اینفوگرافیک مدیریتی | وظایف و مسئولیت‌های هیئت امنا</title>
+    
+    <!-- Import Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Import Vazirmatn Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* A. Global Styles */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #F3F4F6; /* gray-100 */
+            color: #334155; /* slate-700 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* B. Custom Animation: Fade In Up */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Utility class for animation */
+        .fade-in-up {
+            animation: fadeInUp 0.7s ease-out forwards;
+            opacity: 0; /* Start hidden */
+        }
+
+        /* C. Custom Animation: Gradient Text */
+        .gradient-text {
+            background: linear-gradient(90deg, #10B981, #06B6D4, #6366F1);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-flow 6s ease infinite;
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* D. Custom Animation: Subtle Pulse for Icons */
+        @keyframes pulse-subtle {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        .pulse-subtle {
+            animation: pulse-subtle 3s infinite ease-in-out;
+        }
+
+        /* E. Custom List Styles (Checkmarks) */
+        .checked-list li {
+            position: relative;
+            padding-right: 32px; /* Space for checkmark */
+            margin-bottom: 12px;
+        }
+        .checked-list li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            top: 1px;
+            color: #14B8A6; /* teal-500 */
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* F. Section Header Styling */
+        .section-header {
+            font-size: 2.25rem; /* 3xl */
+            font-weight: 700;
+            margin-bottom: 2.5rem; /* mb-10 */
+            text-align: center;
+            color: #1E293B; /* slate-800 */
+            border-bottom: 2px solid #D1D5DB; /* gray-300 */
+            padding-bottom: 1rem; /* pb-4 */
+        }
+
+        /* G. Table Styling */
+        .styled-table th {
+            background-color: #E5E7EB; /* gray-200 */
+            color: #4B5563; /* gray-600 */
+            padding: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .styled-table td {
+            padding: 16px;
+            border-bottom: 1px solid #D1D5DB; /* gray-300 */
+        }
+        .styled-table tbody tr:nth-child(even) {
+            background-color: #F9FAFB; /* gray-50 */
+        }
+        .styled-table tbody tr:hover {
+            background-color: #E5E7EB; /* gray-200 */
+            transition: background-color 0.2s ease;
+        }
+
+        /* H. Custom Tooltip */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            text-decoration: underline;
+            text-decoration-color: #94A3B8; /* slate-400 */
+            text-decoration-style: dotted;
+        }
+
+        .tooltip-content {
+            visibility: hidden;
+            opacity: 0;
+            width: max-content;
+            background-color: #1E293B; /* slate-800 */
+            color: #F8FAFC; /* slate-50 */
+            text-align: right;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 135%; /* Position above the text */
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.3s ease;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 400; /* Back to normal weight */
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Tooltip Arrow */
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* At the bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1E293B transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="py-10 text-center shadow-sm bg-gray-100 border-b border-gray-300">
+        <div class="container mx-auto px-4">
+            <!-- *** UPDATED TITLE *** -->
+            <h1 class="gradient-text text-3xl md:text-4xl font-bold">
+                وظایف و مسئولیت های هیئت امنا (مالکین)
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-16 space-y-24">
+
+        <!-- Section 1: Introduction & Legal Basis -->
+        <section id="legal" class="fade-in-up">
+            <h2 class="section-header">
+                <span class="gradient-text">۱.</span> مقدمه و مبنای قانونی
+            </h2>
+            
+            <!-- Introduction Card -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg relative overflow-hidden border border-gray-200">
+                <!-- Decorative element -->
+                <div class="absolute -top-16 -right-16 w-48 h-48 bg-blue-500/10 rounded-full filter blur-3xl"></div>
+                <p class="text-lg md:text-xl leading-relaxed text-slate-600 z-10 relative">
+                    اداره شهرک‌های مسکونی و توریستی خارج از محدوده شهرها، توسط نهاد مدیریتی منتخب مالکین (هیئت امنا) صورت می‌گیرد. این ساختار، وظیفه حفظ، نگهداری و اداره مشاعات و ارائه خدمات عمومی را بر عهده دارد و تصمیمات آن برای کلیه ساکنین لازم‌الاجراست.
+                </p>
+            </div>
+
+            <!-- Legal Basis Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                <!-- Card 1 -->
+                <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-lg hover:shadow-blue-500/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300 fade-in-up" style="animation-delay: 100ms;">
+                    <h3 class="text-lg font-bold text-blue-600 mb-3 flex items-center"><span class="ml-2 text-xl">⚖️</span>قانون تملک آپارتمان‌ها</h3>
+                    <p class="text-sm text-slate-500">به عنوان قانون مادر در تعریف مشاعات و نحوه اداره آن.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-lg hover:shadow-blue-500/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300 fade-in-up" style="animation-delay: 200ms;">
+                    <h3 class="text-lg font-bold text-blue-600 mb-3 flex items-center"><span class="ml-2 text-xl">🏘️</span>دستورالعمل ترویج شهرک‌سازی</h3>
+                    <p class="text-sm text-slate-500">پرداختن به سازوکار مدیریت شهرک‌ها و وظایف شهرک‌ساز و هیئت امنا.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-lg hover:shadow-blue-500/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300 fade-in-up" style="animation-delay: 300ms;">
+                    <h3 class="text-lg font-bold text-blue-600 mb-3 flex items-center"><span class="ml-2 text-xl">🗺️</span>آیین‌نامه اراضی (مصوب ۱۳۹۱)</h3>
+                    <p class="text-sm text-slate-500">به رسمیت شناختن صریح اداره شهرک‌ها توسط هیئت امنا.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-lg hover:shadow-blue-500/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300 fade-in-up" style="animation-delay: 400ms;">
+                    <h3 class="text-lg font-bold text-blue-600 mb-3 flex items-center"><span class="ml-2 text-xl">📜</span>اساسنامه داخلی شهرک</h3>
+                    <p class="text-sm text-slate-500">مشخص‌کننده جزئیات وظایف، اختیارات و نحوه محاسبه هزینه‌ها.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Main Duties -->
+        <section id="duties" class="fade-in-up" style="animation-delay: 200ms;">
+            <h2 class="section-header">
+                <span class="gradient-text">۲.</span> وظایف اصلی هیئت امنا
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
+                
+                <!-- Duty Card 1: Executive -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 hover:shadow-cyan-500/20 transition-shadow duration-300">
+                    <div class="flex items-center mb-6">
+                        <svg class="w-12 h-12 text-cyan-600 pulse-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <h3 class="text-2xl font-bold text-slate-900 mr-4">مدیریت اجرایی و نگهداری</h3>
+                    </div>
+                    <ul class="checked-list text-slate-600 space-y-3">
+                        <li>تحویل گرفتن شهرک از شهرک‌ساز</li>
+                        <li>نگهداری از تأسیسات (آب، برق، تصفیه‌خانه)</li>
+                        <li>حفظ و نگهداری فضای سبز و معابر</li>
+                        <li>نظافت و بهداشت عمومی (مدیریت پسماند)</li>
+                    </ul>
+                </div>
+
+                <!-- Duty Card 2: Financial -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 hover:shadow-green-500/20 transition-shadow duration-300">
+                    <div class="flex items-center mb-6">
+                        <svg class="w-12 h-12 text-green-600 pulse-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v0m0 0v0m0-4.143A10.002 10.002 0 0012 3c-4.638 0-8.57 3.007-9.963 7.178C3.429 14.39 7.363 17.5 12 17.5c4.638 0 8.57-3.007 9.963-7.178A10.002 10.002 0 0012 3z"></path></svg>
+                        <h3 class="text-2xl font-bold text-slate-900 mr-4">مدیریت مالی و اداری</h3>
+                    </div>
+                    <ul class="checked-list text-slate-600 space-y-3">
+                        <li>تعیین و وصول شارژ (تنظیم بودجه سالانه)</li>
+                        <li>مدیریت هزینه‌ها و پرداخت‌ها</li>
+                        <li>شفافیت مالی (ارائه بیلان کاری به مجمع)</li>
+                        <li>بیمه کردن کلیه تأسیسات و اموال مشاع</li>
+                    </ul>
+                </div>
+
+                <!-- Duty Card 3: Legal -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200 hover:shadow-indigo-500/20 transition-shadow duration-300">
+                    <div class="flex items-center mb-6">
+                        <svg class="w-12 h-12 text-indigo-600 pulse-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <h3 class="text-2xl font-bold text-slate-900 mr-4">نمایندگی و امور حقوقی</h3>
+                    </div>
+                    <ul class="checked-list text-slate-600 space-y-3">
+                        <li>نمایندگی مالکین در تعامل با دستگاه‌ها</li>
+                        <li>اجرای مقررات داخلی شهرک</li>
+                        <li>حل و فصل اختلافات بین ساکنین</li>
+                        <li>نظارت بر ساخت‌وسازها و انطباق با ضوابط</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Costs -->
+        <section id="costs" class="fade-in-up" style="animation-delay: 400ms;">
+            <h2 class="section-header">
+                <span class="gradient-text">۳.</span> هزینه‌های بر عهده هیئت امنا
+            </h2>
+            <p class="text-center text-lg text-slate-600 -mt-6 mb-12 max-w-3xl mx-auto">
+                هزینه‌های <strong>احداث اولیه</strong> بر عهده شهرک‌ساز است، اما هزینه‌های <strong>بهره‌برداری و نگهداری مستمر</strong> پس از تحویل، بر عهده هیئت امنا (مالکین) قرار می‌گیرد.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                
+                <!-- Costs Card 1: Current -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-2 border-green-400 relative">
+                    <span class="absolute top-4 right-4 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">جاری و ثابت</span>
+                    <h3 class="text-2xl font-bold text-green-700 mb-6 mt-4 flex items-center"><span class="ml-2 text-2xl">🔄</span>هزینه‌های جاری و ثابت</h3>
+                    <p class="text-slate-600 mb-6">این هزینه‌ها برای فعال نگه داشتن خدمات شهرک ضروری هستند:</p>
+                    <ul class="checked-list text-slate-600 space-y-3">
+                        <li>حقوق و دستمزد (نگهبانان، باغبانان، نظافتچی‌ها)</li>
+                        <li>قبوض خدماتی مشاعات (برق معابر، آب فضای سبز)</li>
+                        <li>نگهداری و تعمیرات جزئی و سرویس‌های دوره‌ای</li>
+                        <li>هزینه‌های اداری، حسابداری و بیمه</li>
+                    </ul>
+                </div>
+
+                <!-- Costs Card 2: Capital -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-2 border-yellow-400 relative">
+                    <span class="absolute top-4 right-4 bg-yellow-100 text-yellow-700 text-xs font-bold px-3 py-1 rounded-full">عمرانی و متغیر</span>
+                    <h3 class="text-2xl font-bold text-yellow-700 mb-6 mt-4 flex items-center"><span class="ml-2 text-2xl">🏗️</span>هزینه‌های عمرانی و متغیر</h3>
+                     <p class="text-slate-600 mb-6">این هزینه‌ها نیاز به تأمین مالی جداگانه (شارژ عمرانی) و تصویب مجمع دارند:</p>
+                    <ul class="checked-list text-slate-600 space-y-3">
+                        <li>تعمیرات اساسی (بازسازی تأسیسات، آسفالت مجدد)</li>
+                        <li>پروژه‌های توسعه و بهبود (احداث زمین بازی)</li>
+                        <li>ارتقاء سیستم‌های امنیتی (نصب دوربین‌های جدید)</li>
+                        <li>بهینه‌سازی سیستم‌های زیربنایی (مانند آبیاری)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 4: Cost Management Guidelines -->
+        <section id="guidelines" class="fade-in-up" style="animation-delay: 600ms;">
+            <h2 class="section-header">
+                <span class="gradient-text">۴.</span> دستورالعمل مدیریت هزینه‌ها
+            </h2>
+            <div class="space-y-6 mt-10 max-w-4xl mx-auto">
+                
+                <!-- Guideline Item 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 space-x-reverse transform hover:scale-102 transition-transform duration-300 border border-gray-200">
+                    <div class="flex-shrink-0 w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center text-4xl text-white shadow-md">⚖️</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-teal-700">اساسنامه مصوب</h4>
+                        <p class="text-slate-600">مشخص کردن نحوه محاسبه سهم هر واحد (متراژ، سرانه یا مساوی).</p>
+                    </div>
+                </div>
+                <!-- Guideline Item 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 space-x-reverse transform hover:scale-102 transition-transform duration-300 border border-gray-200">
+                    <div class="flex-shrink-0 w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center text-4xl text-white shadow-md">📊</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-teal-700">بودجه‌بندی سالانه</h4>
+                        <p class="text-slate-600">تهیه بودجه دقیق هزینه‌ها و تصویب آن در مجمع عمومی به عنوان مبنای شارژ.</p>
+                    </div>
+                </div>
+                <!-- Guideline Item 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 space-x-reverse transform hover:scale-102 transition-transform duration-300 border border-gray-200">
+                    <div class="flex-shrink-0 w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center text-4xl text-white shadow-md">🔍</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-teal-700">شفافیت در گزارش‌دهی</h4>
+                        <p class="text-slate-600">ارائه گزارش‌های مالی منظم (فصلی) به همراه اسناد به مالکین برای اعتمادسازی.</p>
+                    </div>
+                </div>
+                <!-- Guideline Item 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 space-x-reverse transform hover:scale-102 transition-transform duration-300 border border-gray-200">
+                    <div class="flex-shrink-0 w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center text-4xl text-white shadow-md">🏦</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-teal-700">صندوق ذخیره عمرانی</h4>
+                        <p class="text-slate-600">پس‌انداز بخشی از درآمد شارژ در "صندوق اندوخته" برای هزینه‌های غیرمنتظره.</p>
+                    </div>
+                </div>
+                <!-- Guideline Item 5 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 space-x-reverse transform hover:scale-102 transition-transform duration-300 border border-gray-200">
+                    <div class="flex-shrink-0 w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center text-4xl text-white shadow-md">🛡️</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-teal-700">ضمانت اجرایی</h4>
+                        <p class="text-slate-600">تعیین جریمه دیرکرد و امکان اقدام قانونی (ارسال اظهارنامه) برای بدهکاران.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 5: Matrix -->
+        <section id="matrix" class="fade-in-up" style="animation-delay: 800ms;">
+            <h2 class="section-header">
+                <span class="gradient-text">۵.</span> ماتریس تفکیکی وظایف و هزینه‌ها
+            </h2>
+            <div class="mt-10 overflow-hidden overflow-x-auto rounded-lg shadow-lg border border-gray-300">
+                <table class="w-full min-w-[1200px] text-sm text-right styled-table">
+                    <thead>
+                        <tr>
+                            <th class_:"w-1/12">ردیف</th>
+                            <th class="w-2/12">نوع هزینه / خدمت</th>
+                            <th class="w-3/12">شرح جزئیات</th>
+                            <th class="w-2/12">مسئول اصلی</th>
+                            <th class="w-2/12">زمان انتقال مسئولیت</th>
+                            <th class="w-3/12">مستند / توضیحات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300">
+                        <tr>
+                            <td class="text-center font-bold">۱</td>
+                            <td class="font-semibold text-slate-800">تعمیر و نگهداری معابر</td>
+                            <td>روکش آسفالت، جدول‌کشی، لکه‌گیری، نظافت</td>
+                            <td class="text-teal-600">هیئت امنا (از محل شارژ)</td>
+                            <td>پس از تحویل رسمی شهرک</td>
+                            <td>ماده ۱۴–۱ دستورالعمل شهرک‌سازی</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۲</td>
+                            <td class="font-semibold text-slate-800">روشنایی معابر</td>
+                            <td>نگهداری پایه‌چراغ‌ها، پرداخت هزینه برق</td>
+                            <td class="text-teal-600">هیئت امنا</td>
+                            <td>پس از بهره‌برداری</td>
+                            <td>جزو خدمات عمومی مستمر</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۳</td>
+                            <td class="font-semibold text-slate-800">نگهبانی و کنترل تردد</td>
+                            <td>استخدام نگهبان، دوربین، تجهیزات</td>
+                            <td class="text-teal-600">هیئت امنا</td>
+                            <td>بلافاصله پس از بهره‌برداری</td>
+                            <td>اساسنامه داخلی شهرک</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۴</td>
+                            <td class="font-semibold text-slate-800">مدیریت پسماند (زباله)</td>
+                            <td>جمع‌آوری، حمل و دفع پسماند</td>
+                            <td class="text-teal-600">هیئت امنا (با پیمانکار)</td>
+                            <td>پس از سکونت ساکنان</td>
+                            <td>خارج از محدوده شهری، شهرداری مسئول نیست</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۵</td>
+                            <td class="font-semibold text-slate-800">فضای سبز و باغبانی</td>
+                            <td>آبیاری، کاشت، هرس، نگهداری سیستم آبیاری</td>
+                            <td class="text-teal-600">هیئت امنا</td>
+                            <td>پس از تحویل فضاهای عمومی</td>
+                            <td>هزینه جاری قابل وصول از مالکان</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۶</td>
+                            <td class="font-semibold text-slate-800">تأسیسات زیربنایی مشترک</td>
+                            <td>تعمیر خطوط آب، فاضلاب، پمپاژ، منبع ذخیره</td>
+                            <td class="text-teal-600">هیئت امنا</td>
+                            <td>پس از تحویل از شهرک‌ساز</td>
+                            <td>هزینه مصرف انفرادی با مشترکین است</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۷</td>
+                            <td class="font-semibold text-slate-800">ساختمان‌های خدماتی عمومی</td>
+                            <td>نگهداری ساختمان نگهبانی، اداری، سالن اجتماعات</td>
+                            <td class="text-teal-600">هیئت امنا</td>
+                            <td>پس از تحویل</td>
+                            <td>جزو دارایی‌های مشاع محسوب می‌شوند</td>
+                         </tr>
+                         <tr>
+                            <td class="text-center font-bold">۸</td>
+                            <td class="font-semibold text-slate-800">بیمه مسئولیت و تأسیسات</td>
+                            <td>بیمه آتش‌سوزی، حوادث و مسئولیت مدنی</td>
+                            <td class="text-teal-600">هیئت امنا</td>
+                            <td>از آغاز فعالیت سازمان</td>
+                            <td>هزینه از محل بودجه شارژ سالانه</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۹</td>
+                            <td class="font-semibold text-slate-800">نظارت و حسابداری</td>
+                            <td>هزینه حسابرس، مدیر مالی، نرم‌افزار</td>
+                            <td class="text-teal-600">هیئت امنا</td>
+                            <td>پس از تشکیل رسمی</td>
+                            <td>برای شفاف‌سازی مالی الزامی است</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۱۰</td>
+                            <td class="font-semibold text-slate-800">توسعه یا نوسازی</td>
+                            <td class="text-yellow-600">بازسازی کامل شبکه‌ها، احداث امکانات جدید</td>
+                            <td class="text-yellow-600">هیئت امنا (با مصوبه مجمع)</td>
+                            <td>پس از توافق مجمع عمومی</td>
+                            <td class="text-yellow-600">نیازمند تأمین مالی جداگانه (عمرانی)</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center font-bold">۱۱</td>
+                            <td class="font-semibold text-slate-800">هزینه‌های اداری هیئت</td>
+                            <td>دستمزد مدیر اجرایی، هزینه جلسات</td>
+                            <td class="text-teal-600">هیئت امنا (از محل شارژ)</td>
+                            <td>پس از ثبت رسمی هیئت</td>
+                            <td>در اساسنامه پیش‌بینی می‌شود</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 6: Conclusion -->
+        <section id="conclusion" class="fade-in-up" style="animation-delay: 1000ms;">
+            <h2 class="section-header">
+                <span class="gradient-text">۶.</span> جمع‌بندی نهایی
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+                
+                <!-- Conclusion Card 1 -->
+                <div class="bg-blue-50 p-6 rounded-lg shadow-lg border border-blue-200">
+                    <h4 class="text-lg font-bold text-blue-700 mb-2 flex items-center"><span class="ml-2 text-xl">👷</span>مسئولیت شهرک‌ساز</h4>
+                    <p class="text-slate-700">احداث و تحویل کامل زیرساخت‌ها و فضاهای عمومی مطابق با طرح مصوب.</p>
+                </div>
+                
+                <!-- Conclusion Card 2 -->
+                <div class="bg-teal-50 p-6 rounded-lg shadow-lg border border-teal-200">
+                    <h4 class="text-lg font-bold text-teal-700 mb-2 flex items-center"><span class="ml-2 text-xl">👥</span>مسئولیت هیئت امنا</h4>
+                    <p class="text-slate-700">بهره‌برداری، نگهداری، تعمیرات و ارائه خدمات مستمر پس از تحویل گرفتن.</p>
+                </div>
+
+                <!-- Conclusion Card 3 -->
+                <div class="bg-green-50 p-6 rounded-lg shadow-lg border border-green-200">
+                    <h4 class="text-lg font-bold text-green-700 mb-2 flex items-center"><span class="ml-2 text-xl">👤</span>مسئولیت مالکین</h4>
+                    <p class="text-slate-700">پرداخت به‌موقع شارژ تعیین‌شده (جاری و عمرانی) برای تأمین مالی هزینه‌ها.</p>
+                </div>
+
+                 <!-- Conclusion Card 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 md:col-span-3">
+                    <h4 class="text-lg font-bold text-slate-800 mb-2">تفکیک هزینه‌ها</h4>
+                    <ul class="list-disc list-inside text-slate-700 space-y-2">
+                        <li>هزینه‌های <span class="text-yellow-600 font-semibold">احداث اولیه</span>: بر عهده <span class="font-semibold text-slate-900">شهرک‌ساز</span>.</li>
+                        <li>هزینه‌های <span class="text-cyan-600 font-semibold">بهره‌برداری و نگهداری</span>: بر عهده <span class="font-semibold text-slate-900">هیئت امنا/مالکین</span>.</li>
+                        <li>سهم هر مالک: طبق <span class="font-semibold text-slate-900">اساسنامه</span> یا <span class="font-semibold text-slate-900">تصمیم مجمع</span> (معمولاً به نسبت مساحت).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Final Statement -->
+            <div class="mt-16 text-center bg-gradient-to-r from-gray-50 via-white to-gray-50 p-8 rounded-2xl shadow-inner border border-gray-200">
+                <p class="text-xl md:text-2xl font-semibold text-teal-600 leading-relaxed">
+                    برای اداره موفق شهرک، وجود یک <span class="text-slate-900">اساسنامه دقیق و جامع</span>
+                    <br>
+                    در کنار یک <span class="text-slate-900">هیئت امنای فعال و شفاف</span>، حیاتی است.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-10 border-t border-gray-300 mt-16">
+        <p class="text-base text-slate-700">
+            تهیه شده توسط 
+            <!-- *** NEW TOOLTIP STRUCTURE *** -->
+            <span class="tooltip-container font-semibold text-slate-800">
+               موسسه سپینود شرق
+                <span class="tooltip-content">
+                    تحلیل و طراحی : حمیدرضا ترابی<br>
+                    hr.torabii@gmail.com
+                </span>
+            </span>
+        </p>
+        <p class="text-sm text-slate-500 mt-2">
+            آبان ماه 1404
+        </p>
+    </footer>
+<script>
+    // 1. به محض بارگذاری محتوای صفحه، فوکوس را به این iframe منتقل کن
+    document.addEventListener('DOMContentLoaded', function () {
+        window.focus();
+    });
+
+    // 2. به کلید Backspace گوش بده
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Backspace') {
+            const isEditable = event.target.isContentEditable || event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA';
+            
+            if (!isEditable) {
+                // 3. جلوی بازگشت مرورگر را بگیر
+                event.preventDefault();
+                
+                // 4. دقیقا "همان" پیامی را بفرست که داشبورد می‌فرستد (NAVIGATE_BACK)
+                // این پیام به صفحه اصلی اطلس می‌رود و آن را به فهرست برمی‌گرداند.
+                window.parent.postMessage({ type: 'NAVIGATE_BACK' }, '*');
+            }
+        }
+    });
+</script>
+</body>
+</html>
