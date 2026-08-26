@@ -1,6 +1,20 @@
 <title>داشبورد مدیریتی ارزیابی آثار بحران بر پروژه‌های اراضی عباس‌آباد</title>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta charset="utf-8"/>
+<script id="aa-theme-bootstrap">
+(function(){
+  try{
+    var saved=localStorage.getItem('aa-theme');
+    var theme=(saved==='dark'||saved==='light')?saved:(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    document.documentElement.setAttribute('data-theme',theme);
+    document.documentElement.style.colorScheme=theme;
+  }catch(e){
+    document.documentElement.setAttribute('data-theme','light');
+    document.documentElement.style.colorScheme='light';
+  }
+})();
+</script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -24,7 +38,7 @@
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
+  :root:not([data-theme]){
     --bg:#0D1A14; --surface:#132A20; --surface-2:#0F2118; --surface-raised:#163325;
     --ink:#EAF3EC; --ink-muted:#9FB3A6; --ink-faint:#647A6D;
     --border:#204533; --border-soft:#1A3A2B;
@@ -104,10 +118,10 @@ summary::-webkit-details-marker{display:none}
 @media (min-width:1240px){.updated-note{display:inline}}
 .theme-toggle svg{width:16px; height:16px}
 .theme-toggle .i-sun{display:none}
-:root[data-theme="dark"] .theme-toggle .i-sun,
-:root:not([data-theme="light"]) .theme-toggle .i-sun{display:block}
-:root[data-theme="dark"] .theme-toggle .i-moon,
-:root:not([data-theme="light"]) .theme-toggle .i-moon{display:none}
+:root[data-theme="dark"] .theme-toggle .i-sun{display:block}
+:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
+:root[data-theme="light"] .theme-toggle .i-sun{display:none}
+:root[data-theme="light"] .theme-toggle .i-moon{display:block}
 @media (prefers-color-scheme:light){
   :root:not([data-theme]) .theme-toggle .i-sun{display:none}
   :root:not([data-theme]) .theme-toggle .i-moon{display:block}
@@ -195,11 +209,7 @@ body.has-bottom-nav{padding-bottom:58px}
 .cmdk-empty{padding:20px; text-align:center; color:var(--ink-faint); font-size:13px}
 
 /* ---------- حالت ارائه ---------- */
-html.is-presenting .app-nav, html.is-presenting .header-side .updated-note,
-html.is-presenting .icon-btn.search-btn, html.is-presenting footer, html.is-presenting .bottom-nav{display:none !important}
-html.is-presenting .app-bar{background:var(--bg)}
-.present-exit{display:none; position:fixed; bottom:20px; left:20px; z-index:120; background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:12.5px; font-weight:700; box-shadow:var(--shadow-lg)}
-html.is-presenting .present-exit{display:flex; align-items:center; gap:6px}
+.present-exit{display:none; position:fixed; bottom:calc(18px + env(safe-area-inset-bottom)); left:calc(18px + env(safe-area-inset-left)); z-index:420; background:var(--ink); color:var(--bg); padding:10px 18px; min-height:44px; border-radius:999px; font-size:12.5px; font-weight:700; box-shadow:var(--shadow-lg)}
 
 main{display:block}
 .view{display:none}
@@ -335,6 +345,9 @@ main{display:block}
 .grade-badge[data-grade="C"]{background:var(--surface-2); color:var(--ink-muted); border-color:var(--border-soft)}
 .chip-neutral{background:var(--surface-2); color:var(--ink-faint); border:1px dashed var(--border-soft)}
 .chip-neutral .dot{display:none}
+.chip-build{background:var(--gold-soft);color:var(--gold-strong);border-color:color-mix(in srgb,var(--gold) 28%,var(--border-soft))}
+.chip-build .dot{background:var(--gold)}
+.portfolio-mobile-card .chip{font-size:9.5px;padding:4px 8px;white-space:nowrap}
 
 /* ---------- phase rail ---------- */
 .phase-rail{display:flex; gap:0; overflow-x:auto; padding:8px 2px 18px; scrollbar-width:thin}
@@ -515,15 +528,6 @@ tbody tr:hover{background:var(--surface-2)}
 .chart-crosshair{stroke:var(--ink-faint); stroke-width:1; stroke-dasharray:3 3; opacity:0; pointer-events:none; transition:opacity .1s}
 .chart-hover-dot{opacity:0; pointer-events:none; transition:opacity .1s; filter:drop-shadow(0 0 5px currentColor)}
 svg.spark,svg.linechart{cursor:crosshair}
-.chart-stack{display:flex; flex-direction:column; gap:20px}
-.spark-card-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-.spark-card-lg{
-  position:relative; isolation:isolate; overflow:hidden;
-  background:linear-gradient(165deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface));
-  border:1px solid var(--border-soft); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow-sm);
-  transition:transform .22s cubic-bezier(.22,.61,.36,1), box-shadow .22s;
-}
-.spark-card-lg:hover{transform:translateY(-3px); box-shadow:var(--shadow-lg), 0 18px 30px -20px color-mix(in srgb, var(--accent) 45%, transparent)}
 .spark-head{display:flex; align-items:baseline; justify-content:space-between; font-size:13px; font-weight:700; margin-bottom:2px}
 .spark-val{color:var(--accent-strong); font-size:15px; font-variant-numeric:tabular-nums}
 .spark{width:100%; height:auto}
@@ -843,11 +847,6 @@ svg.spark,svg.linechart{cursor:crosshair}
 
 /* ---------- کارت گیج شدت مواجهه ---------- */
 .kpi-gauge-card{display:flex; flex-direction:column; align-items:center; text-align:center; cursor:pointer}
-.gauge-svg{width:100%; max-width:210px; height:auto; margin-top:4px}
-.gauge-needle{transform-origin:var(--gauge-pivot-x,112px) var(--gauge-pivot-y,125.4px); transform:rotate(-90deg); transition:transform 1.3s cubic-bezier(.22,.61,.36,1)}
-.kpi-gauge-card.is-in .gauge-needle{transform:rotate(var(--needle-rot))}
-.gauge-zone-label{font-size:9.5px; fill:var(--ink-faint); font-family:var(--font-body); font-weight:700}
-.gauge-value{font-size:22px; font-weight:800; color:var(--status-caution); margin-top:-6px}
 .kpi-gauge-card .kpi-sub{text-align:center}
 .kpi-gauge-card .kpi-cta{margin-top:10px}
 .exposure-split{width:100%; display:flex; flex-direction:column; gap:12px; margin-top:6px}
@@ -988,7 +987,6 @@ footer{padding:40px 24px 60px; text-align:center}
   .factors-grid{grid-template-columns:1fr}
   .claims-grid{grid-template-columns:1fr}
   .heatmap-grid{grid-template-columns:repeat(8,1fr)}
-  .spark-card-grid{grid-template-columns:1fr}
   .band{padding:40px 0}
   .app-bar{padding:10px 16px}
   .shell{padding:0 16px}
@@ -1125,6 +1123,339 @@ footer{padding:40px 24px 60px; text-align:center}
 .traffic-hm-tooltip.is-visible{opacity:1;transform:translateY(0)}
 .traffic-hm-tooltip strong{display:block;font-size:12.5px;margin-bottom:3px}.traffic-hm-tooltip .tip-period{color:rgba(255,255,255,.7);font-size:10px;margin-bottom:7px}.traffic-hm-tooltip .tip-grid{display:grid;grid-template-columns:1fr auto;gap:3px 12px}.traffic-hm-tooltip .tip-grid b{font-variant-numeric:tabular-nums}.traffic-hm-tooltip .tip-base{margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.72);font-size:10px}
 @media(max-width:760px){.traffic-corridor-head,.traffic-hm-toolbar{flex-direction:column;align-items:stretch}.traffic-direction-badge{align-self:flex-start}.traffic-hm-toggle{width:100%;display:grid;grid-template-columns:1fr 1fr}.traffic-hm-toggle button{width:100%}.traffic-hm-scroll{padding-inline:10px}.traffic-hm-footer{padding-inline:14px}.traffic-hm-table th.route-col,.traffic-hm-route{right:0}}
+
+
+/* ================= Round 5.10 — responsive progressive analytics ================= */
+html{max-width:100%;overflow-x:clip}body{max-width:100%;overflow-x:clip}
+.analysis-source-note{overflow-wrap:anywhere;word-break:break-word}
+.analysis-accordion{
+  margin-top:18px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--analysis-accent,var(--accent)) 4%,var(--surface)),var(--surface));
+  border:1px solid color-mix(in srgb,var(--analysis-accent,var(--accent)) 20%,var(--border-soft));
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);
+  overflow:hidden;
+}
+.analysis-accordion[open]{box-shadow:var(--shadow),0 24px 44px -32px color-mix(in srgb,var(--analysis-accent,var(--accent)) 48%,transparent)}
+.analysis-summary{
+  min-height:76px; display:flex; align-items:center; gap:18px; padding:18px 22px;
+  cursor:pointer; user-select:none; transition:background .16s ease;
+}
+.analysis-summary:hover{background:color-mix(in srgb,var(--analysis-accent,var(--accent)) 5%,var(--surface-2))}
+.analysis-summary-copy{display:flex; flex-direction:column; gap:4px; min-width:0; flex:1}
+.analysis-kicker{font-size:10.5px; font-weight:900; color:var(--analysis-accent,var(--accent)); letter-spacing:.25px}
+.analysis-summary-title{font-size:15px; font-weight:900; line-height:1.55; color:var(--ink)}
+.analysis-summary-message{font-size:11.8px; color:var(--ink-muted); line-height:1.7}
+.analysis-summary-cta{
+  min-height:44px; display:inline-flex; align-items:center; gap:7px; flex:none;
+  padding:8px 13px; border-radius:999px; background:var(--surface-2);
+  color:var(--analysis-accent,var(--accent)); font-size:11.5px; font-weight:900;
+}
+.analysis-summary-cta svg{width:14px;height:14px;transition:transform .2s ease}
+.analysis-accordion[open] .analysis-summary-cta svg{transform:rotate(180deg)}
+.analysis-body{border-top:1px solid var(--border-soft);padding:18px 22px 22px}
+.analysis-source-note{
+  margin-top:14px; padding:10px 12px; border-radius:10px; background:var(--surface-2);
+  font-size:10.5px; color:var(--ink-faint); line-height:1.7;
+}
+.analysis-insight{
+  display:flex;align-items:flex-start;gap:9px;margin:0 0 14px;padding:11px 13px;
+  border-inline-start:3px solid var(--analysis-accent,var(--accent));
+  background:color-mix(in srgb,var(--analysis-accent,var(--accent)) 7%,var(--surface));
+  border-radius:10px;font-size:12px;line-height:1.8;color:var(--ink-muted)
+}
+.analysis-insight strong{color:var(--ink)}
+.analysis-tabs{
+  display:flex;gap:4px;width:max-content;max-width:100%;padding:4px;margin-bottom:16px;
+  background:var(--surface-2);border:1px solid var(--border-soft);border-radius:14px;
+}
+.analysis-tab{
+  min-height:42px;padding:8px 14px;border-radius:10px;font-size:11.5px;font-weight:900;
+  color:var(--ink-muted);white-space:nowrap;transition:.15s ease;
+}
+.analysis-tab:hover{background:var(--surface);color:var(--ink)}
+.analysis-tab.is-active{background:var(--analysis-accent,var(--accent));color:#fff;box-shadow:0 6px 18px -12px color-mix(in srgb,var(--analysis-accent,var(--accent)) 65%,transparent)}
+.analysis-panel[hidden]{display:none!important}
+.responsive-chart-shell{
+  width:100%; min-width:0; border:1px solid var(--border-soft); border-radius:16px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--analysis-accent,var(--accent)) 3%,var(--surface)),var(--surface));
+  padding:14px 14px 12px; overflow:hidden;
+}
+.responsive-chart{width:100%;min-width:0;direction:ltr}
+.responsive-chart svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
+.rchart-grid{stroke:var(--border-soft);stroke-width:1;stroke-dasharray:2 5;vector-effect:non-scaling-stroke}
+.rchart-axis{fill:var(--ink-faint);font:10.5px var(--font-body);direction:rtl;unicode-bidi:isolate}
+.rchart-ref{stroke:var(--gold-strong);stroke-width:1.4;stroke-dasharray:6 5;vector-effect:non-scaling-stroke;opacity:.82}
+.rchart-ref-label{fill:var(--gold-strong);font:700 10px var(--font-body)}
+.rchart-highlight{fill:var(--gold-soft);opacity:.72}
+.rchart-highlight-label{fill:var(--gold-strong);font:800 9.5px var(--font-body)}
+.rchart-line{fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.rchart-dot{stroke:var(--surface);stroke-width:2;vector-effect:non-scaling-stroke}
+.rchart-crosshair{stroke:var(--ink-muted);stroke-width:1;stroke-dasharray:3 4;vector-effect:non-scaling-stroke;opacity:.65}
+.chart-legend-inline{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:2px 2px 10px;direction:rtl}
+.chart-legend-inline span{display:inline-flex;align-items:center;gap:6px;font-size:10.8px;font-weight:800;color:var(--ink-muted)}
+.chart-legend-inline i{width:18px;height:3px;border-radius:999px;display:inline-block;background:var(--legend-color)}
+.chart-live-detail{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding:10px 12px;border-radius:11px;
+  background:var(--surface-2);font-size:11px;color:var(--ink-muted);direction:rtl;min-height:44px
+}
+.chart-live-detail strong{font-size:11.5px;color:var(--ink)}
+.chart-detail-metric{display:inline-flex;align-items:center;gap:5px}
+.chart-detail-metric i{width:7px;height:7px;border-radius:50%;background:var(--metric-color,var(--accent))}
+.material-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;direction:rtl}
+.material-btn{
+  min-height:42px;padding:8px 13px;border-radius:999px;border:1px solid var(--border);
+  background:var(--surface);font-size:11px;font-weight:900;color:var(--ink-muted);transition:.15s
+}
+.material-btn:hover{border-color:var(--ind-materials);color:var(--ink)}
+.material-btn.is-active{background:color-mix(in srgb,var(--ind-materials) 12%,var(--surface));border-color:color-mix(in srgb,var(--ind-materials) 45%,var(--border));color:var(--ind-materials)}
+.depth-list{display:flex;flex-direction:column;gap:11px}
+.depth-row{
+  display:grid;grid-template-columns:minmax(118px,180px) minmax(0,1fr) 105px;
+  align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--border-soft);border-radius:12px;background:var(--surface)
+}
+.depth-name{font-size:11.8px;font-weight:900;color:var(--ink)}
+.depth-track{position:relative;height:26px;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--status-bad) 10%,var(--surface-2)),var(--surface-2));border:1px solid var(--border-soft);overflow:visible}
+.depth-line{position:absolute;inset-inline-start:0;top:11px;height:2px;width:100%;background:color-mix(in srgb,var(--ink-muted) 28%,var(--border))}
+.depth-baseline-dot,.depth-crisis-dot{position:absolute;top:50%;transform:translate(-50%,-50%);border-radius:50%;z-index:2;display:block}
+.depth-baseline-dot{left:100%;width:10px;height:10px;background:var(--accent-strong);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 12%,transparent)}
+.depth-crisis-dot{width:12px;height:12px;background:var(--status-bad);box-shadow:0 0 0 4px color-mix(in srgb,var(--status-bad) 12%,transparent)}
+.depth-value{font-size:10.8px;font-weight:900;color:var(--status-bad);text-align:left;direction:rtl}
+.depth-value small{display:block;font-size:9.5px;color:var(--ink-faint);font-weight:700;margin-top:2px}
+.depth-scale{display:flex;justify-content:space-between;margin:7px 118px 0 117px;font-size:9.5px;color:var(--ink-faint);direction:ltr}
+.impact-legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.impact-legend-item{display:inline-flex;align-items:center;gap:6px;font-size:10.8px;font-weight:800;color:var(--ink-muted)}
+.impact-symbol{width:24px;height:24px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:1px solid var(--border-soft)}
+.impact-symbol.direct{background:var(--accent-strong);color:#fff}
+.impact-symbol.support{background:var(--gold-soft);color:var(--gold-strong);border-color:color-mix(in srgb,var(--gold) 28%,var(--border))}
+.impact-symbol.none{background:var(--surface-2);color:var(--ink-faint)}
+.impact-matrix-desktop{display:grid;grid-template-columns:minmax(230px,1.5fr) repeat(6,minmax(74px,.55fr));gap:5px;align-items:stretch;direction:rtl}
+.impact-head,.impact-project,.impact-cell{min-height:48px;border-radius:10px;border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;padding:7px 8px}
+.impact-head{background:var(--surface-2);font-size:10.5px;font-weight:900;color:var(--ink-muted);text-align:center}
+.impact-project{justify-content:flex-start;background:var(--surface);font-size:10.8px;font-weight:800;line-height:1.5;color:var(--ink);gap:7px}
+.impact-project .mini-status{flex:none;font-size:8.8px;padding:2px 6px;border-radius:999px;background:var(--surface-2);color:var(--ink-faint)}
+.impact-cell{font-size:13px;font-weight:900;background:var(--surface)}
+.impact-cell.direct{background:color-mix(in srgb,var(--accent) 13%,var(--surface));color:var(--accent-strong);border-color:color-mix(in srgb,var(--accent) 30%,var(--border-soft))}
+.impact-cell.support{background:color-mix(in srgb,var(--gold) 12%,var(--surface));color:var(--gold-strong);border-color:color-mix(in srgb,var(--gold) 28%,var(--border-soft))}
+.impact-cell.none{color:var(--ink-faint)}
+.impact-mobile-list{display:none;flex-direction:column;gap:10px}
+.impact-mobile-card{border:1px solid var(--border);border-radius:13px;background:linear-gradient(165deg,color-mix(in srgb,var(--accent) 3%,var(--surface)),var(--surface));padding:13px;box-shadow:var(--shadow-sm)}
+.impact-mobile-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.impact-mobile-name{font-size:12px;font-weight:900;line-height:1.55}.impact-mobile-card .mini-status{flex:none;display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border-soft);font-size:9px;font-weight:900;color:var(--ink-muted)}
+.impact-mobile-paths{display:flex;flex-wrap:wrap;gap:6px}
+.impact-path-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;font-size:9.8px;font-weight:900;border:1px solid var(--border-soft)}
+.impact-path-chip.direct{background:var(--accent-soft);color:var(--accent-strong)}
+.impact-path-chip.support{background:var(--gold-soft);color:var(--gold-strong)}
+.portfolio-mobile-list{display:none;flex-direction:column;gap:10px;margin-top:10px}
+.portfolio-mobile-card{border:1px solid var(--border);border-radius:14px;background:linear-gradient(165deg,color-mix(in srgb,var(--accent) 3%,var(--surface)),var(--surface));padding:14px;box-shadow:var(--shadow-sm)}
+.portfolio-mobile-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.portfolio-mobile-card-name{font-size:12.8px;font-weight:900;line-height:1.55;color:var(--ink)}
+.portfolio-mobile-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.portfolio-mobile-field{padding:8px 9px;border-radius:9px;background:var(--surface-2);min-width:0}
+.portfolio-mobile-field.wide{grid-column:1/-1}
+.portfolio-mobile-field b{display:block;font-size:9px;color:var(--ink-faint);margin-bottom:3px}
+.portfolio-mobile-field span{display:block;font-size:10.5px;color:var(--ink);line-height:1.55}
+.portfolio-mobile-time{color:var(--accent-strong)!important;font-weight:900;font-size:13px!important}
+/* Mobile representation for the 10-corridor traffic heatmap */
+.traffic-hm-mobile{display:none}
+.traffic-hm-mobile-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 10px;direction:rtl}
+.traffic-hm-mobile-indicator{font-size:10.5px;font-weight:900;color:var(--ink-muted)}
+.traffic-hm-mobile-nav{display:flex;gap:6px}
+.traffic-hm-mobile-nav button{width:44px;height:44px;border-radius:12px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink-muted);font-size:18px}
+.traffic-hm-mobile-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:2px 2px 10px;direction:ltr;overscroll-behavior-inline:contain}
+.traffic-hm-mobile-track::-webkit-scrollbar{display:none}
+.traffic-hm-mobile-card{flex:0 0 calc(100% - 10px);scroll-snap-align:center;direction:rtl;border:1px solid var(--border-soft);border-radius:15px;background:var(--surface);padding:13px;box-shadow:var(--shadow-sm)}
+.traffic-hm-mobile-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:11px}
+.traffic-hm-mobile-card-head strong{font-size:12.5px;font-weight:900;line-height:1.5}
+.traffic-hm-mobile-card-head span{display:block;font-size:9.7px;color:var(--ink-faint);margin-top:2px}
+.traffic-hm-mobile-rank{flex:none;font:800 10px var(--font-mono);color:var(--ind-transport);background:color-mix(in srgb,var(--ind-transport) 10%,var(--surface));padding:4px 7px;border-radius:8px}
+.traffic-hm-mobile-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.traffic-hm-mobile-cell{min-height:62px;border-radius:11px;padding:7px 8px;border:1px solid rgba(255,255,255,.22);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-weight:900}
+.traffic-hm-mobile-cell small{display:block;font-size:8.8px;font-weight:800;line-height:1.35;opacity:.88;margin-bottom:3px}
+.traffic-hm-mobile-cell b{font-size:11.3px}
+.traffic-mobile-detail{margin-top:9px;min-height:54px;padding:9px 10px;border-radius:10px;background:var(--surface-2);font-size:10px;line-height:1.65;color:var(--ink-muted)}
+.traffic-mobile-detail strong{color:var(--ink);display:block;font-size:10.5px}
+@media(max-width:900px){
+  .analysis-accordion{margin-top:14px}
+  .analysis-body{padding:16px}
+  .responsive-chart-shell{padding:10px}
+}
+@media(max-width:760px){
+  .analysis-summary{align-items:flex-start;padding:16px;gap:12px}
+  .analysis-summary-cta{min-width:44px;width:44px;padding:0;justify-content:center}
+  .analysis-summary-cta .analysis-cta-text{display:none}
+  .analysis-summary-title{font-size:13.5px}
+  .analysis-summary-message{font-size:10.8px}
+  .analysis-tabs{width:100%;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none}
+  .analysis-tabs::-webkit-scrollbar{display:none}
+  .analysis-tab{flex:1 0 auto;scroll-snap-align:start}
+  .depth-row{grid-template-columns:1fr;gap:7px}
+  .depth-value{text-align:right}
+  .depth-scale{margin:6px 0 0}
+  .impact-matrix-desktop{display:none}
+  .impact-mobile-list{display:flex}
+  .portfolio-table-wrap{display:none}
+  .portfolio-mobile-list{display:flex}
+  .portfolio-mobile-card-grid{grid-template-columns:1fr}
+  .portfolio-mobile-field.wide{grid-column:auto}
+  .traffic-hm-scroll{overflow:visible;padding:12px 10px 4px}
+  .traffic-hm-desktop{display:none}
+  .traffic-hm-mobile{display:block}
+  .traffic-hm-footer{padding-inline:12px}
+  .traffic-hm-legend{gap:6px}
+  .traffic-hm-note{font-size:9.8px}
+  .responsive-chart svg{touch-action:pan-y}
+}
+@media(max-width:480px){
+  .analysis-body{padding:13px}
+  .responsive-chart-shell{padding:8px;border-radius:13px}
+  .chart-legend-inline{gap:9px}
+  .chart-legend-inline span{font-size:9.8px}
+  .traffic-hm-mobile-grid{grid-template-columns:1fr 1fr}
+  .traffic-hm-mobile-card{flex-basis:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .analysis-accordion,.analysis-summary,.analysis-tab,.material-btn{scroll-behavior:auto!important;transition:none!important}
+}
+
+
+/* ================= Round 5.11 — inflation analytics ================= */
+.inflation-summary-strip{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:0 0 14px;
+}
+.inflation-summary-item{
+  min-width:0;padding:10px 11px;border:1px solid var(--border-soft);border-radius:11px;background:var(--surface-2);
+}
+.inflation-summary-item b{display:block;font-size:15px;font-weight:900;color:var(--ind-inflation);font-variant-numeric:tabular-nums;line-height:1.25}
+.inflation-summary-item span{display:block;margin-top:3px;font-size:9.5px;line-height:1.45;color:var(--ink-faint);font-weight:700}
+.inflation-index-trail{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 13px;direction:rtl}
+.inflation-index-node{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border-soft);font-size:10px;color:var(--ink-muted);font-weight:800}
+.inflation-index-node b{font-size:12px;color:var(--ind-inflation);font-variant-numeric:tabular-nums}
+.inflation-index-arrow{color:var(--ink-faint);font-weight:900}
+.rbar-grid{stroke:var(--border-soft);stroke-width:1;stroke-dasharray:2 5;vector-effect:non-scaling-stroke}
+.rbar-axis{fill:var(--ink-faint);font:10.5px var(--font-body);direction:rtl;unicode-bidi:isolate}
+.rbar-value{fill:var(--ink-muted);font:800 9px var(--font-body)}
+.rbar-group-label{fill:var(--ink);font:800 10.5px var(--font-body)}
+.rbar-bar{transition:opacity .15s ease,filter .15s ease;vector-effect:non-scaling-stroke}
+.rbar-bar:hover,.rbar-bar:focus{filter:brightness(1.04);opacity:.92}
+@media(max-width:760px){
+  .inflation-summary-strip{grid-template-columns:1fr 1fr}
+}
+@media(max-width:420px){
+  .inflation-summary-strip{grid-template-columns:1fr 1fr;gap:7px}
+  .inflation-summary-item{padding:9px}
+  .inflation-summary-item b{font-size:13.5px}
+  .inflation-index-trail{gap:5px}
+  .inflation-index-node{flex:1 1 30%;justify-content:center;padding:7px 6px}
+  .inflation-index-arrow{display:none}
+}
+
+
+
+/* ================= Round 5.13 — authoritative header, theme and presentation system ================= */
+html,body{max-width:100%;overflow-x:clip}
+:root{--aa-header-reserve:94px}
+body{padding-top:var(--aa-header-reserve)}
+
+/* One authoritative fixed header. */
+.app-bar{
+  position:fixed!important;top:0;right:0;left:0;width:100%;z-index:180;
+  transform:translate3d(0,0,0);will-change:transform;
+  transition:transform .24s cubic-bezier(.22,.61,.36,1),padding .2s ease,box-shadow .2s ease,background .2s ease!important;
+}
+.app-bar.is-hidden{transform:translate3d(0,calc(-100% - 6px),0)!important;box-shadow:none!important}
+.app-bar.is-revealed,.app-bar:focus-within{transform:translate3d(0,0,0)!important}
+
+/* Theme controls must always remain reachable when the header is visible. */
+.theme-toggle{display:flex!important;visibility:visible!important;opacity:1!important;position:relative;z-index:4;flex:none}
+:root[data-theme="dark"]{color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+
+/* Laptop/compact-desktop: keep all navigation + utility controls visible; reduce branding chrome instead. */
+@media (min-width:1181px) and (max-width:1679px){
+  :root{--aa-header-reserve:72px}
+  .app-bar{padding:9px 18px;gap:10px}
+  .app-bar.is-scrolled{padding:7px 18px}
+  .brand{flex:0 1 300px;min-width:210px;max-width:300px;gap:8px;font-size:13px;overflow:hidden}
+  .brand-logo.is-main{width:48px;height:48px}
+  .brand-text{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.35}
+  .brand-sub{display:none!important}
+  .app-nav{display:flex!important;flex:1 1 auto;min-width:0;margin-inline-end:0;gap:0;justify-content:center}
+  .nav-btn{padding:8px 9px;font-size:12px;white-space:nowrap;gap:3px}
+  .header-side{display:flex!important;align-items:center;gap:6px;flex:none;min-width:max-content}
+  .header-side .updated-note{display:none!important}
+  .header-side .partner-badge{
+    display:flex!important;visibility:visible!important;opacity:1!important;
+    min-height:38px;padding:4px 8px;border-radius:12px;
+    box-shadow:none;background:color-mix(in srgb,var(--surface) 92%,transparent);
+    flex:none;max-width:104px
+  }
+  .header-side .partner-badge img{height:27px;width:auto;max-width:88px;object-fit:contain}
+  .header-side .search-btn,.header-side .present-btn,.header-side .theme-toggle{display:flex!important;visibility:visible!important;opacity:1!important}
+  .present-btn{width:36px;height:36px;padding:0;justify-content:center}
+  .present-btn span{display:none!important}
+  .hamburger{display:none!important}
+}
+@media (min-width:1181px) and (max-width:1320px){
+  .brand{flex-basis:238px;max-width:238px;min-width:172px}
+  .brand-logo.is-main{width:44px;height:44px}
+  .nav-btn{padding-inline:6px;font-size:11.35px}
+  .header-side .partner-badge{min-height:36px;padding:3px 6px;max-width:90px;border-radius:11px}
+  .header-side .partner-badge img{height:24px;max-width:76px}
+}
+
+/* Mobile/tablet shell remains the proven compact pattern. */
+@media (max-width:1180px){
+  :root{--aa-header-reserve:66px}
+  .app-nav{display:none!important}
+  .header-side .partner-badge,.header-side .updated-note{display:none!important}
+  .hamburger{display:flex!important}
+  .app-bar{padding:10px 16px;gap:10px}
+  .app-bar.is-scrolled{padding:7px 16px}
+  .brand{flex:1 1 auto;min-width:0;max-width:calc(100% - 150px)}
+  .brand-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .brand-sub{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .theme-toggle{display:flex!important}
+}
+@media (max-width:620px){
+  :root{--aa-header-reserve:58px}
+  .app-bar{gap:8px}
+  .brand{max-width:calc(100% - 104px)}
+  .brand-logo.is-main{width:38px;height:38px}
+  .header-side{gap:6px}
+  .header-side .search-btn{display:none}
+  .theme-toggle,.hamburger{width:38px;height:38px}
+}
+
+/* Real presentation mode: fullscreen-capable, chrome-free, with a single exit affordance. */
+html.is-presenting body{padding-top:0!important}
+html.is-presenting .app-bar,
+html.is-presenting .bottom-nav,
+html.is-presenting footer,
+html.is-presenting .cmdk-backdrop{display:none!important}
+html.is-presenting .present-exit{display:flex!important;align-items:center;gap:6px}
+html.is-presenting .shell{max-width:min(1440px,calc(100vw - 48px))}
+html.is-presenting .band{scroll-margin-top:20px}
+@media(max-width:760px){
+  html.is-presenting .shell{max-width:none;padding-inline:14px}
+  html.is-presenting .present-exit{left:12px;bottom:calc(12px + env(safe-area-inset-bottom));padding:9px 14px}
+}
+
+.project-context-band{padding-top:0!important;padding-bottom:42px!important}
+.project-context-wrap{--analysis-accent:var(--p-header,var(--accent));margin-top:0}
+.project-context-note{display:flex;gap:9px;align-items:flex-start;margin:0 0 14px;padding:11px 13px;border:1px dashed color-mix(in srgb,var(--status-info) 28%,var(--border));border-radius:11px;background:color-mix(in srgb,var(--status-info) 6%,var(--surface));font-size:11.5px;line-height:1.75;color:var(--ink-muted)}
+.project-context-note svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--status-info)}
+.project-context-chart-stack{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.project-context-mini-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.project-context-mini-summary span{min-width:0;padding:9px 10px;border:1px solid var(--border-soft);border-radius:10px;background:var(--surface-2);font-size:9.5px;line-height:1.5;color:var(--ink-faint);font-weight:700}
+.project-context-mini-summary b{display:block;font-size:13px;color:var(--p-header,var(--accent-strong));margin-bottom:2px;font-variant-numeric:tabular-nums}
+.project-phase-strip{display:flex;gap:5px;min-height:72px;align-items:stretch;margin:4px 0 10px;direction:rtl}
+.project-phase-seg{position:relative;min-width:54px;display:flex;flex-direction:column;justify-content:flex-end;padding:9px 8px;border-radius:11px;color:#fff;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.project-phase-seg b{font-size:11px;line-height:1.45}.project-phase-seg small{font-size:9px;opacity:.82;line-height:1.35;margin-top:3px}
+.project-phase-seg[data-tier="شدید۱"]{background:var(--tier-شدید۱)}.project-phase-seg[data-tier="بالا"]{background:var(--tier-بالا)}.project-phase-seg[data-tier="متوسط"]{background:var(--tier-متوسط)}.project-phase-seg[data-tier="شدید۲"]{background:var(--tier-شدید۲)}
+.project-phase-countable{position:absolute;inset:0;border:2px solid #fff;border-radius:11px;pointer-events:none;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--gold) 65%,transparent)}
+.project-context-lastdata{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:5px 9px;border-radius:999px;background:var(--surface-2);font-size:9.5px;font-weight:800;color:var(--ink-faint)}
+@media(max-width:680px){.project-context-mini-summary{grid-template-columns:1fr 1fr}.project-context-mini-summary span:last-child{grid-column:1/-1}.project-phase-strip{overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;padding-bottom:4px}.project-phase-strip::-webkit-scrollbar{display:none}.project-phase-seg{flex:0 0 118px;scroll-snap-align:start}}
 
 </style>
 <a class="skip-link" href="#main">رفتن به محتوای اصلی</a>
@@ -1290,7 +1621,7 @@ footer{padding:40px 24px 60px; text-align:center}
 <!-- ============================= منوی تمام‌صفحه موبایل ============================= -->
 <div class="mobile-sheet" id="mobile-sheet">
 <div class="mobile-sheet-head">
-<div class="mobile-brand-wrap"><img alt="لوگوی اراضی عباس‌آباد" class="brand-logo is-main" src="assets/REPLACE_LOGO_ABBASABAD.svg"><span class="brand">نمای اجرایی عباس‌آباد</span></div>
+<div class="mobile-brand-wrap"><img alt="لوگوی اراضی عباس‌آباد" class="brand-logo is-main" src="https://uploadkon.ir/uploads/490925_26abbasabad-logo-green.png"><span class="brand">داشبورد مدیریتی اراضی عباس‌آباد</span></div>
 <button aria-label="بستن" class="icon-btn" data-close-sheet=""><svg fill="none" viewbox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></button>
 </div>
 <div class="mobile-sheet-body">
@@ -2766,13 +3097,40 @@ footer{padding:40px 24px 60px; text-align:center}
   </div>
   <div class="traffic-hm-footer">
     <div class="traffic-hm-legend" id="traffic-heatmap-legend"></div>
-    <div class="traffic-hm-note">هر سلول فقط یک مقدار را نشان می‌دهد؛ جزئیات کامل تردد، درصد تغییر و مبنا با نگه‌داشتن نشانگر روی سلول نمایش داده می‌شود.</div>
+    <div class="traffic-hm-note">هر خانه یک مقدار را نشان می‌دهد؛ در دسکتاپ با نگه‌داشتن نشانگر و در موبایل با لمس خانه، جزئیات کامل تردد، درصد تغییر و مبنا نمایش داده می‌شود.</div>
   </div>
 </div>
 <div class="traffic-hm-tooltip" id="traffic-hm-tooltip" role="tooltip" aria-hidden="true"></div>
 
 </div>
-</div><div class="ind-group reveal" id="ind-materials">
+</div>
+<details class="analysis-accordion reveal" id="analysis-transport" style="--analysis-accent:var(--ind-transport)">
+  <summary class="analysis-summary">
+    <div class="analysis-summary-copy">
+      <span class="analysis-kicker">تحلیل تکمیلی حمل‌ونقل</span>
+      <strong class="analysis-summary-title">روند اختلال و بازیابی تردد؛ از حمل بار تا ترکیب وسایل نقلیه</strong>
+      <span class="analysis-summary-message">پیام اصلی: افت حمل بار در هفتهٔ نخست بحران شدید بود، در ابتدای فروردین عمیق‌تر شد و سپس به‌صورت تدریجی تا پایان فروردین بازیابی شد.</span>
+    </div>
+    <span class="analysis-summary-cta"><span class="analysis-cta-text">مشاهده نمودار</span><svg fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span>
+  </summary>
+  <div class="analysis-body">
+    <div class="analysis-tabs" role="tablist" aria-label="تحلیل تکمیلی حمل‌ونقل">
+      <button class="analysis-tab is-active" type="button" role="tab" aria-selected="true" data-analysis-tab="transport-freight">روند حمل بار</button>
+      <button class="analysis-tab" type="button" role="tab" aria-selected="false" data-analysis-tab="transport-vehicles">انواع وسیله نقلیه</button>
+    </div>
+    <div class="analysis-panel" id="transport-freight" role="tabpanel">
+      <p class="analysis-insight"><span><strong>نحوه خواندن:</strong> خط اصلی متوسط روزانهٔ حمل بار سنگین است؛ خط مرجع، متوسط ۲–۸ اسفند را نشان می‌دهد. ناحیهٔ مشخص‌شده، بازهٔ ۱۰ تا ۱۶ اسفند است که در گزارش به‌عنوان دورهٔ مستقیم و قابل شمارش تفکیک شده است.</span></p>
+      <div class="responsive-chart-shell"><div class="responsive-chart" id="analysis-freight-chart" aria-label="روند روزانه حمل بار سنگین"></div></div>
+      <div class="analysis-source-note">منبع داده: Tehran_Traffic_Dashboard_1404_1405.xlsx · پنل ثابت ترددشمارهای استان تهران. این نمودار برای نمایش روند اختلال و بازیابی است و درصد کاهش ظرفیت را به روز تمدید تبدیل نمی‌کند.</div>
+    </div>
+    <div class="analysis-panel" id="transport-vehicles" role="tabpanel" hidden>
+      <p class="analysis-insight"><span><strong>مقایسه ترکیب تردد:</strong> سه گروه «سواری و وانت»، «کامیون معمولی/سه‌محور» و «تریلی» نسبت به مبنای ۲–۸ اسفند مقایسه شده‌اند. تریلی زیرمجموعه حمل بار سنگین است؛ تفکیک آن برای شناخت رفتار لجستیکی شبکه نمایش داده می‌شود.</span></p>
+      <div class="responsive-chart-shell"><div class="responsive-chart" id="analysis-vehicle-chart" aria-label="مقایسه تغییر تردد انواع وسیله نقلیه"></div></div>
+      <div class="analysis-source-note">منبع داده: Tehran_Traffic_Dashboard_1404_1405.xlsx. مقایسه برای تشخیص تفاوت رفتار تردد عمومی و لجستیکی است؛ هیچ‌یک از درصدها به‌تنهایی معادل روز توقف پروژه نیست.</div>
+    </div>
+  </div>
+</details>
+<div class="ind-group reveal" id="ind-materials">
 <div class="ind-group-head">
 <span class="ind-group-num mono">۰۲</span>
 <h3 class="ind-group-title">بازار و قیمت مصالح ساختمانی</h3>
@@ -2800,7 +3158,46 @@ footer{padding:40px 24px 60px; text-align:center}
 <div class="ind-card-c-body"><span class="ind-card-icon"><svg fill="none" viewbox="0 0 24 24"><rect height="5" stroke="currentColor" stroke-width="1.5" width="8" x="3" y="4"></rect><rect height="5" stroke="currentColor" stroke-width="1.5" width="8" x="13" y="4"></rect><rect height="5" stroke="currentColor" stroke-width="1.5" width="8" x="7" y="10.5"></rect><rect height="4" stroke="currentColor" stroke-width="1.5" width="8" x="3" y="17"></rect><rect height="4" stroke="currentColor" stroke-width="1.5" width="8" x="13" y="17"></rect></svg></span><span class="ind-card-label">تغییر حجم معامله سیمان</span></div>
 </div></div>
 </div>
-</div><div class="ind-group reveal" id="ind-labor">
+</div>
+<details class="analysis-accordion reveal" id="analysis-materials" style="--analysis-accent:var(--ind-materials)">
+  <summary class="analysis-summary">
+    <div class="analysis-summary-copy">
+      <span class="analysis-kicker">تحلیل تکمیلی بازار مصالح</span>
+      <strong class="analysis-summary-title">عمق معاملات و رابطهٔ قیمت با حجم بازار</strong>
+      <span class="analysis-summary-message">پیام اصلی: در مقطع بحران، عمق معاملات برخی مصالح به‌شدت کاهش یافت؛ در ماه‌های بعد نیز مسیر قیمت و حجم معامله یکسان و هم‌جهت نبود.</span>
+    </div>
+    <span class="analysis-summary-cta"><span class="analysis-cta-text">مشاهده تحلیل</span><svg fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span>
+  </summary>
+  <div class="analysis-body">
+    <div class="analysis-tabs" role="tablist" aria-label="تحلیل تکمیلی بازار مصالح">
+      <button class="analysis-tab is-active" type="button" role="tab" aria-selected="true" data-analysis-tab="materials-depth">عمق معاملات در بحران</button>
+      <button class="analysis-tab" type="button" role="tab" aria-selected="false" data-analysis-tab="materials-price-volume">قیمت × حجم، مبنا = ۱۰۰</button>
+      <button class="analysis-tab" type="button" role="tab" aria-selected="false" data-analysis-tab="materials-official-prices">روند رسمی قیمت مصالح</button>
+    </div>
+    <div class="analysis-panel" id="materials-depth" role="tabpanel">
+      <p class="analysis-insight"><span><strong>شاخص دوره مشابه ۱۴۰۳ = ۱۰۰:</strong> موقعیت نشانگر بحران، میزان باقی‌ماندهٔ عمق معاملات در بازهٔ ۹ تا ۱۶ اسفند ۱۴۰۴ را نشان می‌دهد. فاصله بیشتر از ۱۰۰ به معنای افت شدیدتر بازار است.</span></p>
+      <div class="responsive-chart-shell"><div id="analysis-market-depth"></div></div>
+      <div class="analysis-source-note">منبع داده: IME_Physical_Transactions_Dashboard_Esfand_1404_vs_1403.xlsx · شیت 04_Charts. افت معاملات، شاهد محیطی بازار تأمین است و به‌تنهایی توقف یک کارگاه مشخص را اثبات نمی‌کند.</div>
+    </div>
+    <div class="analysis-panel" id="materials-price-volume" role="tabpanel" hidden>
+      <div class="material-selector" aria-label="انتخاب مصالح">
+        <button class="material-btn is-active" type="button" data-material="میلگرد ساختمانی">میلگرد</button>
+        <button class="material-btn" type="button" data-material="تیرآهن استاندارد">تیرآهن</button>
+        <button class="material-btn" type="button" data-material="سیمان تیپ 2 پاکتی 50kg">سیمان تیپ ۲</button>
+      </div>
+      <p class="analysis-insight"><span><strong>هر دو سری با دی ۱۴۰۴ = ۱۰۰ نرمال شده‌اند.</strong> بنابراین فاصلهٔ دو خط، بدون استفاده از محور دوگانه، نشان می‌دهد افزایش قیمت الزاماً با افزایش عمق معامله هم‌زمان نبوده است.</span></p>
+      <div class="responsive-chart-shell"><div class="responsive-chart" id="analysis-price-volume-chart" aria-label="روند شاخص قیمت و حجم مصالح"></div></div>
+      <div class="analysis-source-note">منبع داده: ضمیمه_نمودارها_و_ماتریس_قیمت_مصالح_دی1404_تا_تیر1405.xlsx · شیت 05_Data. شاخص قیمت و حجم صرفاً برای تبیین وضعیت بازار استفاده می‌شوند؛ افزایش قیمت مبنای محاسبهٔ مدت نیست.</div>
+    </div>
+
+    <div class="analysis-panel" id="materials-official-prices" role="tabpanel" hidden>
+      <p class="analysis-insight"><span><strong>شاخص قیمت رسمی، دی ۱۴۰۴ = ۱۰۰:</strong> میلگرد، تیرآهن و سیمان در یک مقیاس مشترک نمایش داده می‌شوند تا مسیر تغییر قیمت تا تیر ۱۴۰۵ بدون محور دوگانه قابل مقایسه باشد.</span></p>
+      <div class="responsive-chart-shell"><div class="responsive-chart" id="analysis-official-prices-chart" aria-label="روند رسمی شاخص قیمت مصالح منتخب"></div></div>
+      <div class="analysis-source-note">منبع داده: Dashboard_Official_Construction_Materials_Prices_Dey1404_Tir1405.xlsx. این سری‌ها زمینهٔ قیمت بازار را توضیح می‌دهند و در محاسبهٔ مدت قابل استناد وارد نشده‌اند.</div>
+    </div>
+  </div>
+</details>
+<div class="ind-group reveal" id="ind-labor">
 <div class="ind-group-head">
 <span class="ind-group-num mono">۰۳</span>
 <h3 class="ind-group-title">نیروی انسانی و فعالیت اقتصادی</h3>
@@ -2819,7 +3216,23 @@ footer{padding:40px 24px 60px; text-align:center}
 <div class="ind-card-c-body"><span class="ind-card-icon"><svg fill="none" viewbox="0 0 24 24"><path d="M3 13a9 9 0 0118 0" stroke="currentColor" stroke-linecap="round" stroke-width="1.7"></path><path d="M3 13h18v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z" stroke="currentColor" stroke-linejoin="round" stroke-width="1.7"></path><path d="M12 13V9" stroke="currentColor" stroke-linecap="round" stroke-width="1.7"></path></svg></span><span class="ind-card-label">افت فرصت شغلی تهران در جنگ</span></div>
 </div></div>
 </div>
-</div><div class="ind-group reveal" id="ind-inflation">
+</div>
+<details class="analysis-accordion reveal" id="analysis-labor" style="--analysis-accent:var(--ind-labor)">
+  <summary class="analysis-summary">
+    <div class="analysis-summary-copy">
+      <span class="analysis-kicker">تحلیل تکمیلی نیروی انسانی</span>
+      <strong class="analysis-summary-title">شامخ اقتصاد، فعالیت و استخدام در برابر مرز خنثی ۵۰</strong>
+      <span class="analysis-summary-message">پیام اصلی: افت اسفند در فعالیت اقتصادی عمیق بود و مسیر بازیابی تا تیر تدریجی باقی ماند؛ عبور یک مؤلفه از ۵۰ به معنی عادی‌شدن همهٔ ابعاد بازار کار نیست.</span>
+    </div>
+    <span class="analysis-summary-cta"><span class="analysis-cta-text">مشاهده نمودار</span><svg fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span>
+  </summary>
+  <div class="analysis-body">
+    <p class="analysis-insight"><span><strong>مرز ۵۰:</strong> کمتر از ۵۰ نشان‌دهندهٔ انقباض و بیشتر از ۵۰ نشان‌دهندهٔ گسترش است. برای خوانایی مدیریتی، سه سری «شامخ کل اقتصاد»، «تولید/ارائه خدمت» و «استخدام» نمایش داده شده‌اند.</span></p>
+    <div class="responsive-chart-shell"><div class="responsive-chart" id="analysis-pmi-chart" aria-label="روند شامخ کل اقتصاد، فعالیت و استخدام"></div></div>
+    <div class="analysis-source-note">منبع داده: Tehran_Labor_Worksite_Activity_Dashboard_1404_1405.xlsx · شیت 02_PMI_Trends. این نمودار وضعیت عمومی فعالیت و نیروی انسانی را توضیح می‌دهد و اثبات‌کنندهٔ روز توقف یک پروژهٔ مشخص نیست.</div>
+  </div>
+</details>
+<div class="ind-group reveal" id="ind-inflation">
 <div class="ind-group-head">
 <span class="ind-group-num mono">۰۴</span>
 <h3 class="ind-group-title">تورم عمومی و نهادهٔ ساخت</h3>
@@ -2853,6 +3266,45 @@ footer{padding:40px 24px 60px; text-align:center}
 <div class="ind-card-chart"><svg aria-label="روند تورم نقطه‌ای نهاده‌های ساختمانی تهران" class="spark" role="img" viewbox="0 0 248 58"><defs><lineargradient id="sg16" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="var(--ind-inflation)" stop-opacity="0.38"></stop><stop offset="100%" stop-color="var(--ind-inflation)" stop-opacity="0"></stop></lineargradient><filter height="300%" id="sglow16" width="300%" x="-100%" y="-100%"><fegaussianblur result="b" stddeviation="3.4"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter></defs><path d="M 10.0 44.0 L 124.0 17.5 L 238.0 10.0 L 238.0 48.0 L 10.0 48.0 Z" fill="url(#sg16)"></path><path class="chartline" d="M 10.0 44.0 L 124.0 17.5 L 238.0 10.0" fill="none" stroke="var(--ind-inflation)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><circle class="pt" cx="10.0" cy="44.0" data-cat="پاییز ۱۴۰۴" data-color="var(--ind-inflation)" data-series="تورم نقطه‌ای نهاده‌های ساختمانی تهران" data-val="+۶۱.۳٪" fill="transparent" r="7"></circle><circle class="pt" cx="124.0" cy="17.5" data-cat="زمستان ۱۴۰۴" data-color="var(--ind-inflation)" data-series="تورم نقطه‌ای نهاده‌های ساختمانی تهران" data-val="+۹۶.۸٪" fill="transparent" r="7"></circle><circle class="pt" cx="238.0" cy="10.0" data-cat="بهار ۱۴۰۵" data-color="var(--ind-inflation)" data-series="تورم نقطه‌ای نهاده‌های ساختمانی تهران" data-val="+۱۰۶.۸٪" fill="transparent" r="7"></circle><circle class="ptend" cx="238.0" cy="10.0" fill="var(--ind-inflation)" filter="url(#sglow16)" r="4"></circle></svg></div>
 </div></div>
 </div>
+
+<details class="analysis-accordion reveal" id="analysis-inflation" style="--analysis-accent:var(--ind-inflation)">
+  <summary class="analysis-summary">
+    <div class="analysis-summary-copy">
+      <span class="analysis-kicker">تحلیل تکمیلی تورم و هزینه ساخت</span>
+      <strong class="analysis-summary-title">دو مقیاس متفاوت: تورم عمومی کشور و فشار نهاده‌های ساخت تهران</strong>
+      <span class="analysis-summary-message">پیام اصلی: فشار قیمت در هر دو سطح محسوس است، اما دادهٔ عمومی ماهانه و شاخص نهادهٔ ساخت فصلی‌اند و نباید به‌عنوان یک سری هم‌مقیاس یا مبنای روز تمدید با هم ادغام شوند.</span>
+    </div>
+    <span class="analysis-summary-cta"><span class="analysis-cta-text">مشاهده نمودار</span><svg fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span>
+  </summary>
+  <div class="analysis-body">
+    <div class="analysis-tabs" role="tablist" aria-label="تحلیل تکمیلی تورم">
+      <button class="analysis-tab is-active" type="button" role="tab" aria-selected="true" data-analysis-tab="inflation-general">تورم عمومی رسمی</button>
+      <button class="analysis-tab" type="button" role="tab" aria-selected="false" data-analysis-tab="inflation-construction">تورم ساخت تهران</button>
+    </div>
+    <div class="analysis-panel" id="inflation-general" role="tabpanel">
+      <div class="inflation-summary-strip" aria-label="خلاصه تورم عمومی">
+        <div class="inflation-summary-item"><b>۵۰.۸٪+</b><span>رشد مرکب سطح قیمت در ۶ ماه · مرکز آمار</span></div>
+        <div class="inflation-summary-item"><b>۴۷.۱٪+</b><span>رشد مرکب سطح قیمت در ۶ ماه · بانک مرکزی</span></div>
+        <div class="inflation-summary-item"><b>۸.۹٪</b><span>بیشترین تورم ماهانه مرکز آمار در بازه · بهمن</span></div>
+        <div class="inflation-summary-item"><b>۸.۵٪</b><span>بیشترین تورم ماهانه بانک مرکزی در بازه · اردیبهشت</span></div>
+      </div>
+      <p class="analysis-insight"><span><strong>خوانش درست:</strong> نمودار، نرخ تورم ماهانهٔ دو مرجع رسمی را از دی ۱۴۰۴ تا خرداد ۱۴۰۵ نشان می‌دهد. تفاوت دو مرجع ناشی از دامنه و روش آماری متفاوت است؛ بنابراین هر دو سری مستقل نگه داشته شده‌اند.</span></p>
+      <div class="responsive-chart-shell"><div class="responsive-chart" id="analysis-general-inflation-chart" aria-label="روند تورم ماهانه مرکز آمار و بانک مرکزی"></div></div>
+      <div class="analysis-source-note">منبع داده: Tehran_Construction_Inflation_Dashboard_1404_1405.xlsx · شیت 02_Monthly_Inflation. مرکز آمار: خانوارهای کل کشور؛ بانک مرکزی: مناطق شهری ایران. این شاخص‌ها زمینه اقتصادی را توضیح می‌دهند و در محاسبه مدت قابل استناد وارد نشده‌اند.</div>
+    </div>
+    <div class="analysis-panel" id="inflation-construction" role="tabpanel" hidden>
+      <div class="inflation-index-trail" aria-label="روند عدد شاخص نهاده‌های ساخت تهران">
+        <span class="inflation-index-node">پاییز ۱۴۰۴ <b>۲۰۴.۸</b></span><span class="inflation-index-arrow">←</span>
+        <span class="inflation-index-node">زمستان ۱۴۰۴ <b>۲۷۸.۶</b></span><span class="inflation-index-arrow">←</span>
+        <span class="inflation-index-node">بهار ۱۴۰۵ <b>۳۳۶.۴</b></span>
+      </div>
+      <p class="analysis-insight"><span><strong>تصویر جامع‌تر فشار ساخت:</strong> سه نوع نرخ «فصلی»، «نقطه‌ای» و «سالانه» کنار هم نمایش داده می‌شوند. جهش زمستان در تورم فصلی و رسیدن تورم نقطه‌ای به ۱۰۶.۸٪ در بهار، دو پیام متفاوت‌اند و نباید با یکدیگر جمع شوند.</span></p>
+      <div class="responsive-chart-shell"><div class="responsive-chart" id="analysis-construction-inflation-chart" aria-label="مقایسه تورم فصلی، نقطه‌ای و سالانه نهاده‌های ساخت تهران"></div></div>
+      <div class="analysis-source-note">منبع داده: Tehran_Construction_Inflation_Dashboard_1404_1405.xlsx · شیت 03_Construction_Inputs. شاخص قیمت نهاده‌های ساختمان‌های مسکونی شهر تهران، سال پایه ۱۴۰۲=۱۰۰؛ داده فصلی است. افزایش هزینه ساخت شاهد اقتصادی است و به‌تنهایی روز تمدید ایجاد نمی‌کند.</div>
+    </div>
+  </div>
+</details>
+
 </div></div>
 </div>
 </section>
@@ -2998,6 +3450,26 @@ footer{padding:40px 24px 60px; text-align:center}
 <td class="portfolio-td-effect">دوره قراردادی مرتبط با بهره‌برداری</td>
 <td class="portfolio-td-effect">بازگشایی تدریجی فعالیت‌های فرهنگی داخل پهنه؛ استمرار تهدید</td>
 </tr></tbody></table></div>
+
+<details class="analysis-accordion reveal" id="analysis-portfolio-paths" style="--analysis-accent:var(--accent)">
+  <summary class="analysis-summary">
+    <div class="analysis-summary-copy">
+      <span class="analysis-kicker">تحلیل تکمیلی سبد ۱۴ پروژه</span>
+      <strong class="analysis-summary-title">نقشهٔ مسیرهای اثرپذیری پروژه‌ها</strong>
+      <span class="analysis-summary-message">پیام اصلی: پروژه‌های ساخت عمدتاً از زنجیرهٔ تأمین–حمل–اجرا و پروژه‌های بهره‌برداری عمدتاً از دسترسی–مراجعه–فعالیت شهری اثر می‌پذیرند.</span>
+    </div>
+    <span class="analysis-summary-cta"><span class="analysis-cta-text">مشاهده ماتریس</span><svg fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span>
+  </summary>
+  <div class="analysis-body">
+    <div class="impact-legend" aria-label="راهنمای ماتریس اثرپذیری">
+      <span class="impact-legend-item"><i class="impact-symbol direct">●</i>ارتباط مستقیم</span>
+      <span class="impact-legend-item"><i class="impact-symbol support">◐</i>ارتباط پشتیبان</span>
+      <span class="impact-legend-item"><i class="impact-symbol none">—</i>نامرتبط / مبنای اصلی نیست</span>
+    </div>
+    <div id="analysis-impact-matrix"></div>
+    <div class="analysis-source-note">این ماتریس از مسیرهای اثرپذیری ثبت‌شده در همین داشبورد و گزارش پروژه‌محور ساخته شده است و هیچ امتیاز عددی یا Score مصنوعی تولید نمی‌کند. «ارتباط» به معنای اثبات روز توقف نیست.</div>
+  </div>
+</details>
 <div class="factors-scope-note" style="margin-top:14px"><span>ستون «تداوم اختلال» فقط استمرار شرایط غیرعادی را نشان می‌دهد و به معنی روز اضافی تمدید نیست. تورم و افزایش قیمت نیز در این ماتریس وارد محاسبهٔ مدت نشده‌اند.</span></div>
 <div class="portfolio-empty" id="portfolio-empty" hidden>پروژه‌ای با این فیلتر پیدا نشد.</div>
 </div></div>
@@ -9218,22 +9690,32 @@ footer{padding:40px 24px 60px; text-align:center}
 (function(){
   "use strict";
 
-  /* ---------- تم روشن/تیره ---------- */
+  /* ---------- تم روشن/تیره — منبع وضعیت واحد ---------- */
   var root = document.documentElement;
-  var toggle = document.getElementById('theme-toggle');
   function getStored(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
   function setStored(k,v){ try { localStorage.setItem(k, v); } catch(e){} }
-  var stored = getStored('aa-theme');
-  if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
-  document.querySelectorAll('[data-theme-toggle]').forEach(function(toggle){
-    toggle.addEventListener('click', function(){
-      var current = root.getAttribute('data-theme');
-      var isDark = current ? current === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var next = isDark ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      setStored('aa-theme', next);
+  function syncThemeButtons(){
+    var dark = root.getAttribute('data-theme') === 'dark';
+    document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+      btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      btn.setAttribute('title', dark ? 'تغییر به حالت روشن' : 'تغییر به حالت تیره');
+      btn.setAttribute('aria-label', dark ? 'تغییر به حالت روشن' : 'تغییر به حالت تیره');
     });
-  });
+  }
+  function applyTheme(theme,persist){
+    theme=theme==='dark'?'dark':'light';
+    root.setAttribute('data-theme',theme); root.style.colorScheme=theme;
+    if(persist) setStored('aa-theme',theme);
+    syncThemeButtons();
+    window.dispatchEvent(new CustomEvent('aa:themechange',{detail:{theme:theme}}));
+  }
+  var initial=root.getAttribute('data-theme');
+  if(initial!=='dark'&&initial!=='light'){
+    var saved=getStored('aa-theme');
+    initial=(saved==='dark'||saved==='light')?saved:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  }
+  applyTheme(initial,false);
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(toggle){toggle.addEventListener('click',function(e){e.preventDefault();applyTheme(root.getAttribute('data-theme')==='dark'?'light':'dark',true);});});
 
   var toastEl;
   function showToast(msg){
@@ -9314,13 +9796,25 @@ footer{padding:40px 24px 60px; text-align:center}
     });
   });
 
-  /* ---------- هدر: باریک‌شدن هنگام اسکرول ---------- */
-  var appBar = document.querySelector('.app-bar');
-  if (appBar){
-    var lastY = 0;
-    window.addEventListener('scroll', function(){
-      appBar.classList.toggle('is-scrolled', window.scrollY > 12);
-    }, {passive:true});
+  /* ---------- هدر هوشمند ثابت: پنهان در حرکت رو به پایین، بازگشت در حرکت رو به بالا ---------- */
+  var appBar=document.querySelector('.app-bar');
+  if(appBar){
+    var lastY=Math.max(0,window.pageYOffset||document.documentElement.scrollTop||0),anchorY=lastY,headerRAF=0,direction='up';
+    function revealHeader(){appBar.classList.remove('is-hidden');appBar.classList.add('is-revealed');}
+    function hideHeader(){appBar.classList.remove('is-revealed');appBar.classList.add('is-hidden');}
+    function updateHeader(){
+      headerRAF=0; var y=Math.max(0,window.pageYOffset||document.documentElement.scrollTop||0),delta=y-lastY;
+      appBar.classList.toggle('is-scrolled',y>12);
+      if(Math.abs(delta)>=2){
+        var next=delta>0?'down':'up'; if(next!==direction){direction=next;anchorY=y;}
+        if(y<=72) revealHeader(); else if(direction==='down'&&y-anchorY>14) hideHeader(); else if(direction==='up'&&anchorY-y>6) revealHeader();
+      }
+      lastY=y;
+    }
+    window.addEventListener('scroll',function(){if(!headerRAF)headerRAF=requestAnimationFrame(updateHeader);},{passive:true});
+    window.addEventListener('focus',revealHeader); document.addEventListener('focusin',function(ev){if(appBar.contains(ev.target))revealHeader();});
+    document.addEventListener('pointermove',function(ev){if(ev.clientY<18)revealHeader();},{passive:true});
+    revealHeader();updateHeader();window.aaRevealHeader=revealHeader;
   }
 
   /* ---------- Mega Menu ---------- */
@@ -9330,7 +9824,7 @@ footer{padding:40px 24px 60px; text-align:center}
     var trigger = projNavItem.querySelector('.nav-btn');
     trigger.addEventListener('click', function(e){
       e.preventDefault();
-      projNavItem.classList.toggle('is-open');
+      projNavItem.classList.toggle('is-open'); if (appBar) appBar.classList.remove('is-hidden');
     });
     document.addEventListener('click', function(e){
       if (!projNavItem.contains(e.target)) closeMegaMenu();
@@ -9341,7 +9835,7 @@ footer{padding:40px 24px 60px; text-align:center}
   /* ---------- منوی موبایل + Bottom Nav ---------- */
   var sheet = document.getElementById('mobile-sheet');
   var hamburger = document.querySelector('.hamburger');
-  function openMobileSheet(){ if (sheet) sheet.classList.add('is-open'); }
+  function openMobileSheet(){ if (sheet) sheet.classList.add('is-open'); if (appBar) appBar.classList.remove('is-hidden'); }
   function closeMobileSheet(){ if (sheet) sheet.classList.remove('is-open'); }
   if (hamburger) hamburger.addEventListener('click', openMobileSheet);
   document.querySelectorAll('[data-close-sheet]').forEach(function(b){ b.addEventListener('click', closeMobileSheet); });
@@ -9365,11 +9859,57 @@ footer{padding:40px 24px 60px; text-align:center}
   window.addEventListener('hashchange', syncBottomNav);
   syncBottomNav();
 
-  /* ---------- حالت ارائه ---------- */
-  document.querySelectorAll('[data-present-toggle]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.documentElement.classList.toggle('is-presenting');
+  /* ---------- حالت ارائه واقعی: Fullscreen + fallback نمای ارائه ---------- */
+  var presentationRoot=document.documentElement;
+  var presentationRequestedFullscreen=false;
+  function setPresentationState(active){
+    presentationRoot.classList.toggle('is-presenting',!!active);
+    document.querySelectorAll('[data-present-toggle]').forEach(function(btn){
+      btn.setAttribute('aria-pressed',active?'true':'false');
     });
+    if(active && window.aaRevealHeader) window.aaRevealHeader();
+  }
+  function enterPresentation(){
+    setPresentationState(true);
+    presentationRequestedFullscreen=false;
+    if(document.fullscreenEnabled && !document.fullscreenElement && presentationRoot.requestFullscreen){
+      presentationRequestedFullscreen=true;
+      var p;
+      try{ p=presentationRoot.requestFullscreen({navigationUI:'hide'}); }
+      catch(err){ try{ p=presentationRoot.requestFullscreen(); }catch(err2){ p=null; } }
+      if(p && typeof p.catch==='function'){
+        p.catch(function(){
+          presentationRequestedFullscreen=false;
+          showToast('حالت ارائه فعال شد؛ مرورگر اجازهٔ تمام‌صفحه نداد.');
+        });
+      }
+    }else{
+      showToast('حالت ارائه فعال شد.');
+    }
+  }
+  function exitPresentation(){
+    setPresentationState(false);
+    presentationRequestedFullscreen=false;
+    if(document.fullscreenElement && document.exitFullscreen){
+      try{ var p=document.exitFullscreen(); if(p&&typeof p.catch==='function')p.catch(function(){}); }catch(e){}
+    }
+  }
+  document.querySelectorAll('[data-present-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      if(presentationRoot.classList.contains('is-presenting')) exitPresentation(); else enterPresentation();
+    });
+  });
+  document.addEventListener('fullscreenchange',function(){
+    if(!document.fullscreenElement && presentationRequestedFullscreen){
+      presentationRequestedFullscreen=false;
+      setPresentationState(false);
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && presentationRoot.classList.contains('is-presenting') && !document.fullscreenElement){
+      exitPresentation();
+    }
   });
 
   /* ---------- Project Switcher ---------- */
@@ -9915,6 +10455,7 @@ footer{padding:40px 24px 60px; text-align:center}
   const tip = document.getElementById('traffic-hm-tooltip');
   if(!root || !legend || !tip) return;
   let mode = 'pct';
+  let mobileIndex = 0;
 
   function renderLegend(){
     const items = mode==='pct'
@@ -9923,8 +10464,8 @@ footer{padding:40px 24px 60px; text-align:center}
     legend.innerHTML = '<span class="traffic-hm-legend-label">طیف ۵مرحله‌ای:</span>'+items.map(([c,l])=>`<span class="traffic-hm-legend-item"><i class="${c}"></i>${l}</span>`).join('');
   }
 
-  function render(){
-    let html = '<table class="traffic-hm-table" aria-label="هیت‌مپ تردد ۱۰ ورودی پرتردد تهران"><thead><tr><th class="route-col">کریدور ورودی تهران</th>';
+  function desktopHtml(){
+    let html = '<div class="traffic-hm-desktop"><table class="traffic-hm-table" aria-label="هیت‌مپ تردد ۱۰ ورودی پرتردد تهران"><thead><tr><th class="route-col">کریدور ورودی تهران</th>';
     periods.forEach((p,i)=> html += `<th data-col="${i}">${p}</th>`);
     html += '</tr></thead><tbody>';
     routes.forEach((r,ri)=>{
@@ -9937,10 +10478,40 @@ footer{padding:40px 24px 60px; text-align:center}
       });
       html += '</tr>';
     });
-    html += '</tbody></table>';
-    root.innerHTML = html;
+    return html + '</tbody></table></div>';
+  }
+
+  function mobileHtml(){
+    let html = `<div class="traffic-hm-mobile">
+      <div class="traffic-hm-mobile-controls">
+        <span class="traffic-hm-mobile-indicator" id="traffic-hm-mobile-indicator">مسیر ${toFa(mobileIndex+1)} از ${toFa(routes.length)}</span>
+        <div class="traffic-hm-mobile-nav">
+          <button type="button" data-hm-mobile-prev aria-label="مسیر قبلی">→</button>
+          <button type="button" data-hm-mobile-next aria-label="مسیر بعدی">←</button>
+        </div>
+      </div>
+      <div class="traffic-hm-mobile-track" id="traffic-hm-mobile-track">`;
+    routes.forEach((r,ri)=>{
+      html += `<article class="traffic-hm-mobile-card" data-mobile-route="${ri}">
+        <div class="traffic-hm-mobile-card-head"><div><strong>${r.display}</strong><span>مبنای روزانه: ${fmtInt(r.baseline)}</span></div><b class="traffic-hm-mobile-rank">${toFa(ri+1)} / ${toFa(routes.length)}</b></div>
+        <div class="traffic-hm-mobile-grid">`;
+      r.cells.forEach((cell,ci)=>{
+        const [volume,pct]=cell;
+        const cls=mode==='pct'?pctClass(pct):volClass(volume);
+        const val=mode==='pct'?fmtPct(pct):fmtInt(volume);
+        html += `<button type="button" class="traffic-hm-mobile-cell ${cls}" data-mobile-row="${ri}" data-mobile-col="${ci}" aria-label="${r.display}، ${periods[ci]}، ${val}"><small>${periods[ci]}</small><b>${val}</b></button>`;
+      });
+      const [v0,p0]=r.cells[0];
+      html += `</div><div class="traffic-mobile-detail" data-mobile-detail="${ri}"><strong>${periods[0]}</strong>متوسط روزانه ${fmtInt(v0)} · تغییر نسبت به مبنا ${fmtPct(p0)}</div></article>`;
+    });
+    return html + '</div></div>';
+  }
+
+  function render(){
+    root.innerHTML = desktopHtml()+mobileHtml();
     renderLegend();
-    bindCells();
+    bindDesktopCells();
+    bindMobile();
   }
 
   function showTip(cell, e){
@@ -9968,7 +10539,7 @@ footer{padding:40px 24px 60px; text-align:center}
       table.querySelectorAll('.is-focus-row,.is-focus-col,.is-focus').forEach(el=>el.classList.remove('is-focus-row','is-focus-col','is-focus'));
     }
   }
-  function bindCells(){
+  function bindDesktopCells(){
     root.querySelectorAll('.traffic-hm-cell').forEach(cell=>{
       cell.addEventListener('mouseenter',e=>{focusCross(cell,true);showTip(cell,e);});
       cell.addEventListener('mousemove',e=>showTip(cell,e));
@@ -9977,6 +10548,45 @@ footer{padding:40px 24px 60px; text-align:center}
       cell.addEventListener('blur',()=>{focusCross(cell,false);hideTip();});
     });
   }
+  function setMobileIndicator(index){
+    mobileIndex=Math.max(0,Math.min(routes.length-1,index));
+    const ind=root.querySelector('#traffic-hm-mobile-indicator');
+    if(ind) ind.textContent=`مسیر ${toFa(mobileIndex+1)} از ${toFa(routes.length)}`;
+  }
+  function bindMobile(){
+    const track=root.querySelector('#traffic-hm-mobile-track');
+    if(!track)return;
+    root.querySelectorAll('.traffic-hm-mobile-cell').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const ri=+btn.dataset.mobileRow, ci=+btn.dataset.mobileCol;
+        const r=routes[ri], [volume,pct]=r.cells[ci];
+        const detail=root.querySelector(`[data-mobile-detail="${ri}"]`);
+        if(detail) detail.innerHTML=`<strong>${periods[ci]}</strong>متوسط روزانه ${fmtInt(volume)} · تغییر نسبت به مبنا ${fmtPct(pct)}`;
+      });
+    });
+    const cards=Array.from(track.querySelectorAll('.traffic-hm-mobile-card'));
+    function go(index){
+      setMobileIndicator(index);
+      cards[mobileIndex]?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',inline:'center',block:'nearest'});
+    }
+    root.querySelector('[data-hm-mobile-prev]')?.addEventListener('click',()=>go(mobileIndex-1));
+    root.querySelector('[data-hm-mobile-next]')?.addEventListener('click',()=>go(mobileIndex+1));
+    let scrollTimer;
+    track.addEventListener('scroll',()=>{
+      clearTimeout(scrollTimer);
+      scrollTimer=setTimeout(()=>{
+        const tr=track.getBoundingClientRect();
+        let best=0,bestD=Infinity;
+        cards.forEach((card,i)=>{
+          const cr=card.getBoundingClientRect();
+          const d=Math.abs((cr.left+cr.width/2)-(tr.left+tr.width/2));
+          if(d<bestD){bestD=d;best=i;}
+        });
+        setMobileIndicator(best);
+      },80);
+    },{passive:true});
+  }
+
   document.querySelectorAll('[data-hm-mode]').forEach(btn=>btn.addEventListener('click',()=>{
     mode=btn.dataset.hmMode;
     document.querySelectorAll('[data-hm-mode]').forEach(b=>{const a=b===btn;b.classList.toggle('is-active',a);b.setAttribute('aria-selected',a?'true':'false');});
@@ -9985,5 +10595,403 @@ footer{padding:40px 24px 60px; text-align:center}
   window.addEventListener('scroll',hideTip,{passive:true});
   window.addEventListener('resize',hideTip);
   render();
+})();
+</script>
+<script>
+(function(){
+  const DATA = {
+    freight:[{"date":"1 اسفند","freight":44735,"trailer":24739,"baseline":77143},{"date":"2 اسفند","freight":80685,"trailer":41698,"baseline":77143},{"date":"3 اسفند","freight":82280,"trailer":41717,"baseline":77143},{"date":"4 اسفند","freight":83553,"trailer":42756,"baseline":77143},{"date":"5 اسفند","freight":84519,"trailer":43844,"baseline":77143},{"date":"6 اسفند","freight":88339,"trailer":45857,"baseline":77143},{"date":"7 اسفند","freight":74218,"trailer":39003,"baseline":77143},{"date":"8 اسفند","freight":46407,"trailer":25716,"baseline":77143},{"date":"9 اسفند","freight":69133,"trailer":35157,"baseline":77143},{"date":"10 اسفند","freight":50211,"trailer":25992,"baseline":77143},{"date":"11 اسفند","freight":43710,"trailer":22232,"baseline":77143},{"date":"12 اسفند","freight":47820,"trailer":24650,"baseline":77143},{"date":"13 اسفند","freight":48273,"trailer":23718,"baseline":77143},{"date":"14 اسفند","freight":41693,"trailer":21012,"baseline":77143},{"date":"15 اسفند","freight":28579,"trailer":15092,"baseline":77143},{"date":"16 اسفند","freight":46950,"trailer":23307,"baseline":77143},{"date":"17 اسفند","freight":51828,"trailer":25490,"baseline":77143},{"date":"18 اسفند","freight":56957,"trailer":28193,"baseline":77143},{"date":"19 اسفند","freight":61018,"trailer":30650,"baseline":77143},{"date":"20 اسفند","freight":47618,"trailer":24982,"baseline":77143},{"date":"21 اسفند","freight":50456,"trailer":25966,"baseline":77143},{"date":"22 اسفند","freight":35021,"trailer":18700,"baseline":77143},{"date":"23 اسفند","freight":62752,"trailer":31126,"baseline":77143},{"date":"24 اسفند","freight":66846,"trailer":33385,"baseline":77143},{"date":"25 اسفند","freight":67304,"trailer":33335,"baseline":77143},{"date":"26 اسفند","freight":65546,"trailer":32968,"baseline":77143},{"date":"27 اسفند","freight":63976,"trailer":32803,"baseline":77143},{"date":"28 اسفند","freight":44784,"trailer":23938,"baseline":77143},{"date":"29 اسفند","freight":20294,"trailer":11554,"baseline":77143},{"date":"1 فروردین","freight":21567,"trailer":12285,"baseline":77143},{"date":"2 فروردین","freight":22666,"trailer":12967,"baseline":77143},{"date":"3 فروردین","freight":23238,"trailer":13054,"baseline":77143},{"date":"4 فروردین","freight":26704,"trailer":14924,"baseline":77143},{"date":"5 فروردین","freight":31043,"trailer":17136,"baseline":77143},{"date":"6 فروردین","freight":33949,"trailer":18525,"baseline":77143},{"date":"7 فروردین","freight":28380,"trailer":15516,"baseline":77143},{"date":"8 فروردین","freight":41400,"trailer":22287,"baseline":77143},{"date":"9 فروردین","freight":43909,"trailer":23337,"baseline":77143},{"date":"10 فروردین","freight":47384,"trailer":25535,"baseline":77143},{"date":"11 فروردین","freight":46296,"trailer":24938,"baseline":77143},{"date":"12 فروردین","freight":36186,"trailer":19452,"baseline":77143},{"date":"13 فروردین","freight":21683,"trailer":11201,"baseline":77143},{"date":"14 فروردین","freight":28255,"trailer":15270,"baseline":77143},{"date":"15 فروردین","freight":51526,"trailer":27793,"baseline":77143},{"date":"16 فروردین","freight":58808,"trailer":31078,"baseline":77143},{"date":"17 فروردین","freight":61469,"trailer":32412,"baseline":77143},{"date":"18 فروردین","freight":59342,"trailer":30833,"baseline":77143},{"date":"19 فروردین","freight":57421,"trailer":29409,"baseline":77143},{"date":"20 فروردین","freight":56306,"trailer":29697,"baseline":77143},{"date":"21 فروردین","freight":38355,"trailer":21071,"baseline":77143},{"date":"22 فروردین","freight":69279,"trailer":36012,"baseline":77143},{"date":"23 فروردین","freight":67730,"trailer":35215,"baseline":77143},{"date":"24 فروردین","freight":72071,"trailer":38102,"baseline":77143},{"date":"25 فروردین","freight":58039,"trailer":31422,"baseline":77143},{"date":"26 فروردین","freight":73572,"trailer":38419,"baseline":77143},{"date":"27 فروردین","freight":62110,"trailer":33290,"baseline":77143},{"date":"28 فروردین","freight":41203,"trailer":23234,"baseline":77143},{"date":"29 فروردین","freight":72108,"trailer":38135,"baseline":77143},{"date":"30 فروردین","freight":73847,"trailer":38529,"baseline":77143},{"date":"31 فروردین","freight":72072,"trailer":38019,"baseline":77143}],
+    depth:[{"name":"سیمان","baseline":100,"crisis":0.045347322702465304},{"name":"فولاد کل","baseline":100,"crisis":28.177230036519376},{"name":"میلگرد","baseline":100,"crisis":2.3916905835725024},{"name":"تیرآهن","baseline":100,"crisis":21.570466365419048},{"name":"فولاد ساختمانی","baseline":100,"crisis":6.435260915676512}],
+    priceVolume:{"میلگرد ساختمانی":[{"month":"دی ۱۴۰۴","priceIndex":100,"volumeIndex":100},{"month":"بهمن ۱۴۰۴","priceIndex":103.9422537714041,"volumeIndex":120.0739391750804},{"month":"اسفند ۱۴۰۴","priceIndex":109.3916601769469,"volumeIndex":68.95412848551136},{"month":"فروردین ۱۴۰۵","priceIndex":123.9183723929566,"volumeIndex":64.22505944480243},{"month":"اردیبهشت ۱۴۰۵","priceIndex":135.6710719805681,"volumeIndex":146.8493476768147},{"month":"خرداد ۱۴۰۵","priceIndex":136.5166687217293,"volumeIndex":100.7725218562257},{"month":"تیر ۱۴۰۵","priceIndex":135.6738733899395,"volumeIndex":150.1040988608879}],"تیرآهن استاندارد":[{"month":"دی ۱۴۰۴","priceIndex":100,"volumeIndex":100},{"month":"بهمن ۱۴۰۴","priceIndex":104.2523646840801,"volumeIndex":55.68459897444159},{"month":"اسفند ۱۴۰۴","priceIndex":104.5664696662996,"volumeIndex":55.92780902430233},{"month":"فروردین ۱۴۰۵","priceIndex":121.1724867004178,"volumeIndex":92.71794524932785},{"month":"اردیبهشت ۱۴۰۵","priceIndex":135.6081105389156,"volumeIndex":142.372561587771},{"month":"خرداد ۱۴۰۵","priceIndex":143.6018368842178,"volumeIndex":44.35857294301454},{"month":"تیر ۱۴۰۵","priceIndex":136.2441184927806,"volumeIndex":67.16748176210537}],"سیمان تیپ 2 پاکتی 50kg":[{"month":"دی ۱۴۰۴","priceIndex":100,"volumeIndex":100},{"month":"بهمن ۱۴۰۴","priceIndex":105.304645895626,"volumeIndex":116.2807678860932},{"month":"اسفند ۱۴۰۴","priceIndex":109.2612128551037,"volumeIndex":103.7928402014331},{"month":"فروردین ۱۴۰۵","priceIndex":124.083519143491,"volumeIndex":125.5572142797273},{"month":"اردیبهشت ۱۴۰۵","priceIndex":170.7955666804252,"volumeIndex":126.8516232214336},{"month":"خرداد ۱۴۰۵","priceIndex":173.516482080783,"volumeIndex":120.7346310647575},{"month":"تیر ۱۴۰۵","priceIndex":172.8855644885002,"volumeIndex":73.39446700963747}]},
+    pmi:[{"month":"بهمن ۱۴۰۴","economy":46.4,"activity":47.5,"employment":45.2,"neutral":50},{"month":"اسفند ۱۴۰۴","economy":24.9,"activity":15.4,"employment":37.1,"neutral":50},{"month":"فروردین ۱۴۰۵","economy":38.5,"activity":40.4,"employment":38.7,"neutral":50},{"month":"اردیبهشت ۱۴۰۵","economy":41.8,"activity":43.8,"employment":40.7,"neutral":50},{"month":"خرداد ۱۴۰۵","economy":46.9,"activity":47.7,"employment":48.5,"neutral":50},{"month":"تیر ۱۴۰۵","economy":48.3,"activity":51,"employment":47.3,"neutral":50}],
+    impact:[{"name":"پردیس گردشگری فرهنگ و هنر اقوام ایرانی","status":"ساخت","paths":[2,2,2,1,0,0]},{"name":"اقیانوس پارک","status":"بهره‌برداری","paths":[0,0,0,2,2,2]},{"name":"شهربازی","status":"ساخت","paths":[2,2,2,1,0,0]},{"name":"ادونچر پارک","status":"ساخت","paths":[2,2,2,1,0,0]},{"name":"باغ غذا","status":"بهره‌برداری","paths":[0,0,0,2,2,2]},{"name":"باغ‌راه بوستان طالقانی","status":"ساخت","paths":[2,2,2,1,0,0]},{"name":"رستوران سیاوش","status":"بهره‌برداری","paths":[1,0,0,2,2,2]},{"name":"خانه خلاق هزاره","status":"بهره‌برداری","paths":[0,0,0,2,2,2]},{"name":"استخر بهشت مادران","status":"بهره‌برداری","paths":[0,0,0,2,2,2]},{"name":"اسکیت پارک","status":"بهره‌برداری","paths":[0,0,0,2,2,2]},{"name":"مجتمع تجاری رواق","status":"بهره‌برداری","paths":[0,0,0,2,2,2]},{"name":"مجتمع پارکینگ و کارواش قنبرزاده","status":"بهره‌برداری","paths":[0,1,0,2,2,2]},{"name":"غرفه‌های بوستان بهشت مادران و سه‌راه بسکتبال طالقانی","status":"بهره‌برداری","paths":[0,0,0,2,2,2]},{"name":"کافه پلتفرم الف / خانه شعر و ادبیات","status":"بهره‌برداری","paths":[0,0,0,2,2,2]}]
+  };
+  const INFLATION_GENERAL = [
+    {month:'دی',sci:7.9,cbi:5.7},{month:'بهمن',sci:9.4,cbi:8.4},{month:'اسفند',sci:5.6,cbi:3.0},
+    {month:'فروردین',sci:5.0,cbi:7.0},{month:'اردیبهشت',sci:8.8,cbi:8.5},{month:'خرداد',sci:5.9,cbi:7.4}
+  ];
+  const CONSTRUCTION_INFLATION = [
+    {period:'پاییز ۱۴۰۴',seasonal:18.4,point:61.3,annual:44.9,index:204.8},
+    {period:'زمستان ۱۴۰۴',seasonal:36.0,point:96.8,annual:61.8,index:278.6},
+    {period:'بهار ۱۴۰۵',seasonal:20.7,point:106.8,annual:80.0,index:336.4}
+  ];
+  const TRAFFIC_WEEK_LABELS=['۲–۸ اسفند','۹–۱۵ اسفند','۱۶–۲۲ اسفند','۲۳–۲۹ اسفند','۱–۷ فروردین','۸–۱۴ فروردین','۱۵–۲۱ فروردین','۲۲–۲۸ فروردین','۲۹–۳۱ فروردین'];
+  const PASSENGER_WEEKLY=[0,-20.0,-23.1,-18.0,-28.6,-24.0,-12.1,-3.1,-3.1];
+  const PROJECT_CONTEXT={
+    1:{kind:'build',title:'روند شاخص‌های محیطی مرتبط با ساخت و تکمیل',tabs:['حمل و لجستیک','بازار مصالح','تورم و قیمت ساخت']},2:{kind:'ops',title:'روند شاخص‌های محیطی مرتبط با بهره‌برداری',tabs:['دسترسی و تردد','فعالیت اقتصادی','تورم عمومی']},3:{kind:'build',title:'روند شاخص‌های محیطی مرتبط با ساخت و نصب تجهیزات',tabs:['حمل و لجستیک','بازار مصالح','تورم و قیمت ساخت']},4:{kind:'build',title:'روند شاخص‌های محیطی مرتبط با ساخت و راه‌اندازی',tabs:['حمل و لجستیک','بازار مصالح','تورم و قیمت ساخت']},5:{kind:'ops',title:'روند شاخص‌های محیطی مرتبط با مراجعه و فعالیت مجموعه',tabs:['دسترسی و تردد','فعالیت اقتصادی','تورم عمومی']},6:{kind:'build',title:'روند شاخص‌های محیطی مرتبط با ساخت و تجهیز',tabs:['حمل و لجستیک','بازار مصالح','تورم و قیمت ساخت']},7:{kind:'ops',title:'روند شاخص‌های محیطی مرتبط با مراجعه و خدمات',tabs:['دسترسی و تردد','فعالیت اقتصادی','تورم عمومی']},8:{kind:'creative',title:'روند شاخص‌های محیطی مرتبط با حضور و فعالیت خدماتی',tabs:['دسترسی و حضور','شامخ و اشتغال','تورم عمومی']},9:{kind:'seasonal',title:'روند شاخص‌های محیطی مرتبط با بهره‌برداری فصلی',tabs:['دسترسی و تردد','تقویم بحران','تورم عمومی']},10:{kind:'ops',title:'روند شاخص‌های محیطی مرتبط با مراجعه و فعالیت ورزشی',tabs:['دسترسی و تردد','فعالیت اقتصادی','تورم عمومی']},11:{kind:'ops',title:'روند شاخص‌های محیطی مرتبط با پاخور و فعالیت تجاری',tabs:['دسترسی و تردد','فعالیت اقتصادی','تورم عمومی']},12:{kind:'vehicle',title:'روند شاخص‌های محیطی مرتبط با تردد خودرو',tabs:['انواع وسیله نقلیه','تردد عمومی','روند بازیابی']},13:{kind:'seasonal',title:'روند شاخص‌های محیطی مرتبط با فعالیت فصلی غرفه‌ها',tabs:['دسترسی و تردد','تقویم بحران','تورم عمومی']},14:{kind:'ops',title:'روند شاخص‌های محیطی مرتبط با پاخور و فعالیت فرهنگی',tabs:['دسترسی و تردد','فعالیت اقتصادی','تورم عمومی']}
+  };
+
+  const faDigits='۰۱۲۳۴۵۶۷۸۹';
+  const toFa=s=>String(s).replace(/\d/g,d=>faDigits[d]);
+  const fmtInt=n=>toFa(Math.round(n).toLocaleString('en-US'));
+  const fmt1=n=>toFa(Number(n).toFixed(1));
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cssVar=name=>getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  function niceTicks(min,max,count=4){
+    const span=max-min||1, raw=span/count, pow=Math.pow(10,Math.floor(Math.log10(raw))), err=raw/pow;
+    const step=(err>=5?10:err>=2?5:err>=1?2:1)*pow;
+    const start=Math.floor(min/step)*step, end=Math.ceil(max/step)*step, out=[];
+    for(let v=start;v<=end+step*.2;v+=step) out.push(v);
+    return out;
+  }
+
+  function renderLineChart(root,cfg){
+    if(!root || root.dataset.rendering==='1') return;
+    root.dataset.rendering='1';
+    const width=Math.max(300,Math.floor(root.clientWidth||760));
+    const mobile=width<560, height=mobile?300:340;
+    const m={top:26,right:mobile?12:18,bottom:mobile?58:50,left:mobile?48:58};
+    const iw=width-m.left-m.right, ih=height-m.top-m.bottom;
+    const n=cfg.labels.length;
+    const all=cfg.series.flatMap(s=>s.values).filter(Number.isFinite);
+    let ymin=cfg.yMin!=null?cfg.yMin:Math.min(...all), ymax=cfg.yMax!=null?cfg.yMax:Math.max(...all);
+    if(ymin===ymax){ymin-=1;ymax+=1}
+    const x=i=>m.left+(n<=1?iw/2:(i/(n-1))*iw);
+    const y=v=>m.top+ih-((v-ymin)/(ymax-ymin))*ih;
+    const ticks=cfg.yTicks||niceTicks(ymin,ymax,4).filter(v=>v>=ymin-.0001&&v<=ymax+.0001);
+    const tickTarget=mobile?5:9;
+    const xIndices=[];
+    if(n<=tickTarget) for(let i=0;i<n;i++) xIndices.push(i);
+    else {
+      const step=(n-1)/(tickTarget-1);
+      for(let k=0;k<tickTarget;k++) xIndices.push(Math.round(k*step));
+    }
+    const uid='rc'+Math.random().toString(36).slice(2,8);
+    let defs='', area='';
+    if(cfg.area){
+      defs=`<defs><linearGradient id="${uid}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${cfg.series[0].color}" stop-opacity=".24"/><stop offset="100%" stop-color="${cfg.series[0].color}" stop-opacity="0"/></linearGradient></defs>`;
+    }
+    let svg=`<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(cfg.aria||'نمودار تحلیلی')}">`+defs;
+    ticks.forEach(t=>{
+      const yy=y(t); svg+=`<line class="rchart-grid" x1="${m.left}" x2="${width-m.right}" y1="${yy}" y2="${yy}"/><text class="rchart-axis" x="${m.left-7}" y="${yy+3}" text-anchor="end">${cfg.yFormat?cfg.yFormat(t):fmt1(t)}</text>`;
+    });
+    if(cfg.highlight){
+      const [a,b,label]=cfg.highlight, xa=x(a), xb=x(b);
+      const start=Math.max(m.left,xa-(iw/(Math.max(1,n-1)))/2), end=Math.min(width-m.right,xb+(iw/(Math.max(1,n-1)))/2);
+      svg+=`<rect class="rchart-highlight" x="${start}" y="${m.top}" width="${Math.max(1,end-start)}" height="${ih}" rx="7"/>`;
+      if(label) svg+=`<text class="rchart-highlight-label" x="${(start+end)/2}" y="${m.top+12}" text-anchor="middle">${esc(label)}</text>`;
+    }
+    (cfg.refLines||[]).forEach(r=>{
+      if(r.value<ymin||r.value>ymax)return; const yy=y(r.value);
+      svg+=`<line class="rchart-ref" x1="${m.left}" x2="${width-m.right}" y1="${yy}" y2="${yy}"/><text class="rchart-ref-label" x="${width-m.right-2}" y="${yy-6}" text-anchor="end">${esc(r.label||'')}</text>`;
+    });
+    if(cfg.area){
+      const vals=cfg.series[0].values; let d=`M ${x(0)} ${y(vals[0])}`;
+      vals.slice(1).forEach((v,i)=>d+=` L ${x(i+1)} ${y(v)}`);
+      d+=` L ${x(n-1)} ${m.top+ih} L ${x(0)} ${m.top+ih} Z`;
+      svg+=`<path d="${d}" fill="url(#${uid}g)"/>`;
+    }
+    cfg.series.forEach(s=>{
+      let d='';
+      s.values.forEach((v,i)=>{d+=(i?' L ':'M ')+x(i)+' '+y(v)});
+      svg+=`<path class="rchart-line" d="${d}" stroke="${s.color}"/>`;
+      if(n<=12) s.values.forEach((v,i)=>svg+=`<circle class="rchart-dot" cx="${x(i)}" cy="${y(v)}" r="${mobile?3.5:4}" fill="${s.color}"/>`);
+    });
+    xIndices.forEach(i=>{svg+=`<text class="rchart-axis" x="${x(i)}" y="${height-18}" text-anchor="middle">${esc(cfg.shortLabel?cfg.shortLabel(cfg.labels[i],mobile):cfg.labels[i])}</text>`});
+    svg+=`<line class="rchart-crosshair" data-crosshair x1="${x(cfg.defaultIndex||0)}" x2="${x(cfg.defaultIndex||0)}" y1="${m.top}" y2="${m.top+ih}"/></svg>`;
+    const legend=`<div class="chart-legend-inline">${cfg.series.map(s=>`<span><i style="--legend-color:${s.color}"></i>${esc(s.name)}</span>`).join('')}${(cfg.refLines||[]).map(r=>`<span><i style="--legend-color:var(--gold-strong);height:2px;background:repeating-linear-gradient(90deg,var(--gold-strong) 0 6px,transparent 6px 10px)"></i>${esc(r.legend||r.label||'خط مرجع')}</span>`).join('')}</div>`;
+    root.innerHTML=legend+svg+`<div class="chart-live-detail" data-chart-detail></div>`;
+    const svgEl=root.querySelector('svg'), detail=root.querySelector('[data-chart-detail]'), cross=svgEl.querySelector('[data-crosshair]');
+    function setIndex(idx){
+      idx=Math.max(0,Math.min(n-1,idx)); const xx=x(idx); cross.setAttribute('x1',xx);cross.setAttribute('x2',xx);
+      const bits=cfg.series.map(s=>`<span class="chart-detail-metric" style="--metric-color:${s.color}"><i></i>${esc(s.name)}: <strong>${cfg.valueFormat?cfg.valueFormat(s.values[idx],s):fmt1(s.values[idx])}</strong></span>`).join('');
+      detail.innerHTML=`<strong>${esc(cfg.labels[idx])}</strong>${bits}`;
+    }
+    setIndex(cfg.defaultIndex!=null?cfg.defaultIndex:n-1);
+    function pointerIndex(ev){
+      const rect=svgEl.getBoundingClientRect(); const px=(ev.clientX-rect.left)*(width/rect.width);
+      return Math.round(((px-m.left)/iw)*(n-1));
+    }
+    svgEl.addEventListener('pointermove',ev=>{if(ev.pointerType==='mouse')setIndex(pointerIndex(ev));});
+    svgEl.addEventListener('pointerdown',ev=>setIndex(pointerIndex(ev)));
+    root.dataset.rendering='0';
+    root.dataset.rendered='1';
+  }
+
+  function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
+  function weeklyVehicleChanges(){
+    const ranges=[['2 اسفند','8 اسفند'],['9 اسفند','15 اسفند'],['16 اسفند','22 اسفند'],['23 اسفند','29 اسفند'],['1 فروردین','7 فروردین'],['8 فروردین','14 فروردین'],['15 فروردین','21 فروردین'],['22 فروردین','28 فروردین'],['29 فروردین','31 فروردین']];
+    const ix=Object.fromEntries(DATA.freight.map((d,i)=>[d.date,i])),groups=ranges.map(([a,b])=>DATA.freight.slice(ix[a],ix[b]+1));
+    const bt=avg(groups[0].map(d=>d.freight-d.trailer)),br=avg(groups[0].map(d=>d.trailer));
+    return {truck:groups.map(g=>(avg(g.map(d=>d.freight-d.trailer))/bt-1)*100),trailer:groups.map(g=>(avg(g.map(d=>d.trailer))/br-1)*100)};
+  }
+  function renderVehicles(rootId='analysis-vehicle-chart'){
+    const root=document.getElementById(rootId);if(!root)return;const w=weeklyVehicleChanges();root.removeAttribute('data-rendered');
+    renderLineChart(root,{labels:TRAFFIC_WEEK_LABELS,series:[{name:'سواری و وانت',values:PASSENGER_WEEKLY,color:cssVar('--accent')},{name:'کامیون معمولی/سه‌محور',values:w.truck,color:cssVar('--ind-transport')},{name:'تریلی',values:w.trailer,color:cssVar('--gold-strong')}],yMin:-75,yMax:10,yTicks:[-70,-50,-30,-10,0,10],yFormat:v=>fmtInt(v)+'٪',valueFormat:v=>(v>0?'+':'')+fmt1(v)+'٪',refLines:[{value:0,label:'مبنای ۲–۸ اسفند'}],defaultIndex:4,aria:'مقایسه درصد تغییر تردد سواری و وانت، کامیون معمولی و تریلی نسبت به مبنای پیش از بحران'});
+  }
+  function renderOfficialPrices(rootId='analysis-official-prices-chart'){
+    const root=document.getElementById(rootId);if(!root)return;const a=DATA.priceVolume['میلگرد ساختمانی'],b=DATA.priceVolume['تیرآهن استاندارد'],c=DATA.priceVolume['سیمان تیپ 2 پاکتی 50kg'];root.removeAttribute('data-rendered');
+    renderLineChart(root,{labels:a.map(d=>d.month.replace(' ۱۴۰۴','').replace(' ۱۴۰۵','')),series:[{name:'میلگرد',values:a.map(d=>d.priceIndex),color:cssVar('--accent')},{name:'تیرآهن',values:b.map(d=>d.priceIndex),color:cssVar('--gold-strong')},{name:'سیمان تیپ ۲',values:c.map(d=>d.priceIndex),color:cssVar('--status-bad')}],yMin:90,yMax:180,yTicks:[100,120,140,160,180],yFormat:v=>fmtInt(v),valueFormat:v=>fmt1(v),refLines:[{value:100,label:'دی = ۱۰۰'}],defaultIndex:6,aria:'روند رسمی شاخص قیمت میلگرد، تیرآهن و سیمان از دی ۱۴۰۴ تا تیر ۱۴۰۵'});
+  }
+  function renderPassenger(rootId){const root=document.getElementById(rootId);if(!root)return;root.removeAttribute('data-rendered');renderLineChart(root,{labels:TRAFFIC_WEEK_LABELS,series:[{name:'سواری و وانت',values:PASSENGER_WEEKLY,color:cssVar('--ind-transport')}],yMin:-35,yMax:5,yTicks:[-30,-20,-10,0],yFormat:v=>fmtInt(v)+'٪',valueFormat:v=>(v>0?'+':'')+fmt1(v)+'٪',refLines:[{value:0,label:'مبنای پیش از بحران'}],area:true,defaultIndex:4,aria:'روند تغییر تردد سواری و وانت نسبت به مبنای پیش از بحران'});}
+  function renderProjectPMI(rootId){const root=document.getElementById(rootId);if(!root)return;root.removeAttribute('data-rendered');renderLineChart(root,{labels:DATA.pmi.map(d=>d.month),series:[{name:'شامخ کل اقتصاد',values:DATA.pmi.map(d=>d.economy),color:cssVar('--ind-labor')},{name:'فعالیت / تولید',values:DATA.pmi.map(d=>d.activity),color:cssVar('--accent')},{name:'استخدام',values:DATA.pmi.map(d=>d.employment),color:cssVar('--gold-strong')}],yMin:10,yMax:60,yTicks:[20,30,40,50,60],yFormat:v=>fmtInt(v),valueFormat:v=>fmt1(v),refLines:[{value:50,label:'مرز ۵۰'}],defaultIndex:1,aria:'روند شامخ کل اقتصاد، فعالیت و استخدام تا تیر ۱۴۰۵'});}
+  function renderProjectInflation(rootId){const root=document.getElementById(rootId);if(!root)return;root.removeAttribute('data-rendered');renderLineChart(root,{labels:INFLATION_GENERAL.map(d=>d.month),series:[{name:'مرکز آمار',values:INFLATION_GENERAL.map(d=>d.sci),color:cssVar('--ind-inflation')},{name:'بانک مرکزی',values:INFLATION_GENERAL.map(d=>d.cbi),color:cssVar('--gold-strong')}],yMin:0,yMax:10,yTicks:[0,2,4,6,8,10],yFormat:v=>fmt1(v)+'٪',valueFormat:v=>fmt1(v)+'٪',defaultIndex:2,aria:'روند تورم عمومی ماهانه رسمی از دی ۱۴۰۴ تا خرداد ۱۴۰۵'});}
+  function renderFreightInto(rootId){const root=document.getElementById(rootId);if(!root)return;const labels=DATA.freight.map(d=>d.date),values=DATA.freight.map(d=>d.freight),baseline=DATA.freight[0]?.baseline||77143;root.removeAttribute('data-rendered');renderLineChart(root,{labels,series:[{name:'حمل بار سنگین',values,color:cssVar('--ind-transport')}],yMin:15000,yMax:95000,yTicks:[20000,40000,60000,80000],yFormat:v=>fmtInt(v),valueFormat:v=>fmtInt(v),refLines:[{value:baseline,label:'مبنای ۲–۸ اسفند'}],highlight:[labels.indexOf('10 اسفند'),labels.indexOf('16 اسفند'),'۱۰–۱۶ اسفند'],area:true,defaultIndex:labels.indexOf('15 اسفند'),shortLabel:(v,m)=>m?v.replace('اسفند','ا').replace('فروردین','ف'):v,aria:'روند روزانه حمل بار سنگین از اسفند ۱۴۰۴ تا پایان فروردین ۱۴۰۵'});}
+  function renderProjectPriceVolume(rootId){const root=document.getElementById(rootId),arr=DATA.priceVolume['میلگرد ساختمانی'];if(!root||!arr)return;root.removeAttribute('data-rendered');renderLineChart(root,{labels:arr.map(d=>d.month.replace(' ۱۴۰۴','').replace(' ۱۴۰۵','')),series:[{name:'شاخص قیمت',values:arr.map(d=>d.priceIndex),color:cssVar('--ind-materials')},{name:'شاخص حجم',values:arr.map(d=>d.volumeIndex),color:cssVar('--accent')}],yMin:40,yMax:170,yTicks:[50,75,100,125,150],yFormat:v=>fmtInt(v),valueFormat:v=>fmt1(v),refLines:[{value:100,label:'دی = ۱۰۰'}],defaultIndex:2,aria:'روند شاخص قیمت و حجم میلگرد با مبنای دی ۱۴۰۴ برابر صد'});}
+  function projectPhaseStrip(){const p=[['۹–۱۶ اسفند','۸ روز','شدید۱',8],['۱۷–۲۲ اسفند','۶ روز','بالا',6],['۲۳–۲۹ اسفند','۷ روز','متوسط',7],['۱–۱۲ فروردین','۱۲ روز','متوسط',12],['۱۳–۱۹ فروردین','۷ روز','شدید۲',7]];return `<div class="project-phase-strip" role="img" aria-label="پنج فاز دوره چهل روزه بحران">${p.map((x,i)=>`<div class="project-phase-seg" data-tier="${x[2]}" style="flex:${x[3]} 1 0"><b>${x[0]}</b><small>${x[1]}</small>${i===0?'<i class="project-phase-countable" title="دوره قابل شمارش ۱۰ تا ۱۶ اسفند"></i>':''}</div>`).join('')}</div><div class="analysis-source-note">فاز نخست از ۹ اسفند آغاز می‌شود؛ دورهٔ قابل شمارش گزارش ۱۰ تا ۱۶ اسفند، معادل ۷ روز، درون همین فاز قرار دارد.</div>`;}
+  function projectContextMarkup(pid,cfg){return `<div class="shell"><details class="analysis-accordion project-context-wrap reveal" id="project-context-${pid}" style="--analysis-accent:var(--p-header,var(--accent))"><summary class="analysis-summary"><div class="analysis-summary-copy"><span class="analysis-kicker">تحلیل تکمیلی پروژه</span><strong class="analysis-summary-title">${esc(cfg.title)}</strong><span class="analysis-summary-message">پیام اصلی: روند شاخص‌های بیرونی مرتبط با ماهیت این پروژه برای درک تغییر شرایط از اسفند تا آخرین داده معتبر نمایش داده می‌شود؛ این نمودارها عملکرد اختصاصی پروژه را اندازه‌گیری نمی‌کنند.</span></div><span class="analysis-summary-cta"><span class="analysis-cta-text">مشاهده روندها</span><svg fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span></summary><div class="analysis-body"><div class="project-context-note"><svg fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v6" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/><circle cx="12" cy="7.5" r="1.1" fill="currentColor"/></svg><span>این نمودارها «شرایط محیط فعالیت مرتبط با پروژه» را نشان می‌دهند؛ به‌تنهایی اثبات‌کنندهٔ توقف، کاهش درآمد یا مدت تأخیر اختصاصی پروژه نیستند.</span></div><div class="analysis-tabs" role="tablist" aria-label="روندهای مرتبط با پروژه">${cfg.tabs.map((t,i)=>`<button class="analysis-tab ${i===0?'is-active':''}" type="button" role="tab" aria-selected="${i===0?'true':'false'}" data-project-tab="${pid}-${i}">${esc(t)}</button>`).join('')}</div>${cfg.tabs.map((t,i)=>`<div class="analysis-panel project-context-panel" id="project-panel-${pid}-${i}" role="tabpanel" ${i?'hidden':''}><div class="project-context-chart-stack" id="project-context-chart-${pid}-${i}"></div></div>`).join('')}</div></details></div>`;}
+  function injectProjectContext(){Object.keys(PROJECT_CONTEXT).forEach(k=>{const pid=+k,section=document.getElementById('view-project-'+pid);if(!section||section.querySelector('#project-context-'+pid))return;const timeline=section.querySelector('#sec-timeline');if(!timeline)return;const band=document.createElement('div');band.className='band project-context-band';band.innerHTML=projectContextMarkup(pid,PROJECT_CONTEXT[pid]);timeline.insertAdjacentElement('afterend',band);});}
+  function renderProjectTab(pid,index){
+    const cfg=PROJECT_CONTEXT[pid],host=document.getElementById(`project-context-chart-${pid}-${index}`);if(!cfg||!host)return;const cid=`project-chart-${pid}-${index}`;host.innerHTML='';
+    if(cfg.kind==='build'){
+      if(index===0){host.innerHTML=`<p class="analysis-insight"><span><strong>حمل و لجستیک:</strong> روند روزانه حمل بار سنگین و خط مبنا، تغییر ظرفیت شبکه پشتیبان عملیات ساخت را نشان می‌دهد.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div><span class="project-context-lastdata">آخرین داده موجود: ۳۱ فروردین ۱۴۰۵</span>`;renderFreightInto(cid);}else if(index===1){host.innerHTML=`<p class="analysis-insight"><span><strong>بازار مصالح:</strong> قیمت و حجم میلگرد با مبنای مشترک ۱۰۰، برای نمایش هم‌زمان فشار قیمت و عمق معامله تا تیر ۱۴۰۵.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div><span class="project-context-lastdata">آخرین داده موجود: تیر ۱۴۰۵</span>`;renderProjectPriceVolume(cid);}else{host.innerHTML=`<div class="project-context-mini-summary"><span><b>۳۶.۰٪</b>تورم فصلی زمستان ۱۴۰۴</span><span><b>۱۰۶.۸٪</b>تورم نقطه‌ای بهار ۱۴۰۵</span><span><b>خارج از مدت</b>زمینه اقتصادی، نه روز تمدید</span></div><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div><span class="project-context-lastdata">آخرین قیمت مصالح: تیر ۱۴۰۵</span>`;renderOfficialPrices(cid);}
+    }else if(cfg.kind==='vehicle'){
+      if(index===0){host.innerHTML=`<p class="analysis-insight"><span><strong>نوع وسیله نقلیه:</strong> تفاوت رفتار سواری/وانت، کامیون و تریلی به فهم محیط تقاضای خدمات خودرویی کمک می‌کند.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div>`;renderVehicles(cid);}else if(index===1){host.innerHTML=`<p class="analysis-insight"><span><strong>تردد عمومی:</strong> روند سواری و وانت نسبت به مبنای پیش از بحران، شاخص محیطی دسترسی و تقاضای بالقوه خدمات است.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div>`;renderPassenger(cid);}else{host.innerHTML=`<p class="analysis-insight"><span><strong>روند بازیابی:</strong> حمل بار سنگین از شوک اسفند و افت نوروزی به سمت سطوح نزدیک‌تر به مبنا در پایان فروردین حرکت کرد.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div>`;renderFreightInto(cid);}
+    }else if(cfg.kind==='seasonal'){
+      if(index===0){host.innerHTML=`<p class="analysis-insight"><span><strong>دسترسی و مراجعه:</strong> تغییر تردد عمومی، شرایط دسترسی بالقوه به فعالیت فصلی را توضیح می‌دهد؛ نه تعداد مراجعه واقعی این پروژه.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div>`;renderPassenger(cid);}else if(index===1){host.innerHTML=`<p class="analysis-insight"><span><strong>تقویم بحران:</strong> محل وقوع دوره هفت‌روزه قابل شمارش درون دوره چهل‌روزه و ادامه شرایط غیرعادی پس از آن.</span></p>${projectPhaseStrip()}`;}else{host.innerHTML=`<p class="analysis-insight"><span><strong>زمینه اقتصادی:</strong> تورم عمومی برای شناخت شرایط مصرف و هزینه نمایش داده می‌شود؛ حساسیت فصلی به‌خودی‌خود ضریب زمانی اضافی ایجاد نمی‌کند.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div><span class="project-context-lastdata">آخرین داده عمومی موجود: خرداد ۱۴۰۵</span>`;renderProjectInflation(cid);}
+    }else{
+      if(index===0){host.innerHTML=`<p class="analysis-insight"><span><strong>دسترسی و حضور:</strong> روند تردد سواری و وانت، یکی از شاخص‌های محیطی دسترسی و حضور بالقوه در شهر است.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div><span class="project-context-lastdata">آخرین داده موجود: ۳۱ فروردین ۱۴۰۵</span>`;renderPassenger(cid);}else if(index===1){host.innerHTML=`<p class="analysis-insight"><span><strong>فعالیت و اشتغال:</strong> شامخ کل، فعالیت و استخدام تا تیر ۱۴۰۵ برای درک سرعت بازیابی محیط کسب‌وکار نمایش داده می‌شوند.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div><span class="project-context-lastdata">آخرین داده موجود: تیر ۱۴۰۵</span>`;renderProjectPMI(cid);}else{host.innerHTML=`<p class="analysis-insight"><span><strong>تورم عمومی:</strong> مسیر ماهانه دو مرجع رسمی صرفاً زمینه اقتصادی دوره را تکمیل می‌کند و در تعیین مدت وارد نشده است.</span></p><div class="responsive-chart-shell"><div class="responsive-chart" id="${cid}"></div></div><span class="project-context-lastdata">آخرین داده موجود: خرداد ۱۴۰۵</span>`;renderProjectInflation(cid);}
+    }
+  }
+
+  function renderFreight(){
+    const root=document.getElementById('analysis-freight-chart'); if(!root)return;
+    const labels=DATA.freight.map(d=>d.date), values=DATA.freight.map(d=>d.freight), baseline=DATA.freight[0]?.baseline||77143;
+    const idx10=labels.indexOf('10 اسفند'), idx16=labels.indexOf('16 اسفند');
+    renderLineChart(root,{
+      labels,series:[{name:'حمل بار سنگین',values,color:cssVar('--ind-transport')}],
+      yMin:0,yMax:100000,area:true,highlight:[idx10,idx16,'۱۰–۱۶ اسفند'],refLines:[{value:baseline,label:'مبنای ۲–۸ اسفند',legend:'خط مبنا'}],
+      yFormat:v=>fmtInt(v),valueFormat:v=>fmtInt(v),defaultIndex:labels.indexOf('15 اسفند'),
+      shortLabel:(s,mobile)=>{if(!mobile)return s; return s.replace(' اسفند',' اسف.').replace(' فروردین',' فرو.');},
+      aria:'روند روزانه حمل بار سنگین و خط مبنای پیش از بحران'
+    });
+  }
+
+  function renderDepth(){
+    const root=document.getElementById('analysis-market-depth'); if(!root||root.dataset.rendered==='1')return;
+    const rows=[...DATA.depth].sort((a,b)=>a.crisis-b.crisis);
+    root.innerHTML=`<div class="depth-list">${rows.map(r=>{
+      const x=Math.max(0,Math.min(100,r.crisis));
+      const drop=100-r.crisis;
+      return `<div class="depth-row"><div class="depth-name">${esc(r.name)}</div><div class="depth-track" aria-label="${esc(r.name)}: شاخص بحران ${fmt1(r.crisis)} از ۱۰۰"><span class="depth-line"></span><i class="depth-crisis-dot" style="left:${x}%"></i><i class="depth-baseline-dot"></i></div><div class="depth-value">بحران: ${fmt1(r.crisis)}<small>افت ${fmt1(drop)}٪</small></div></div>`;
+    }).join('')}</div><div class="depth-scale"><span>۰</span><span>شاخص دوره مشابه = ۱۰۰</span></div>`;
+    root.dataset.rendered='1';
+  }
+
+  let currentMaterial='میلگرد ساختمانی';
+  function renderPriceVolume(force=false){
+    const root=document.getElementById('analysis-price-volume-chart'); if(!root)return;
+    if(!force && root.dataset.renderedMaterial===currentMaterial && root.clientWidth===+(root.dataset.lastWidth||0))return;
+    const rows=DATA.priceVolume[currentMaterial]||[], labels=rows.map(r=>r.month.replace(' ۱۴۰۴','').replace(' ۱۴۰۵',''));
+    const p=rows.map(r=>r.priceIndex), v=rows.map(r=>r.volumeIndex), ymax=Math.ceil(Math.max(...p,...v,100)/20)*20;
+    root.dataset.renderedMaterial=currentMaterial; root.dataset.lastWidth=root.clientWidth;
+    renderLineChart(root,{
+      labels,series:[
+        {name:'شاخص قیمت',values:p,color:cssVar('--ind-materials')},
+        {name:'شاخص حجم معامله',values:v,color:cssVar('--accent')}
+      ],
+      yMin:0,yMax:Math.max(180,ymax),refLines:[{value:100,label:'مبنای دی = ۱۰۰',legend:'مبنای مشترک ۱۰۰'}],
+      yFormat:v=>fmtInt(v),valueFormat:v=>fmt1(v),defaultIndex:2,
+      aria:'روند شاخص قیمت و حجم معامله با مبنای دی برابر ۱۰۰'
+    });
+  }
+
+  function renderPMI(){
+    const root=document.getElementById('analysis-pmi-chart'); if(!root)return;
+    const labels=DATA.pmi.map(d=>d.month.replace(' ۱۴۰۴','').replace(' ۱۴۰۵',''));
+    renderLineChart(root,{
+      labels,series:[
+        {name:'شامخ کل اقتصاد',values:DATA.pmi.map(d=>d.economy),color:cssVar('--ind-labor')},
+        {name:'تولید / ارائه خدمت',values:DATA.pmi.map(d=>d.activity),color:cssVar('--accent')},
+        {name:'استخدام',values:DATA.pmi.map(d=>d.employment),color:cssVar('--gold-strong')}
+      ],
+      yMin:0,yMax:60,refLines:[{value:50,label:'مرز خنثی ۵۰',legend:'مرز ۵۰'}],
+      yFormat:v=>fmtInt(v),valueFormat:v=>fmt1(v),defaultIndex:1,
+      aria:'روند شامخ کل اقتصاد، فعالیت و استخدام در برابر مرز ۵۰'
+    });
+  }
+
+
+  function renderGroupedBars(root,cfg){
+    if(!root || root.dataset.rendering==='1') return;
+    root.dataset.rendering='1';
+    const width=Math.max(300,Math.floor(root.clientWidth||760));
+    const mobile=width<560, height=mobile?320:350;
+    const m={top:26,right:mobile?10:18,bottom:mobile?62:54,left:mobile?48:58};
+    const iw=width-m.left-m.right, ih=height-m.top-m.bottom;
+    const n=cfg.labels.length, sc=cfg.series.length;
+    const ymax=cfg.yMax||Math.max(...cfg.series.flatMap(s=>s.values));
+    const ymin=cfg.yMin||0, y=v=>m.top+ih-((v-ymin)/(ymax-ymin))*ih;
+    const ticks=cfg.yTicks||niceTicks(ymin,ymax,4).filter(v=>v>=ymin&&v<=ymax);
+    const groupW=iw/n, usable=Math.min(groupW*.72,mobile?82:112), gap=mobile?3:5, barW=Math.max(9,(usable-gap*(sc-1))/sc);
+    let svg=`<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(cfg.aria||'نمودار میله‌ای تحلیلی')}">`;
+    ticks.forEach(t=>{const yy=y(t);svg+=`<line class="rbar-grid" x1="${m.left}" x2="${width-m.right}" y1="${yy}" y2="${yy}"/><text class="rbar-axis" x="${m.left-7}" y="${yy+3}" text-anchor="end">${cfg.yFormat?cfg.yFormat(t):fmt1(t)}</text>`});
+    cfg.labels.forEach((label,i)=>{
+      const center=m.left+groupW*(i+.5), total=barW*sc+gap*(sc-1), start=center-total/2;
+      cfg.series.forEach((ser,j)=>{
+        const v=ser.values[i], xx=start+j*(barW+gap), yy=y(v), hh=m.top+ih-yy;
+        svg+=`<rect tabindex="0" class="rbar-bar" data-bar-i="${i}" data-bar-j="${j}" x="${xx}" y="${yy}" width="${barW}" height="${Math.max(1,hh)}" rx="${Math.min(5,barW/3)}" fill="${ser.color}" aria-label="${esc(label+'، '+ser.name+'، '+cfg.valueFormat(v))}"/>`;
+        if(!mobile || v>=80) svg+=`<text class="rbar-value" x="${xx+barW/2}" y="${Math.max(m.top+10,yy-5)}" text-anchor="middle">${esc(cfg.valueFormat(v))}</text>`;
+      });
+      const short=mobile?label.replace(' ۱۴۰۴','').replace(' ۱۴۰۵',''):label;
+      svg+=`<text class="rbar-group-label" x="${center}" y="${height-20}" text-anchor="middle">${esc(short)}</text>`;
+    });
+    svg+='</svg>';
+    const legend=`<div class="chart-legend-inline">${cfg.series.map(ser=>`<span><i style="--legend-color:${ser.color}"></i>${esc(ser.name)}</span>`).join('')}</div>`;
+    root.innerHTML=legend+svg+`<div class="chart-live-detail" data-chart-detail></div>`;
+    const detail=root.querySelector('[data-chart-detail]');
+    function setGroup(i){
+      detail.innerHTML=`<strong>${esc(cfg.labels[i])}</strong>`+cfg.series.map(ser=>`<span class="chart-detail-metric" style="--metric-color:${ser.color}"><i></i>${esc(ser.name)}: <strong>${esc(cfg.valueFormat(ser.values[i]))}</strong></span>`).join('');
+    }
+    setGroup(n-1);
+    root.querySelectorAll('[data-bar-i]').forEach(bar=>{
+      bar.addEventListener('pointerenter',()=>setGroup(+bar.dataset.barI));
+      bar.addEventListener('pointerdown',()=>setGroup(+bar.dataset.barI));
+      bar.addEventListener('focus',()=>setGroup(+bar.dataset.barI));
+    });
+    root.dataset.rendering='0';root.dataset.rendered='1';
+  }
+
+  function renderGeneralInflation(){
+    const root=document.getElementById('analysis-general-inflation-chart'); if(!root)return;
+    renderLineChart(root,{
+      labels:INFLATION_GENERAL.map(d=>d.month),
+      series:[
+        {name:'مرکز آمار',values:INFLATION_GENERAL.map(d=>d.sci),color:cssVar('--ind-inflation')},
+        {name:'بانک مرکزی',values:INFLATION_GENERAL.map(d=>d.cbi),color:cssVar('--gold-strong')}
+      ],
+      yMin:0,yMax:10,yTicks:[0,2,4,6,8,10],
+      yFormat:v=>fmt1(v)+'٪',valueFormat:v=>fmt1(v)+'٪',defaultIndex:2,
+      aria:'نرخ تورم ماهانه رسمی از دی ۱۴۰۴ تا خرداد ۱۴۰۵، مقایسه مرکز آمار و بانک مرکزی'
+    });
+  }
+
+  function renderConstructionInflation(){
+    const root=document.getElementById('analysis-construction-inflation-chart'); if(!root)return;
+    renderGroupedBars(root,{
+      labels:CONSTRUCTION_INFLATION.map(d=>d.period),
+      series:[
+        {name:'تورم فصلی',values:CONSTRUCTION_INFLATION.map(d=>d.seasonal),color:cssVar('--accent')},
+        {name:'تورم نقطه‌ای',values:CONSTRUCTION_INFLATION.map(d=>d.point),color:cssVar('--ind-inflation')},
+        {name:'تورم سالانه',values:CONSTRUCTION_INFLATION.map(d=>d.annual),color:cssVar('--gold-strong')}
+      ],
+      yMin:0,yMax:120,yTicks:[0,20,40,60,80,100,120],
+      yFormat:v=>fmtInt(v)+'٪',valueFormat:v=>fmt1(v)+'٪',
+      aria:'تورم فصلی، نقطه‌ای و سالانه نهاده‌های ساخت تهران در پاییز و زمستان ۱۴۰۴ و بهار ۱۴۰۵'
+    });
+  }
+
+  function renderImpact(){
+    const root=document.getElementById('analysis-impact-matrix'); if(!root||root.dataset.rendered==='1')return;
+    const heads=['پروژه','تأمین','حمل / لجستیک','اجرا','دسترسی','مراجعه','فعالیت شهری'];
+    const pathNames=heads.slice(1);
+    const cls=v=>v===2?'direct':v===1?'support':'none', sym=v=>v===2?'●':v===1?'◐':'—', label=v=>v===2?'ارتباط مستقیم':v===1?'ارتباط پشتیبان':'نامرتبط / مبنای اصلی نیست';
+    let desk=`<div class="impact-matrix-desktop" role="table">${heads.map(h=>`<div class="impact-head" role="columnheader">${esc(h)}</div>`).join('')}`;
+    DATA.impact.forEach(r=>{
+      desk+=`<div class="impact-project" role="rowheader"><span class="mini-status">${esc(r.status)}</span>${esc(r.name)}</div>`;
+      r.paths.forEach((v,i)=>desk+=`<div class="impact-cell ${cls(v)}" role="cell" title="${esc(pathNames[i]+': '+label(v))}" aria-label="${esc(pathNames[i]+': '+label(v))}">${sym(v)}</div>`);
+    });
+    desk+='</div>';
+    let mob='<div class="impact-mobile-list">';
+    DATA.impact.forEach(r=>{
+      const chips=r.paths.map((v,i)=>v?`<span class="impact-path-chip ${cls(v)}">${esc(pathNames[i])} · ${v===2?'مستقیم':'پشتیبان'}</span>`:'').join('');
+      mob+=`<article class="impact-mobile-card"><div class="impact-mobile-head"><strong class="impact-mobile-name">${esc(r.name)}</strong><span class="mini-status">${esc(r.status)}</span></div><div class="impact-mobile-paths">${chips}</div></article>`;
+    });
+    root.innerHTML=desk+mob; root.dataset.rendered='1';
+  }
+
+  function renderPortfolioMobile(){
+    const table=document.getElementById('portfolio-table'); if(!table)return;
+    const wrap=table.closest('.portfolio-table-wrap'); if(!wrap)return;
+    let list=document.getElementById('portfolio-mobile-list');
+    if(!list){list=document.createElement('div');list.id='portfolio-mobile-list';list.className='portfolio-mobile-list';wrap.insertAdjacentElement('afterend',list);}
+    const rows=Array.from(table.querySelectorAll('tbody .portfolio-row'));
+    list.innerHTML=rows.map((r,i)=>{
+      const c=r.querySelectorAll('td'), link=c[1]?.querySelector('a');
+      const name=link?.textContent.trim()||'', href=link?.getAttribute('href')||'#';
+      return `<article class="portfolio-mobile-card" data-mobile-search="${esc(r.dataset.search||name)}" data-mobile-status="${esc(r.dataset.status||'')}" data-mobile-exposure="${esc(r.dataset.exposure||'')}">
+        <div class="portfolio-mobile-card-head"><a class="portfolio-mobile-card-name" href="${href}">${esc(name)}</a><span class="chip ${r.dataset.status==='ساخت'?'chip-build':'chip-good'}">${esc(r.dataset.status||'')}</span></div>
+        <div class="portfolio-mobile-card-grid">
+          <div class="portfolio-mobile-field"><b>مسیر اثرپذیری</b><span>${esc(c[3]?.textContent.trim()||'—')}</span></div>
+          <div class="portfolio-mobile-field"><b>مبنای زمانی</b><span class="portfolio-mobile-time">${esc(c[5]?.querySelector('strong')?.textContent.trim()||'۷ روز')}</span></div>
+          <div class="portfolio-mobile-field wide"><b>شواهد اصلی</b><span>${esc(c[4]?.textContent.trim()||'—')}</span></div>
+          <div class="portfolio-mobile-field"><b>محل اعمال</b><span>${esc(c[6]?.textContent.trim()||'—')}</span></div>
+          <div class="portfolio-mobile-field wide"><b>تداوم اختلال پس از ۱۶ اسفند</b><span>${esc(c[7]?.textContent.trim()||'—')}</span></div>
+        </div>
+      </article>`;
+    }).join('');
+    const q=document.getElementById('portfolio-search-input'), s=document.getElementById('portfolio-filter-status'), e=document.getElementById('portfolio-filter-exposure');
+    function sync(){
+      const query=(q?.value||'').trim().toLowerCase(), status=s?.value||'', exposure=e?.value||'';
+      list.querySelectorAll('.portfolio-mobile-card').forEach(card=>{
+        const ok=(!query||card.dataset.mobileSearch.toLowerCase().includes(query))&&(!status||card.dataset.mobileStatus===status)&&(!exposure||card.dataset.mobileExposure===exposure);
+        card.hidden=!ok;
+      });
+    }
+    q?.addEventListener('input',sync);s?.addEventListener('change',sync);e?.addEventListener('change',sync);sync();
+  }
+
+  function renderForDetails(details){
+    if(!details?.open)return;
+    if(details.id==='analysis-transport'){const active=details.querySelector('.analysis-tab.is-active')?.dataset.analysisTab;if(active==='transport-vehicles')renderVehicles();else renderFreight();}
+    if(details.id==='analysis-materials'){const active=details.querySelector('.analysis-tab.is-active')?.dataset.analysisTab;if(active==='materials-price-volume')renderPriceVolume(true);else if(active==='materials-official-prices')renderOfficialPrices();else renderDepth();}
+    if(details.id==='analysis-labor') renderPMI();
+    if(details.id==='analysis-inflation'){const active=details.querySelector('.analysis-tab.is-active')?.dataset.analysisTab; if(active==='inflation-construction') renderConstructionInflation(); else renderGeneralInflation();}
+    if(details.id==='analysis-portfolio-paths') renderImpact();
+    if(details.id&&details.id.indexOf('project-context-')===0){const pid=+details.id.split('-').pop(),idx=+(details.querySelector('[data-project-tab].is-active')?.dataset.projectTab.split('-')[1]||0);renderProjectTab(pid,idx);}
+  }
+
+  document.querySelectorAll('.analysis-accordion').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)requestAnimationFrame(()=>renderForDetails(d));}));
+  document.querySelectorAll('[data-analysis-tab]').forEach(btn=>btn.addEventListener('click',()=>{
+    const details=btn.closest('.analysis-accordion'), target=btn.dataset.analysisTab;
+    details.querySelectorAll('[data-analysis-tab]').forEach(b=>{const a=b===btn;b.classList.toggle('is-active',a);b.setAttribute('aria-selected',a?'true':'false');});
+    details.querySelectorAll('.analysis-panel').forEach(p=>p.hidden=p.id!==target);
+    if(target==='materials-depth')renderDepth();
+    if(target==='materials-price-volume')requestAnimationFrame(()=>renderPriceVolume(true));
+    if(target==='materials-official-prices')requestAnimationFrame(()=>renderOfficialPrices());
+    if(target==='transport-freight')requestAnimationFrame(()=>renderFreight());
+    if(target==='transport-vehicles')requestAnimationFrame(()=>renderVehicles());
+    if(target==='inflation-general')requestAnimationFrame(()=>renderGeneralInflation());
+    if(target==='inflation-construction')requestAnimationFrame(()=>renderConstructionInflation());
+  }));
+  document.querySelectorAll('[data-material]').forEach(btn=>btn.addEventListener('click',()=>{
+    currentMaterial=btn.dataset.material;
+    document.querySelectorAll('[data-material]').forEach(b=>b.classList.toggle('is-active',b===btn));
+    requestAnimationFrame(()=>renderPriceVolume(true));
+  }));
+
+  injectProjectContext();
+  document.querySelectorAll('[data-project-tab]').forEach(btn=>btn.addEventListener('click',()=>{
+    const d=btn.closest('.analysis-accordion'),parts=btn.dataset.projectTab.split('-'),pid=+parts[0],idx=+parts[1];
+    d.querySelectorAll('[data-project-tab]').forEach(b=>{const a=b===btn;b.classList.toggle('is-active',a);b.setAttribute('aria-selected',a?'true':'false');});
+    d.querySelectorAll('.project-context-panel').forEach(p=>p.hidden=p.id!==`project-panel-${pid}-${idx}`);requestAnimationFrame(()=>renderProjectTab(pid,idx));
+  }));
+  document.querySelectorAll('[id^="project-context-"]').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){const pid=+d.id.split('-').pop(),idx=+(d.querySelector('[data-project-tab].is-active')?.dataset.projectTab.split('-')[1]||0);requestAnimationFrame(()=>renderProjectTab(pid,idx));}}));
+
+  renderPortfolioMobile();
+
+  window.addEventListener('aa:themechange',()=>{
+    setTimeout(()=>{
+      document.querySelectorAll('.analysis-accordion[open]').forEach(d=>{
+        if(d.id==='analysis-transport'){const r=document.getElementById('analysis-freight-chart');if(r)r.removeAttribute('data-rendered');renderFreight();}
+        if(d.id==='analysis-materials'&&!document.getElementById('materials-price-volume')?.hidden) renderPriceVolume(true);
+        if(d.id==='analysis-labor'){const r=document.getElementById('analysis-pmi-chart');if(r)r.removeAttribute('data-rendered');renderPMI();}
+        if(d.id==='analysis-inflation'){
+          const general=document.getElementById('inflation-general'), construction=document.getElementById('inflation-construction');
+          if(general && !general.hidden){const r=document.getElementById('analysis-general-inflation-chart');if(r)r.removeAttribute('data-rendered');renderGeneralInflation();}
+          if(construction && !construction.hidden){const r=document.getElementById('analysis-construction-inflation-chart');if(r)r.removeAttribute('data-rendered');renderConstructionInflation();}
+        }
+      });
+    },40);
+  });
+
+  let resizeTimer;
+  window.addEventListener('resize',()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(()=>{
+      document.querySelectorAll('.analysis-accordion[open]').forEach(d=>{
+        if(d.id==='analysis-transport'){const r=document.getElementById('analysis-freight-chart');if(r)r.removeAttribute('data-rendered');renderFreight();}
+        if(d.id==='analysis-materials'&&!document.getElementById('materials-price-volume')?.hidden) renderPriceVolume(true);
+        if(d.id==='analysis-labor'){const r=document.getElementById('analysis-pmi-chart');if(r)r.removeAttribute('data-rendered');renderPMI();}
+        if(d.id==='analysis-inflation'){
+          const general=document.getElementById('inflation-general'), construction=document.getElementById('inflation-construction');
+          if(general && !general.hidden){const r=document.getElementById('analysis-general-inflation-chart');if(r)r.removeAttribute('data-rendered');renderGeneralInflation();}
+          if(construction && !construction.hidden){const r=document.getElementById('analysis-construction-inflation-chart');if(r)r.removeAttribute('data-rendered');renderConstructionInflation();}
+        }
+      });
+    },160);
+  },{passive:true});
+  window.addEventListener('aa:themechange',()=>{setTimeout(()=>{document.querySelectorAll('[id^="project-context-"][open]').forEach(d=>{const pid=+d.id.split('-').pop(),idx=+(d.querySelector('[data-project-tab].is-active')?.dataset.projectTab.split('-')[1]||0);renderProjectTab(pid,idx);});const tv=document.getElementById('transport-vehicles');if(tv&&!tv.hidden)renderVehicles();const op=document.getElementById('materials-official-prices');if(op&&!op.hidden)renderOfficialPrices();},60);});
 })();
 </script>
