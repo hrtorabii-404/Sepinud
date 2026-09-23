@@ -7,6 +7,7 @@
 .r8-audit-note{margin-top:9px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--ind-transport) 5%,var(--surface-2));border-inline-start:3px solid var(--ind-transport);font-size:9.7px;line-height:1.75;color:var(--ink-muted)}.r8-audit-note b{color:var(--ink)}
 @media(max-width:760px){.r8-live-detail{gap:8px;font-size:9px}.r8-live-detail>strong{width:100%}.r8-hm{min-width:1180px}}
 </style>
+<!-- AA_CIE Construction Engine V5 | activity-based | isolated namespace aa.cs5 -->
 <title>داشبورد مدیریتی ارزیابی آثار بحران بر پروژه‌های اراضی عباس‌آباد</title>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta charset="utf-8"/>
@@ -1136,7 +1137,7 @@ footer{padding:40px 24px 60px; text-align:center}
 
 /* ================= Round 5.10 — responsive progressive analytics ================= */
 html{max-width:100%;overflow-x:clip}body{max-width:100%;overflow-x:clip}
-.analysis-source-note{overflow-wrap:anywhere;word-break:break-word}
+.analysis-source-note{overflow-wrap:normal;word-break:normal;word-break:break-word}
 .analysis-accordion{
   margin-top:18px;
   background:linear-gradient(165deg,color-mix(in srgb,var(--analysis-accent,var(--accent)) 4%,var(--surface)),var(--surface));
@@ -1697,7 +1698,7 @@ html.is-presenting .band{scroll-margin-top:20px}
 <div class="header-side">
 <div aria-label="سپینود" class="partner-badge" title="سپینود تدبیر شریف">
 <!-- REPLACE ASSET: assets/REPLACE_LOGO_SEPINUD.svg -->
-<img alt="سپینود تدبیر شریف" src="https://tehranswitch.org/hrt/sepinud/abasabad2/assets/img/logo-sepinoud.png">
+<img alt="تحلیل و طراحی: حمیدرضا ترابی" src="https://tehranswitch.org/hrt/sepinud/abasabad2/assets/img/logo-sepinoud.png">
 </div>
 <span class="updated-note"><span aria-hidden="true" class="live-pulse"></span>به‌روزرسانی: مرداد ۱۴۰۵</span>
 <button aria-label="جستجو" class="icon-btn search-btn" data-cmdk-open="" title="جستجو (Ctrl+K)"><svg fill="none" viewbox="0 0 24 24"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"></circle><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></button>
@@ -6584,8 +6585,31 @@ var stateLabel={severe:'اختلال شدید',high:'فشار بالا',pressure
 
 /* chart engine */
 function smoothPath(P){if(!P.length)return '';if(P.length<3)return 'M '+P.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1)}).join(' L ');var d='M '+P[0][0].toFixed(1)+' '+P[0][1].toFixed(1);for(var i=0;i<P.length-1;i++){var p0=P[Math.max(0,i-1)],p1=P[i],p2=P[i+1],p3=P[Math.min(P.length-1,i+2)];var c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6,c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;d+=' C '+c1x.toFixed(1)+' '+c1y.toFixed(1)+', '+c2x.toFixed(1)+' '+c2y.toFixed(1)+', '+p2[0].toFixed(1)+' '+p2[1].toFixed(1)}return d}
-function chartSvg(labels,series,opt){opt=opt||{};var W=900,H=opt.h||285,ml=58,mr=18,mt=20,mb=48,iw=W-ml-mr,ih=H-mt-mb;var vals=[];series.forEach(function(s){s.values.forEach(function(v){if(v!=null&&isFinite(v))vals.push(v)})});if(opt.ref!=null)vals.push(opt.ref);var ymin=opt.ymin!=null?opt.ymin:Math.min.apply(null,vals),ymax=opt.ymax!=null?opt.ymax:Math.max.apply(null,vals);if(!isFinite(ymin)||!isFinite(ymax)){ymin=0;ymax=100}if(ymax===ymin){ymax+=1;ymin-=1}var pad=(ymax-ymin)*.12;ymin-=pad;ymax+=pad;if(opt.zero){ymin=Math.min(ymin,0);ymax=Math.max(ymax,0)}var x=function(i){return ml+(labels.length<=1?iw/2:iw*i/(labels.length-1))},y=function(v){return mt+(ymax-v)/(ymax-ymin)*ih};var out='<svg class="t7-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(opt.aria||'نمودار')+'">';for(var g=0;g<5;g++){var vv=ymax-(ymax-ymin)*g/4,yy=y(vv);out+='<line class="t7-grid" x1="'+ml+'" x2="'+(W-mr)+'" y1="'+yy+'" y2="'+yy+'"/><text class="t7-axis" x="'+(ml-8)+'" y="'+(yy+3)+'" text-anchor="end">'+fa((Math.round(vv*10)/10).toString())+(opt.suffix||'')+'</text>'}if(opt.ref!=null){var ry=y(opt.ref);out+='<line class="t7-ref" x1="'+ml+'" x2="'+(W-mr)+'" y1="'+ry+'" y2="'+ry+'"/><text class="t7-axis" x="'+(W-mr-4)+'" y="'+(ry-5)+'" text-anchor="end">'+esc(opt.refLabel||'مبنا')+'</text>'}
-var step=Math.max(1,Math.ceil(labels.length/8));labels.forEach(function(l,i){if(i%step===0||i===labels.length-1)out+='<text class="t7-axis" x="'+x(i)+'" y="'+(H-13)+'" text-anchor="middle">'+esc(fa(l))+'</text>'});series.forEach(function(s,si){var P=[];s.values.forEach(function(v,i){if(v!=null&&isFinite(v))P.push([x(i),y(v),i,v])});out+='<path class="t7-line" d="'+smoothPath(P)+'" stroke="'+s.color+'"/>';var every=Math.max(1,Math.floor(labels.length/18));P.forEach(function(p,j){if(j%every===0||j===P.length-1)out+='<circle class="t7-dot" cx="'+p[0]+'" cy="'+p[1]+'" r="3.7" fill="'+s.color+'" data-t7-tip="'+esc(s.name+' · '+fa(labels[p[2]])+' · '+(opt.valueFmt?opt.valueFmt(p[3]):fa((Math.round(p[3]*10)/10).toString())+(opt.suffix||'')))+'"/>'});});out+='</svg><div class="t7-legend">'+series.map(function(s){return '<span><i style="background:'+s.color+'"></i>'+esc(s.name)+'</span>'}).join('')+'</div>';return out}
+function chartSvg(pair,s){
+ const {official,active}=pair,idx=[];for(let i=s.start;i<=s.end;i++)idx.push(i);
+ const W=980,H=330,m={l:50,r:56,t:34,b:48},iw=W-m.l-m.r,ih=H-m.t-m.b,n=idx.length||1;
+ const bars=s.mode==='sensitivity'?active:official;
+ const maxDay=Math.max(4,...idx.map(i=>bars.months[i].days))*1.18;
+ const x=k=>m.l+iw*(k+.5)/n,bw=Math.min(64,iw/n*.48),y=v=>m.t+ih-(v/maxDay)*ih;
+ let co=0,ca=0;
+ const offCum=idx.map((i,k)=>{co+=official.months[i].days;return[co,k]});
+ const actCum=idx.map((i,k)=>{ca+=active.months[i].days;return[ca,k]});
+ const maxCum=Math.max(1,...offCum.map(x=>x[0]),...actCum.map(x=>x[0]));
+ const yc=v=>m.t+ih-(v/maxCum)*ih;
+ const offCumPts=offCum.map(([v,k])=>[x(k),yc(v)]),actCumPts=actCum.map(([v,k])=>[x(k),yc(v)]);
+ let out=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="روزهای جبرانی ماهانه و روند تجمعی">`;
+ [0,.25,.5,.75,1].forEach(q=>{const v=maxDay*q,yy=y(v);out+=`<line class="cs7-grid" x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}"/><text class="cs7-axis" x="${m.l-8}" y="${yy+4}" text-anchor="end">${f1(v)}</text>`});
+ [0,.5,1].forEach(q=>{const v=maxCum*q,yy=yc(v);out+=`<text class="cs7-axis cs7-axis-right" x="${W-m.r+8}" y="${yy+4}" text-anchor="start">${f1(v)}</text>`});
+ idx.forEach((i,k)=>{if(i===2||i===3){const bx=x(k)-iw/n*.48;out+=`<rect class="cs7-crisis" x="${bx}" y="${m.t}" width="${iw/n*.96}" height="${ih}" rx="14"/>`;}});
+ idx.forEach((i,k)=>{const a=bars.months[i],bx=x(k)-bw/2,yy=y(a.days),hh=m.t+ih-yy;out+=`<rect class="cs7-bar ${i===2||i===3?'hot':''} ${s.mode==='sensitivity'?'scenario-bar':''}" x="${bx}" y="${yy}" width="${bw}" height="${Math.max(1,hh)}" rx="9"/><text class="cs7-val" x="${x(k)}" y="${yy-8}" text-anchor="middle">${f1(a.days)}</text><text class="cs7-label" x="${x(k)}" y="${H-15}" text-anchor="middle">${SHORT[i]}</text><rect class="cs7-hit" data-chart-month="${i}" data-chart-type="days" x="${bx-10}" y="${m.t}" width="${bw+20}" height="${ih}"/>`;});
+ if(s.mode==='sensitivity'){
+   out+=`<path class="cs7-cumline cs7-cumline-official" d="${linePath(offCumPts)}"/>${offCumPts.map(p=>`<circle class="cs7-cumdot cs7-cumdot-official" cx="${p[0]}" cy="${p[1]}" r="3.1"/>`).join('')}`;
+   out+=`<path class="cs7-cumline-scenario" d="${linePath(actCumPts)}"/>${actCumPts.map(p=>`<circle class="cs7-cumdot-scenario" cx="${p[0]}" cy="${p[1]}" r="3.8"/>`).join('')}`;
+ }else{
+   out+=`<path class="cs7-cumline" d="${linePath(offCumPts)}"/>${offCumPts.map(p=>`<circle class="cs7-cumdot" cx="${p[0]}" cy="${p[1]}" r="3.3"/>`).join('')}`;
+ }
+ return out+'</svg>';
+}
 function spark(values,color){var W=240,H=50,p=6,min=Math.min.apply(null,values),max=Math.max.apply(null,values);if(max===min)max=min+1;var P=values.map(function(v,i){return [p+(W-2*p)*(values.length<=1?.5:i/(values.length-1)),p+(H-2*p)*(max-v)/(max-min)]});return '<svg class="t7-spark" viewBox="0 0 '+W+' '+H+'"><path d="'+smoothPath(P)+'" fill="none" stroke="'+color+'" stroke-width="2.4" stroke-linecap="round"/></svg>'}
 function ma(a,w){return a.map(function(_,i){var st=Math.max(0,i-w+1),x=a.slice(st,i+1).filter(function(v){return v!=null&&isFinite(v)});return x.length?x.reduce(function(s,v){return s+v},0)/x.length:null})}
 function seriesName(k){return {total:'کل تردد',passenger:'سواری و وانت',heavy:'حمل بار سنگین'}[k]||k}
@@ -8005,3 +8029,1003 @@ window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setT
 window.AACIE_CITY_TRAFFIC=DATA;
 })();
 </script>
+
+<style id="aa-construction-engine-v8-style">
+/* Construction V8 — visual language intentionally aligned with V1-22, with compact controls and full-width expert view */
+#aa-cie-model-host .cs7-engine{
+  --cs7-bg:var(--surface-2,#f4f7f6);--cs7-surface:var(--surface,#fff);--cs7-ink:var(--ink,#163239);--cs7-muted:var(--ink-muted,#647a7d);--cs7-faint:var(--ink-faint,#7f9092);--cs7-line:var(--border-soft,#dce7e4);--cs7-accent:#2f966c;
+  direction:rtl;color:var(--cs7-ink);font-family:var(--font-body,'Vazirmatn',Tahoma,sans-serif);background:var(--cs7-bg);border-radius:24px;overflow:clip;
+}
+#aa-cie-model-host .cs7-engine *,#aa-cie-model-host .cs7-engine *::before,#aa-cie-model-host .cs7-engine *::after{box-sizing:border-box}
+#aa-cie-model-host .cs7-engine button,#aa-cie-model-host .cs7-engine input,#aa-cie-model-host .cs7-engine select{font-family:inherit}
+#aa-cie-model-host .cs7-wrap{width:min(100% - 30px,1480px);margin-inline:auto}
+#aa-cie-model-host .cs7-card{background:var(--cs7-surface);border:1px solid var(--cs7-line);border-radius:20px;box-shadow:0 18px 46px -38px rgba(20,55,61,.34);min-width:0}
+
+/* Persistent group toggle + project selector */
+#aa-cie-model-host .cs7-projectbar{position:sticky;top:var(--aa-header-reserve,58px);z-index:35;background:color-mix(in srgb,var(--cs7-surface) 95%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--cs7-line)}
+#aa-cie-model-host .cs7-projectbar .cs7-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;padding-block:8px}
+.cs7-group-toggle{display:flex;gap:4px;padding:3px;border:1px solid var(--border-soft,#dce7e4);background:var(--surface-2,#f3f7f5);border-radius:11px;direction:rtl}
+.cs7-group-toggle button{border:0;background:transparent;color:var(--ink-muted,#647a7d);border-radius:8px;min-height:32px;padding:0 10px;font-size:11px;font-weight:850;cursor:pointer;white-space:nowrap}
+.cs7-group-toggle button b{font-size:9px;margin-right:4px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.05)}
+.cs7-group-toggle button.is-on{background:var(--surface,#fff);color:var(--ink,#163239);box-shadow:0 2px 8px rgba(23,55,61,.08)}
+#aa-cie-group-toggle-v7{margin-bottom:9px;display:flex;justify-content:flex-start}
+#aa-cie-model-host .cs7-projectgrid{display:flex;gap:7px;overflow:auto;scrollbar-width:thin;padding:1px 0}
+#aa-cie-model-host .cs7-pbtn{flex:0 0 auto;min-height:36px;border:1px solid var(--cs7-line);border-radius:10px;background:var(--cs7-surface);color:var(--cs7-muted);padding:0 12px;font-size:11px;font-weight:820;cursor:pointer;white-space:nowrap}
+#aa-cie-model-host .cs7-pbtn.is-on{background:linear-gradient(135deg,var(--cs7-accent),color-mix(in srgb,var(--cs7-accent) 74%,#14535d));border-color:transparent;color:#fff;box-shadow:0 10px 25px -20px var(--cs7-accent)}
+
+/* Header */
+#aa-cie-model-host .cs7-head{background:linear-gradient(180deg,var(--cs7-surface) 0%,color-mix(in srgb,var(--cs7-surface) 88%,#eaf3f0));border-bottom:1px solid var(--cs7-line)}
+#aa-cie-model-host .cs7-headrow{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:18px 0 15px}
+#aa-cie-model-host .cs7-kicker{font-size:10px;font-weight:950;color:var(--cs7-accent);letter-spacing:.04em}
+#aa-cie-model-host .cs7-head h1{font-size:26px;line-height:1.3;margin:4px 0 3px;font-weight:950;color:var(--cs7-ink)}
+#aa-cie-model-host .cs7-head p{margin:0;font-size:12px;color:var(--cs7-muted);line-height:1.7}
+#aa-cie-model-host .cs7-head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start;max-width:460px}
+#aa-cie-model-host .cs7-head-actions span{border:1px solid var(--cs7-line);background:var(--cs7-surface);border-radius:999px;padding:6px 9px;font-size:10px;font-weight:800;color:var(--cs7-muted)}
+
+/* Workspace */
+#aa-cie-model-host .cs7-workspace{direction:ltr;display:grid;grid-template-columns:minmax(0,1fr) 334px;gap:13px;padding:13px 0 18px;align-items:start}
+#aa-cie-model-host .cs7-main,#aa-cie-model-host .cs7-rail{direction:rtl;min-width:0}
+#aa-cie-model-host .cs7-main{display:grid;gap:13px}
+#aa-cie-model-host .cs7-rail{position:sticky;top:calc(var(--aa-header-reserve,58px) + 62px);max-height:calc(100vh - 86px);overflow:auto;scrollbar-width:thin}
+
+/* Hero + readable font floor */
+#aa-cie-model-host .cs7-summary{display:grid;grid-template-columns:260px minmax(0,1fr);gap:12px;padding:15px 15px 8px}
+#aa-cie-model-host .cs7-total{border:1px solid color-mix(in srgb,var(--cs7-accent) 20%,var(--cs7-line));border-radius:16px;background:linear-gradient(145deg,color-mix(in srgb,var(--cs7-accent) 7%,var(--cs7-surface)),var(--cs7-surface));padding:14px 15px;position:relative}
+#aa-cie-model-host .cs7-total small{display:block;font-size:11px;font-weight:850;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-total strong{display:inline-block;margin-top:5px;font-size:44px;line-height:1;color:var(--cs7-accent);font-weight:950;font-variant-numeric:tabular-nums}
+#aa-cie-model-host .cs7-total>span{font-size:13px;font-weight:850;margin-right:5px}
+#aa-cie-model-host .cs7-total em{display:block;margin-top:8px;font-style:normal;font-size:10.5px;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#aa-cie-model-host .cs7-kpis article{border:1px solid var(--cs7-line);border-radius:14px;background:color-mix(in srgb,var(--cs7-surface) 94%,#eef5f2);padding:12px 13px;display:flex;flex-direction:column;justify-content:center;min-height:104px}
+#aa-cie-model-host .cs7-kpis small{font-size:10px;color:var(--cs7-faint);font-weight:780}
+#aa-cie-model-host .cs7-kpis b{font-size:16px;margin-top:5px;font-weight:930;color:var(--cs7-ink)}
+#aa-cie-model-host .cs7-kpis span{font-size:10px;margin-top:4px;color:var(--cs7-muted)}
+
+/* Month cards: compact, clickable, no hover tooltip */
+#aa-cie-model-host .cs7-monthcards{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;padding:5px 15px 10px}
+#aa-cie-model-host .cs7-month{position:relative;min-width:0;border:1px solid var(--cs7-line);border-radius:12px;background:var(--cs7-surface);padding:8px 9px 9px;text-align:right;color:inherit;cursor:pointer;overflow:hidden;min-height:76px}
+#aa-cie-model-host .cs7-month.is-on{border-color:color-mix(in srgb,var(--cs7-accent) 55%,var(--cs7-line));box-shadow:0 0 0 2px color-mix(in srgb,var(--cs7-accent) 9%,transparent);background:color-mix(in srgb,var(--cs7-accent) 3%,var(--cs7-surface))}
+#aa-cie-model-host .cs7-month.is-out{opacity:.45}
+#aa-cie-model-host .cs7-month small{display:block;font-size:9.5px;color:var(--cs7-muted);font-weight:800}
+#aa-cie-model-host .cs7-month strong{display:block;margin-top:4px;font-size:17px;color:var(--cs7-ink);font-weight:950}.cs7-month strong span{font-size:9px}
+#aa-cie-model-host .cs7-month em{display:block;margin-top:4px;font-style:normal;font-size:8.5px;color:var(--cs7-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#aa-cie-model-host .cs7-month>i{position:absolute;right:0;bottom:0;width:var(--mv);height:3px;background:var(--cs7-accent);opacity:.75}
+
+/* Chart */
+#aa-cie-model-host .cs7-chartbox{padding:4px 10px 8px;border-top:1px solid var(--cs7-line)}
+#aa-cie-model-host .cs7-chart-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:10px 8px 2px}
+#aa-cie-model-host .cs7-chart-head b{font-size:13px}.cs7-chart-head>div>span{display:block;margin-top:3px;font-size:10px;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-compare{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-start;font-size:10px}
+#aa-cie-model-host .cs7-compare b,.cs7-compare span{padding:5px 7px;border-radius:999px;background:var(--cs7-bg);font-weight:850}.cs7-compare b.sc{color:var(--cs7-accent)}.cs7-compare span.up{color:#a34e42;background:#fff0ed}.cs7-compare span.down{color:#26785d;background:#eaf7f1}
+#aa-cie-model-host .cs7-mainchart{height:315px;min-height:315px}.cs7-mainchart svg,.cs7-capchart svg{width:100%;height:100%;display:block;overflow:visible}
+#aa-cie-model-host .cs7-grid{stroke:var(--cs7-line);stroke-width:1}.cs7-axis,.cs7-label{fill:var(--cs7-muted);font:800 10px var(--font-body)}.cs7-val{fill:var(--cs7-ink);font:900 11px var(--font-body)}
+#aa-cie-model-host .cs7-crisis{fill:#fae9dd;opacity:.78}.cs7-bar{fill:#2f966c}.cs7-bar.hot{fill:#e47c34}.cs7-offline{fill:none;stroke:#8ba0a2;stroke-width:1.5;stroke-dasharray:5 4}.cs7-offdot{fill:#fff;stroke:#8ba0a2;stroke-width:1.5}.cs7-scline{fill:none;stroke:var(--cs7-accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.cs7-scdot{fill:var(--cs7-accent);stroke:#fff;stroke-width:1.7}.cs7-cumline{fill:none;stroke:#284b56;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}.cs7-cumdot{fill:#284b56;stroke:#fff;stroke-width:1.5}.cs7-hit{fill:transparent;cursor:pointer}
+#aa-cie-model-host .cs7-legend{display:flex;gap:13px;justify-content:flex-end;flex-wrap:wrap;padding:1px 12px 7px;font-size:9.5px;color:var(--cs7-muted);font-weight:800}.cs7-legend span{display:flex;align-items:center;gap:5px}.cs7-legend i{width:16px;height:4px;border-radius:99px;background:#2f966c}.cs7-legend i.off{height:2px;background:#8ba0a2}.cs7-legend i.scenario{height:2px;background:var(--cs7-accent)}.cs7-legend i.cum{height:2px;background:#284b56}
+
+/* Section heads */
+#aa-cie-model-host .cs7-section-head{padding:14px 15px 7px}.cs7-section-head small{font-size:9px;color:var(--cs7-accent);font-weight:950}.cs7-section-head h2{font-size:16px;margin:2px 0 0}.cs7-section-head p{font-size:10.5px;line-height:1.7;color:var(--cs7-muted);margin:4px 0 0}
+
+/* Capacity */
+#aa-cie-model-host .cs7-capchart{height:245px;padding:0 12px 8px}.cs7-capbase{stroke:#9db4af;stroke-dasharray:5 5}.cs7-capbg{fill:#eef3f1}.cs7-caploss{fill:#f5dfdb}.cs7-capfill{fill:#319a71}.cs7-capofficial{stroke:#7e9697;stroke-width:2;stroke-dasharray:4 4}.cs7-capval{fill:#fff;font:900 10px var(--font-body)}.cs7-caplossval{fill:#a45548;font:900 9px var(--font-body)}
+
+/* Domains */
+#aa-cie-model-host .cs7-domains{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:0 14px 14px}
+#aa-cie-model-host .cs7-domain{border:1px solid color-mix(in srgb,var(--dc) 22%,var(--cs7-line));background:linear-gradient(160deg,var(--cs7-surface),color-mix(in srgb,var(--dc) 4%,var(--cs7-surface)));border-radius:14px;padding:11px 12px;min-width:0}
+#aa-cie-model-host .cs7-domain>div{display:flex;align-items:center;gap:7px}.cs7-domain .ico{width:29px;height:29px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--dc) 10%,var(--cs7-surface));color:var(--dc)}.cs7-domain .ico svg{width:17px;height:17px}.cs7-domain b{font-size:10.5px}.cs7-domain strong{display:block;margin-top:7px;font-size:22px;color:var(--dc);font-weight:950}.cs7-domain small{display:block;margin-top:2px;font-size:8.8px;line-height:1.55;color:var(--cs7-muted)}.cs7-domain em{display:inline-block;margin-top:5px;font-style:normal;font-size:8px;background:var(--cs7-bg);padding:3px 5px;border-radius:999px;color:var(--cs7-muted)}
+
+/* Drill-down, compact and graphical */
+#aa-cie-model-host .cs7-drill{padding:0 14px 14px}.cs7-drill-head{display:flex;justify-content:space-between;align-items:end;gap:10px;border-bottom:1px solid var(--cs7-line);padding-bottom:9px}.cs7-drill-head small{display:block;font-size:9px;color:var(--cs7-muted)}.cs7-drill-head b{display:block;margin-top:2px;font-size:12px}.cs7-drill-head strong{font-size:24px;color:var(--cs7-accent);font-weight:950}.cs7-drill-head strong span{font-size:10px;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-flow{display:grid;grid-template-columns:1.2fr auto 1.1fr auto 1.1fr auto .9fr auto .8fr;gap:5px;align-items:stretch;margin-top:10px}.cs7-flow article{border:1px solid var(--cs7-line);border-radius:10px;background:var(--cs7-surface);padding:8px 9px}.cs7-flow article span{display:block;font-size:8px;color:var(--cs7-muted);font-weight:800}.cs7-flow article b{display:block;margin-top:3px;font-size:9px;line-height:1.65}.cs7-flow article.final{border-color:color-mix(in srgb,var(--cs7-accent) 35%,var(--cs7-line));background:color-mix(in srgb,var(--cs7-accent) 5%,var(--cs7-surface))}.cs7-flow>i{font-style:normal;align-self:center;color:var(--cs7-faint);font-size:14px}
+#aa-cie-model-host .cs7-topacts{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:6px;align-items:stretch;margin-top:9px}.cs7-topacts>b{font-size:9px;color:var(--cs7-muted);align-self:center}.cs7-topacts article{border:1px solid var(--cs7-line);border-radius:9px;padding:7px 8px;background:var(--cs7-surface)}.cs7-topacts article span{display:block;font-size:9px;font-weight:850}.cs7-topacts article em{display:block;margin-top:3px;font-style:normal;color:var(--cs7-accent);font-size:10px;font-weight:900}.cs7-topacts article small{display:block;margin-top:2px;font-size:7.8px;color:var(--cs7-muted)}.cs7-drill-delta{margin-top:8px;padding:7px 9px;border-radius:9px;background:var(--cs7-bg);font-size:9px;font-weight:850;color:var(--cs7-muted)}
+
+/* Settings rail: compact, larger readable type */
+#aa-cie-model-host .cs7-settings{overflow:hidden}.cs7-rail-head{padding:12px 12px 8px;border-bottom:1px solid var(--cs7-line)}.cs7-rail-head h3{font-size:13px;margin:0}.cs7-rail-head p{font-size:9.5px;margin:3px 0 0;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-period{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:9px 10px 6px}.cs7-period label{display:grid;gap:3px;font-size:8.5px;color:var(--cs7-muted);font-weight:800}.cs7-period select{height:32px;border:1px solid var(--cs7-line);border-radius:8px;background:var(--cs7-surface);color:var(--cs7-ink);font-size:9.5px;padding:0 6px;outline:none}
+#aa-cie-model-host .cs7-mode{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:2px 10px 8px;padding:3px;background:var(--cs7-bg);border-radius:10px}.cs7-mode button{border:0;border-radius:8px;background:transparent;min-height:32px;font-size:10px;font-weight:850;color:var(--cs7-muted);cursor:pointer}.cs7-mode button.is-on{background:var(--cs7-surface);color:var(--cs7-ink);box-shadow:0 2px 8px rgba(20,55,61,.07)}
+#aa-cie-model-host .cs7-global{padding:0 10px 7px}.cs7-global-head{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--cs7-line);padding:9px 1px 5px}.cs7-global-head b{font-size:10px}.cs7-global-head span{font-size:8px;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-global-row{padding:6px 0 7px;border-bottom:1px solid color-mix(in srgb,var(--cs7-line) 70%,transparent)}.cs7-global-row>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:8px}.cs7-global-row b{font-size:9.5px}.cs7-global-row strong{font-size:13px;color:var(--dc);font-weight:950}.cs7-global-row strong small{font-size:7.5px;color:var(--cs7-muted);font-weight:800}.cs7-global-row em{display:block;margin-top:2px;font-style:normal;font-size:7.5px;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-range{--rv:50%;width:100%;height:16px;margin:3px 0 0;appearance:none;background:transparent;cursor:pointer;touch-action:none}
+#aa-cie-model-host .cs7-range::-webkit-slider-runnable-track{height:5px;border-radius:999px;background:linear-gradient(to left,var(--dc,var(--ac,var(--cs7-accent))) 0 var(--rv),#e6ecea var(--rv) 100%)}
+#aa-cie-model-host .cs7-range::-webkit-slider-thumb{appearance:none;width:15px;height:15px;border-radius:50%;background:var(--dc,var(--ac,var(--cs7-accent)));border:2px solid #fff;box-shadow:0 1px 5px rgba(20,55,61,.16);margin-top:-5px}
+#aa-cie-model-host .cs7-range::-moz-range-track{height:5px;border-radius:999px;background:#e6ecea}.cs7-range::-moz-range-progress{height:5px;background:var(--dc,var(--ac,var(--cs7-accent)));border-radius:999px}.cs7-range::-moz-range-thumb{width:13px;height:13px;border:2px solid #fff;border-radius:50%;background:var(--dc,var(--ac,var(--cs7-accent)));box-shadow:0 1px 5px rgba(20,55,61,.16)}
+#aa-cie-model-host .cs7-range:disabled{opacity:.62;cursor:default}
+#aa-cie-model-host .cs7-scale{display:grid;grid-template-columns:repeat(5,1fr);margin-top:-1px;font-size:6.8px;color:var(--cs7-faint)}.cs7-scale span{text-align:center;padding-top:2px;border-top:2px solid color-mix(in srgb,var(--dc) 30%,#e5ebe9)}
+
+/* activities */
+#aa-cie-model-host .cs7-act-list{padding:4px 10px 6px;border-top:1px solid var(--cs7-line)}
+#aa-cie-model-host .cs7-act{position:relative;border:1px solid var(--cs7-line);border-radius:10px;background:var(--cs7-surface);padding:7px 8px;margin-top:6px;overflow:hidden}.cs7-act::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--ac)}
+#aa-cie-model-host .cs7-act-main{display:grid;grid-template-columns:25px minmax(0,1fr) 48px;gap:5px;align-items:center}.cs7-expand{width:24px;height:24px;border:0;border-radius:7px;background:var(--cs7-bg);color:var(--cs7-muted);font-size:12px;cursor:pointer}.cs7-act-main select{height:28px;border:0;background:transparent;outline:none;color:var(--cs7-ink);font-size:9.5px;font-weight:850;min-width:0}.cs7-act-main select:disabled{opacity:1}.cs7-act-main>strong{font-size:11px;text-align:left;color:var(--ac);font-weight:950}
+#aa-cie-model-host .cs7-act-share{height:17px}.cs7-act-share .cs7-range{height:14px;margin:1px 0}
+#aa-cie-model-host .cs7-dep-panel{display:grid;gap:5px;padding-top:5px;margin-top:4px;border-top:1px dashed var(--cs7-line)}.cs7-dep-panel label{display:grid;grid-template-columns:1fr 38px;align-items:center;column-gap:6px}.cs7-dep-panel label span{font-size:8px;color:var(--cs7-muted)}.cs7-dep-panel label b{font-size:9px;color:var(--dc);text-align:left}.cs7-dep-panel label input{grid-column:1/-1}.cs7-dep-panel p{margin:2px 0 0;font-size:8px;line-height:1.6;color:var(--cs7-muted)}
+#aa-cie-model-host .cs7-act-total{padding:7px 10px 9px;display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center}.cs7-act-total span{font-size:8.5px;color:var(--cs7-muted)}.cs7-act-total>b{font-size:10px}.cs7-act-total>b.warn{color:#b36a2d}.cs7-act-total>div{grid-column:1/-1;height:6px;background:var(--cs7-bg);border-radius:99px;overflow:hidden}.cs7-act-total>div i{display:block;height:100%;background:linear-gradient(90deg,#557EB2,#D78343,#2F966C)}.cs7-act-total small{grid-column:1/-1;font-size:7.5px;color:var(--cs7-faint)}
+#aa-cie-model-host .cs7-reset{margin:0 10px 10px;width:calc(100% - 20px);height:32px;border:1px dashed #b7ccc6;border-radius:9px;background:color-mix(in srgb,var(--cs7-accent) 3%,var(--cs7-surface));color:var(--cs7-accent);font-size:9px;font-weight:900;cursor:pointer}
+
+/* Full-width expert view */
+#aa-cie-model-host .cs7-expert{margin:0 0 28px;border:1px solid var(--cs7-line);border-radius:18px;background:var(--cs7-surface);box-shadow:0 18px 46px -40px rgba(20,55,61,.3);overflow:hidden}
+#aa-cie-model-host .cs7-expert summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}.cs7-expert summary::-webkit-details-marker{display:none}.cs7-expert summary b{font-size:13px}.cs7-expert summary span:not(.cs7-chev){display:block;margin-top:3px;font-size:9.5px;color:var(--cs7-muted)}.cs7-chev{font-size:20px;color:var(--cs7-muted);transition:.2s}.cs7-expert[open] .cs7-chev{transform:rotate(180deg)}
+#aa-cie-model-host .cs7-expert-body{border-top:1px solid var(--cs7-line);padding:13px 15px 16px}.cs7-expert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.cs7-expert-grid section{border:1px solid var(--cs7-line);border-radius:11px;background:var(--cs7-bg);padding:10px}.cs7-expert-grid h3{font-size:10.5px;margin:0 0 5px}.cs7-expert-grid p{font-size:9px;line-height:1.75;color:var(--cs7-muted);margin:0}
+#aa-cie-model-host .cs7-expert-table{margin-top:10px;border:1px solid var(--cs7-line);border-radius:11px;overflow:auto}.cs7-expert-table>div{display:grid;grid-template-columns:1.15fr 1fr repeat(3,.85fr) .8fr .65fr .7fr;min-width:900px;border-top:1px solid var(--cs7-line)}.cs7-expert-table>div:first-child{border-top:0}.cs7-expert-table span{padding:7px 8px;font-size:8.5px;color:var(--cs7-muted)}.cs7-expert-table .head{background:var(--cs7-bg)}.cs7-expert-table .head span{font-weight:900;color:var(--cs7-ink)}
+#aa-cie-model-host .cs7-source-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px}.cs7-source-grid article{border:1px solid color-mix(in srgb,var(--dc) 20%,var(--cs7-line));border-radius:10px;padding:9px;background:color-mix(in srgb,var(--dc) 3%,var(--cs7-surface))}.cs7-source-grid b{font-size:9.5px;color:var(--dc)}.cs7-source-grid p{font-size:8px;line-height:1.65;color:var(--cs7-muted);margin:3px 0 0}
+
+/* Tooltip only charts */
+#aa-cie-model-host .cs7-charttip{position:fixed;z-index:99999;pointer-events:none;min-width:210px;max-width:260px;background:rgba(20,43,47,.96);color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:11px;box-shadow:0 14px 36px rgba(10,30,33,.24);padding:9px 10px;font-size:10px;line-height:1.55}
+#aa-cie-model-host .cs7-charttip[hidden]{display:none}.cs7-charttip>b{display:block;font-size:11px;margin-bottom:5px}.cs7-charttip>span{display:flex;justify-content:space-between;gap:12px;padding:2px 0;border-top:1px solid rgba(255,255,255,.07);color:#c7d4d3}.cs7-charttip strong{color:#fff;font-size:10.5px}
+
+/* prevent legacy tooltips within this engine */
+#aa-cie-model-host .cs7-engine [title]{pointer-events:auto}
+
+@media(max-width:1180px){
+ #aa-cie-model-host .cs7-workspace{grid-template-columns:minmax(0,1fr) 310px}
+ #aa-cie-model-host .cs7-domains{grid-template-columns:repeat(2,1fr)}
+ #aa-cie-model-host .cs7-monthcards{grid-template-columns:repeat(4,1fr)}
+ #aa-cie-model-host .cs7-flow{grid-template-columns:1fr auto 1fr auto 1fr}.cs7-flow article:nth-of-type(4),.cs7-flow article:nth-of-type(5),.cs7-flow>i:nth-of-type(4),.cs7-flow>i:nth-of-type(5){display:none}
+ #aa-cie-model-host .cs7-expert-grid,#aa-cie-model-host .cs7-source-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+ #aa-cie-model-host .cs7-projectbar .cs7-wrap{grid-template-columns:1fr}.cs7-group-toggle{width:100%;display:grid;grid-template-columns:1fr 1fr}
+ #aa-cie-model-host .cs7-workspace{display:block}.cs7-rail{position:static!important;max-height:none!important;margin-bottom:12px}.cs7-main{margin-top:12px}.cs7-summary{grid-template-columns:1fr!important}.cs7-kpis{grid-template-columns:repeat(3,1fr)!important}
+ #aa-cie-model-host .cs7-headrow{flex-direction:column}.cs7-head-actions{max-width:none}
+}
+@media(max-width:640px){
+ #aa-cie-model-host .cs7-wrap{width:min(100% - 16px,1480px)}
+ #aa-cie-model-host .cs7-monthcards{display:flex;overflow:auto}.cs7-month{flex:0 0 110px}
+ #aa-cie-model-host .cs7-kpis{grid-template-columns:1fr!important}.cs7-domains{grid-template-columns:1fr 1fr!important}.cs7-topacts{grid-template-columns:1fr!important}.cs7-flow{display:flex;overflow:auto}.cs7-flow article{flex:0 0 150px}.cs7-flow>i{flex:0 0 auto;display:block!important}.cs7-expert-grid,.cs7-source-grid{grid-template-columns:1fr!important}.cs7-mainchart{height:280px!important}
+}
+
+
+/* V8 polish — clearer active states, larger text, only cumulative lines on the main chart */
+.cs7-group-toggle{padding:4px;border-radius:13px;box-shadow:inset 0 0 0 1px rgba(31,69,75,.03)}
+.cs7-group-toggle button{display:flex;align-items:center;justify-content:center;gap:4px;min-height:36px;font-size:11.5px;transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+.cs7-group-toggle button.is-on{background:#234e58;color:#fff;box-shadow:0 6px 16px -11px rgba(25,67,76,.8)}
+.cs7-group-toggle button.is-on b{background:rgba(255,255,255,.16);color:#fff}.cs7-group-toggle button:not(.is-on) b{background:rgba(23,55,61,.06)}
+#aa-cie-model-host .cs7-mode{border:1px solid var(--cs7-line);padding:4px;border-radius:12px}
+#aa-cie-model-host .cs7-mode button{display:flex;align-items:center;justify-content:center;min-height:35px;font-size:11px;line-height:1.2}
+#aa-cie-model-host .cs7-mode button.is-on{background:var(--cs7-accent);color:#fff;box-shadow:0 7px 18px -14px var(--cs7-accent)}
+#aa-cie-model-host .cs7-reset{display:flex;align-items:center;justify-content:center;font-size:10px}
+#aa-cie-model-host .cs8-scenario-actions{display:grid;grid-template-columns:1fr;gap:7px;margin:0 10px 10px}
+#aa-cie-model-host .cs8-scenario-actions .cs7-reset{margin:0;width:100%;height:34px}
+#aa-cie-model-host .cs8-reset-sensitivity{border-style:solid;background:var(--cs7-surface);color:var(--cs7-ink);border-color:var(--cs7-line)}
+#aa-cie-model-host .cs8-return-official{border-style:solid;background:color-mix(in srgb,var(--cs7-accent) 8%,var(--cs7-surface));color:var(--cs7-accent);border-color:color-mix(in srgb,var(--cs7-accent) 34%,var(--cs7-line))}
+#aa-cie-model-host .cs7-workspace{grid-template-columns:minmax(0,1fr) 322px}
+#aa-cie-model-host .cs7-month small{font-size:10px}.cs7-month em{font-size:9.4px}.cs7-month strong{font-size:17.5px}
+#aa-cie-model-host .cs7-mainchart{height:305px;min-height:305px}
+#aa-cie-model-host .cs7-axis,.cs7-label{font-size:10.5px}.cs7-axis-right{fill:var(--cs7-faint);font-size:9.5px}.cs7-val{font-size:11.5px}
+#aa-cie-model-host .cs7-offline,.cs7-offdot,.cs7-scline,.cs7-scdot{display:none!important}
+#aa-cie-model-host .cs7-cumline{fill:none;stroke:#284b56;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+#aa-cie-model-host .cs7-cumdot{fill:#284b56;stroke:#fff;stroke-width:1.5}
+#aa-cie-model-host .cs7-cumline-official{stroke:#829597;stroke-width:2;stroke-dasharray:7 6;opacity:.9}
+#aa-cie-model-host .cs7-cumdot-official{fill:#fff;stroke:#829597;stroke-width:1.6}
+#aa-cie-model-host .cs7-cumline-scenario{fill:none;stroke:var(--cs7-accent);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+#aa-cie-model-host .cs7-cumdot-scenario{fill:var(--cs7-accent);stroke:#fff;stroke-width:1.7}
+#aa-cie-model-host .cs7-bar.scenario-bar{fill:color-mix(in srgb,var(--cs7-accent) 82%,#2f966c)}.cs7-bar.scenario-bar.hot{fill:#df7631}
+#aa-cie-model-host .cs7-legend{font-size:10px;gap:15px;padding-top:3px}.cs7-legend i.bar.scenario{background:var(--cs7-accent)}.cs7-legend i.official-dash{height:2px;background:repeating-linear-gradient(90deg,#829597 0 7px,transparent 7px 12px)}.cs7-legend i.scenario-line{height:2px;background:var(--cs7-accent)}
+#aa-cie-model-host .cs7-section-head small{font-size:9.8px}.cs7-section-head p{font-size:11px}.cs7-section-head h2{font-size:16.5px}
+#aa-cie-model-host .cs7-domain b{font-size:11.2px}.cs7-domain small{font-size:9.6px}.cs7-domain em{font-size:8.8px}
+#aa-cie-model-host .cs7-drill-head small{font-size:10px}.cs7-drill-head b{font-size:12.5px}.cs7-flow article span{font-size:9.2px}.cs7-flow article b{font-size:10.2px;line-height:1.6}.cs7-topacts>b{font-size:9.8px}.cs7-topacts article span{font-size:9.8px}.cs7-topacts article small{font-size:8.8px}.cs7-drill-delta{font-size:9.8px}
+#aa-cie-model-host .cs7-rail-head p{font-size:10px}.cs7-period label{font-size:9.5px}.cs7-period select{font-size:10.5px}
+#aa-cie-model-host .cs7-global-head b{font-size:10.8px}.cs7-global-head span{font-size:9px}.cs7-global-row b{font-size:10.2px}.cs7-global-row strong{font-size:13.5px}.cs7-global-row strong small{font-size:8.5px}.cs7-global-row em{font-size:8.5px}
+#aa-cie-model-host .cs7-scale{font-size:8.2px;margin-top:0}.cs7-scale span{padding-top:3px}
+#aa-cie-model-host .cs7-act{padding:6px 8px;margin-top:5px}.cs7-act-main select{font-size:10.5px}.cs7-act-main>strong{font-size:11.5px}.cs7-dep-panel label span{font-size:9.4px}.cs7-dep-panel label b{font-size:10px}.cs7-dep-panel p{font-size:9px;line-height:1.55}.cs7-act-total span{font-size:9.2px}.cs7-act-total small{font-size:8.6px}
+#aa-cie-model-host .cs7-expert summary b{font-size:14px}.cs7-expert summary span:not(.cs7-chev){font-size:10.5px}.cs7-expert-grid h3{font-size:12px}.cs7-expert-grid p{font-size:10.3px;line-height:1.72}.cs7-expert-table span{font-size:10px;padding:8px 9px}.cs7-source-grid b{font-size:10.5px}.cs7-source-grid p{font-size:9.5px;line-height:1.6}
+#aa-cie-model-host .cs7-charttip{min-width:195px;max-width:235px;padding:8px 9px;font-size:10.5px;line-height:1.5}.cs7-charttip>b{font-size:11.5px}.cs7-charttip strong{font-size:10.8px}
+/* No non-chart hover cards or browser tooltip behavior inside V8 */
+#aa-cie-model-host .cs7-engine button:not(.cs7-month):hover,#aa-cie-model-host .cs7-engine article:hover{transform:none!important}
+
+
+
+/* V8.1 — final chart/card delta + calculation path redesign (scoped; no other dashboard structure changed) */
+#aa-cie-model-host .cs8-total-delta{margin-top:9px;padding:7px 9px;border-radius:10px;display:grid;gap:2px;border:1px solid var(--cs7-line);background:var(--cs7-bg);font-style:normal}
+#aa-cie-model-host .cs8-total-delta[hidden]{display:none!important}
+#aa-cie-model-host .cs8-total-delta b{font-size:10.5px;font-weight:920}.cs8-total-delta span{font-size:9px;color:var(--cs7-muted)}
+#aa-cie-model-host .cs8-total-delta.up{border-color:#f2cfc7;background:#fff3f0;color:#a24f42}.cs8-total-delta.down{border-color:#c7e4d8;background:#eef9f4;color:#26785d}
+#aa-cie-model-host .cs8-calculation-card{overflow:hidden;background:linear-gradient(160deg,var(--cs7-surface) 0%,color-mix(in srgb,var(--cs7-accent) 2.5%,var(--cs7-surface)) 100%)}
+#aa-cie-model-host .cs8-calculation-head{padding-bottom:9px;border-bottom:1px solid color-mix(in srgb,var(--cs7-accent) 12%,var(--cs7-line))}
+#aa-cie-model-host .cs8-drill{padding:12px 14px 15px}
+#aa-cie-model-host .cs8-drill-shell{display:grid;gap:12px}
+#aa-cie-model-host .cs8-drill-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--cs7-accent) 18%,var(--cs7-line));border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--cs7-accent) 6%,var(--cs7-surface)),var(--cs7-surface));box-shadow:0 14px 34px -30px var(--cs7-accent)}
+#aa-cie-model-host .cs8-drill-context{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}.cs8-drill-context small{flex-basis:100%;font-size:10px;color:var(--cs7-muted);margin-top:2px}
+#aa-cie-model-host .cs8-month-pill,.cs8-mode-pill{display:inline-flex;align-items:center;min-height:27px;padding:0 9px;border-radius:999px;font-size:10px;font-weight:900}.cs8-month-pill{background:var(--cs7-accent);color:#fff}.cs8-mode-pill{background:var(--cs7-bg);color:var(--cs7-muted);border:1px solid var(--cs7-line)}.cs8-mode-pill.scenario{color:var(--cs7-accent);background:color-mix(in srgb,var(--cs7-accent) 8%,var(--cs7-surface));border-color:color-mix(in srgb,var(--cs7-accent) 22%,var(--cs7-line))}
+#aa-cie-model-host .cs8-drill-result{text-align:left;flex:none}.cs8-drill-result small{display:block;font-size:9.5px;color:var(--cs7-muted);font-weight:800}.cs8-drill-result strong{display:block;margin-top:1px;font-size:30px;line-height:1;color:var(--cs7-accent);font-weight:950}.cs8-drill-result strong span{font-size:11px;color:var(--cs7-muted);font-weight:850}.cs8-drill-result em{display:block;margin-top:5px;font-style:normal;font-size:9.5px;color:var(--cs7-muted);font-weight:800}.cs8-drill-result em.up{color:#a24f42}.cs8-drill-result em.down{color:#26785d}
+#aa-cie-model-host .cs8-process{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding-top:2px}.cs8-process:before{content:'';position:absolute;right:7%;left:7%;top:22px;height:2px;background:linear-gradient(90deg,color-mix(in srgb,var(--cs7-accent) 8%,var(--cs7-line)),color-mix(in srgb,var(--cs7-accent) 38%,var(--cs7-line)),color-mix(in srgb,var(--cs7-accent) 8%,var(--cs7-line)));z-index:0}
+#aa-cie-model-host .cs8-step{position:relative;z-index:1;min-width:0;padding:10px 11px 11px;border-radius:13px;border:1px solid var(--cs7-line);background:color-mix(in srgb,var(--cs7-surface) 97%,var(--cs7-bg));box-shadow:0 9px 24px -24px rgba(20,55,61,.28)}
+#aa-cie-model-host .cs8-step-top{display:flex;align-items:center;gap:7px}.cs8-step-top>span{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:var(--cs7-bg);border:1px solid var(--cs7-line);font-size:8.5px;font-weight:950;color:var(--cs7-accent)}.cs8-step-top b{font-size:9.8px;line-height:1.4;color:var(--cs7-ink)}
+#aa-cie-model-host .cs8-step>strong{display:block;margin-top:8px;font-size:11.2px;line-height:1.65;color:var(--cs7-ink);font-weight:930;min-height:36px}.cs8-step>small{display:block;margin-top:4px;font-size:8.8px;line-height:1.55;color:var(--cs7-muted)}.cs8-step>i{display:none}
+#aa-cie-model-host .cs8-step.is-final{border-color:color-mix(in srgb,var(--cs7-accent) 42%,var(--cs7-line));background:linear-gradient(145deg,color-mix(in srgb,var(--cs7-accent) 10%,var(--cs7-surface)),var(--cs7-surface));box-shadow:0 14px 32px -27px var(--cs7-accent)}.cs8-step.is-final .cs8-step-top>span{background:var(--cs7-accent);color:#fff;border-color:transparent}.cs8-step.is-final>strong{font-size:17px;color:var(--cs7-accent)}
+#aa-cie-model-host .cs8-activity-zone{border:1px solid var(--cs7-line);border-radius:15px;background:var(--cs7-surface);padding:10px 11px}.cs8-activity-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.cs8-activity-head small{display:block;font-size:8.8px;color:var(--cs7-accent);font-weight:950}.cs8-activity-head b{display:block;margin-top:2px;font-size:10.5px}.cs8-activity-head>span{font-size:9px;font-weight:850;color:var(--cs7-muted);padding:5px 8px;border-radius:999px;background:var(--cs7-bg)}
+#aa-cie-model-host .cs8-activity-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.cs8-activity-cards article{border:1px solid var(--cs7-line);border-radius:11px;padding:8px 9px;background:linear-gradient(160deg,var(--cs7-surface),color-mix(in srgb,var(--cs7-accent) 2%,var(--cs7-surface)))}.cs8-activity-cards article>div:first-child{display:grid;grid-template-columns:23px minmax(0,1fr) auto;gap:6px;align-items:center}.cs8-activity-cards .rank{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:var(--cs7-bg);color:var(--cs7-accent);font-size:9px;font-weight:950}.cs8-activity-cards b{font-size:9.8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cs8-activity-cards em{font-style:normal;color:var(--cs7-accent);font-size:10.5px;font-weight:950}.cs8-actbar{height:5px!important;margin-top:7px;border-radius:999px;background:var(--cs7-bg);overflow:hidden}.cs8-actbar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--cs7-accent) 58%,#7eb4a0),var(--cs7-accent))}.cs8-activity-cards small{display:block;margin-top:5px;font-size:8.5px;color:var(--cs7-muted);line-height:1.5}.cs8-noactivity{grid-column:1/-1;padding:12px;text-align:center;border-radius:10px;background:var(--cs7-bg);color:var(--cs7-muted);font-size:9.5px}
+#aa-cie-model-host .cs8-scenario-strip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border-radius:12px;border:1px solid color-mix(in srgb,var(--cs7-accent) 16%,var(--cs7-line));background:color-mix(in srgb,var(--cs7-accent) 4%,var(--cs7-surface));font-size:9.5px;color:var(--cs7-muted)}.cs8-scenario-strip>span{font-weight:900;color:var(--cs7-ink);margin-inline-end:auto}.cs8-scenario-strip b{padding:4px 7px;border-radius:999px;background:var(--cs7-bg)}.cs8-scenario-strip b.scenario{color:var(--cs7-accent);background:color-mix(in srgb,var(--cs7-accent) 9%,var(--cs7-surface))}.cs8-scenario-strip i{font-style:normal;color:var(--cs7-faint)}.cs8-scenario-strip em{font-style:normal;font-weight:950;padding:4px 7px;border-radius:999px}.cs8-scenario-strip em.up{color:#a24f42;background:#fff1ee}.cs8-scenario-strip em.down{color:#26785d;background:#edf8f3}
+@media(max-width:1000px){#aa-cie-model-host .cs8-process{grid-template-columns:repeat(3,1fr)}#aa-cie-model-host .cs8-process:before{display:none}#aa-cie-model-host .cs8-activity-cards{grid-template-columns:1fr}}
+@media(max-width:640px){#aa-cie-model-host .cs8-drill-hero{align-items:flex-start;flex-direction:column}.cs8-drill-result{text-align:right}.cs8-process{display:flex!important;overflow:auto}.cs8-step{flex:0 0 185px}.cs8-activity-head{align-items:flex-start;flex-direction:column}.cs8-scenario-strip>span{width:100%;margin:0}}
+</style>
+<script id="aa-construction-engine-v8-script">
+(function(){
+'use strict';
+if(window.__AA_CONSTRUCTION_ENGINE_V8__) return;
+window.__AA_CONSTRUCTION_ENGINE_V8__=true;
+
+const CPIDS=[1,3,4,6];
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const fa=x=>String(x).replace(/\d/g,d=>FA[d]).replace('.', '٫');
+const f0=x=>fa(Math.round(Number(x)||0));
+const f1=x=>fa((Math.round((Number(x)||0)*10)/10).toFixed(1));
+const clamp=(x,a=0,b=100)=>Math.max(a,Math.min(b,Number(x)||0));
+const esc=x=>String(x).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const PERIODS=['دی ۱۴۰۴','بهمن ۱۴۰۴','اسفند ۱۴۰۴','فروردین ۱۴۰۵','اردیبهشت ۱۴۰۵','خرداد ۱۴۰۵','تیر ۱۴۰۵'];
+const BASE_PERIODS=['دی ۱۴۰۳','بهمن ۱۴۰۳','اسفند ۱۴۰۳','فروردین ۱۴۰۴','اردیبهشت ۱۴۰۴','خرداد ۱۴۰۴','تیر ۱۴۰۴'];
+const SHORT=['دی','بهمن','اسفند','فروردین','اردیبهشت','خرداد','تیر'];
+const DAYS=[30,30,29,31,31,31,31];
+const DOMAIN3=[
+ {k:'human',n:'نیروی انسانی',c:'#267C69'},
+ {k:'logistics',n:'حمل‌ونقل و لجستیک',c:'#D78343'},
+ {k:'materials',n:'تأمین مصالح و تجهیزات',c:'#557EB2'}
+];
+const WORKSITE={k:'worksite',n:'قابلیت عمومی فعالیت ساختمانی',c:'#8A5FB0'};
+const DOMAINS=[...DOMAIN3,WORKSITE];
+
+/* مرجع اول: شکاف ماه مشابه سال قبل که در V6 از بانک‌های داده استخراج شده بود. */
+const YOY={
+ human:[9,2,57.8,41.1,22.3,0,0],
+ logistics:[4.9,.4,25.3,5.2,0,0,0],
+ materials:[6,2,38,6,2,0,0],
+ worksite:[12.6,2.7,39.7,20.1,14.8,0,0]
+};
+/* مرجع دوم: مسیر فشار مشاهده‌شده دی ۱۴۰۴ تا تیر ۱۴۰۵. دی و بهمن برای کالیبراسیون روند پیش از بحران‌اند. */
+const RAW={
+ human:[20,23,72,68,48,35,28],
+ logistics:[10,14,55,68,40,25,18],
+ materials:[15,20,64,55,40,32,25],
+ worksite:[18,22,80,74,48,34,27]
+};
+const CONF={
+ human:[72,76,91,88,80,76,76],
+ logistics:[82,84,96,94,86,82,80],
+ materials:[82,84,95,88,84,82,82],
+ worksite:[65,72,29,49,63,72,72]
+};
+const SOURCES={
+ human:['بازار کار و استخدام تهران','شامخ استخدام و فعالیت','شواهد دسترسی نیروی کار'],
+ logistics:['تردد حمل بار سنگین','محورهای ورودی تهران','کنترل فصلی و نوروز'],
+ materials:['حجم معاملات فیزیکی','روزهای فعال بازار','تفکیک فولاد، میلگرد، تیرآهن و سیمان'],
+ worksite:['شامخ ساختمان بازسازی‌شده','فعالیت انجام‌شده','سرعت انجام کار']
+};
+
+function trendExcess(k,j){
+  const b=(RAW[k][0]+RAW[k][1])/2;
+  return clamp((RAW[k][j]-b)/(100-b)*100);
+}
+/* مرجع دوگانه بدون وزن آزاد: هر انحرافی که توسط یکی از دو مرجع مستقل تأیید شود باقی می‌ماند. */
+function env(k,j){return Math.max(YOY[k][j],trendExcess(k,j));}
+
+const ACTIVITY={
+ 'پوسته‌های نمادین':{human:.85,logistics:.75,materials:.90,note:'پوسته و سازه سبک/نمادین؛ وابستگی همزمان به نیروی ماهر، حمل و تأمین.'},
+ 'محوطه‌سازی پردیس':{human:.90,logistics:.80,materials:.75,note:'فعالیت حجیم و نیروی‌بر با نیاز همزمان به حمل و مصالح.'},
+ 'تجهیزات فرهنگی و فنی':{human:.65,logistics:.70,materials:.80,note:'نصب و تجهیز؛ حمل خاص و تأمین تخصصی اهمیت بالایی دارد.'},
+ 'نازک‌کاری پردیس':{human:.90,logistics:.45,materials:.85,note:'نیروی ماهر و مصالح تکمیلی غالب؛ حمل نقش مکمل دارد.'},
+ 'سازه و تأسیسات باقی‌مانده پردیس':{human:.80,logistics:.75,materials:.85,note:'بخش باقیمانده سازه و تأسیسات؛ سه‌عاملی.'},
+ 'نصب و تکمیل دستگاه‌های شهربازی':{human:.80,logistics:.55,materials:.45,note:'نیروی فنی غالب؛ حمل و تأمین تجهیزات نیز مؤثر است.'},
+ 'تست، استاندارد و راه‌اندازی شهربازی':{human:.65,logistics:.10,materials:.05,note:'فعالیت پایانی؛ نیروی تخصصی مهم‌تر از حمل و مصالح عمومی.'},
+ 'Punch List و تکمیل تأسیسات شهربازی':{human:.70,logistics:.25,materials:.35,note:'اصلاحات پایانی و تکمیل جزئی.'},
+ 'تحویل و جانمایی تجهیزات باقیمانده شهربازی':{human:.45,logistics:.70,materials:.10,note:'حمل تجهیزات تحویل‌نشده نقش اصلی دارد.'},
+ 'بازی‌ها و تجهیزات ادونچر':{human:.75,logistics:.70,materials:.10,note:'قرارداد یکپارچه؛ نیروی تخصصی و حمل تجهیزات غالب‌اند.'},
+ 'کافه و ابنیه پشتیبان ادونچر':{human:.65,logistics:.45,materials:.55,note:'بخش ساختمانی پشتیبان پروژه.'},
+ 'محوطه و فضاهای پشتیبان ادونچر':{human:.70,logistics:.60,materials:.65,note:'حساسیت متعادل به سه حوزه.'},
+ 'تجهیزات اداری و پشتیبان ادونچر':{human:.40,logistics:.20,materials:.20,note:'سهم کوچک پشتیبان.'},
+ 'ساخت غرفه‌ها و فضاهای پشتیبان باغ‌راه':{human:.85,logistics:.70,materials:.85,note:'ساخت غرفه، نما، پنل و تأسیسات؛ سه‌عاملی.'},
+ 'تجهیز و تکمیل باغ‌راه':{human:.75,logistics:.40,materials:.75,note:'تکمیل و تجهیز؛ نیروی ماهر و مصالح غالب‌اند.'}
+};
+const PROJECTS={
+ 1:{name:'پردیس گردشگری فرهنگ و هنر اقوام ایرانی',sub:'تکمیل، تجهیز و افتتاح مرحله‌ای',stage:'پیشرفت مبنا تا تیر: حدود ۵۰٪',accent:'#2F966C',exposure:[1,1,1,1,1,1,1],defaults:[['پوسته‌های نمادین',31.3],['محوطه‌سازی پردیس',26.8],['تجهیزات فرهنگی و فنی',17.9],['نازک‌کاری پردیس',16.1],['سازه و تأسیسات باقی‌مانده پردیس',7.9]]},
+ 3:{name:'شهربازی',sub:'تکمیل نصب، تست و راه‌اندازی',stage:'پیشرفت مبنا تا تیر: حدود ۸۰٪',accent:'#8B5AB1',exposure:[1,1,1,1,1,1,1],defaults:[['نصب و تکمیل دستگاه‌های شهربازی',53],['تست، استاندارد و راه‌اندازی شهربازی',29],['Punch List و تکمیل تأسیسات شهربازی',10],['تحویل و جانمایی تجهیزات باقیمانده شهربازی',8]]},
+ 4:{name:'ادونچر پارک',sub:'پروژه و قرارداد یکپارچه با افتتاح تدریجی اجزا',stage:'تحویل زمین: بهمن ۱۴۰۴',accent:'#2186A4',exposure:[0,1,1,1,1,1,1],defaults:[['بازی‌ها و تجهیزات ادونچر',83],['کافه و ابنیه پشتیبان ادونچر',7.4],['محوطه و فضاهای پشتیبان ادونچر',5.3],['تجهیزات اداری و پشتیبان ادونچر',4.3]]},
+ 6:{name:'باغ‌راه بوستان طالقانی',sub:'ساخت غرفه‌ها، تجهیز و تکمیل',stage:'تحویل زمین: بهمن ۱۴۰۴',accent:'#4B9665',exposure:[0,1,1,1,1,1,1],defaults:[['ساخت غرفه‌ها و فضاهای پشتیبان باغ‌راه',55.8],['تجهیز و تکمیل باغ‌راه',44.2]]}
+};
+const ACOL=['#2F966C','#D78343','#557EB2','#8A5FB0','#C6A14B','#5CA7A0','#B26975','#71926A'];
+
+function icon(type){
+ const a='fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"';
+ if(type==='human')return `<svg ${a}><path d="M4 11h16M7 11V8a5 5 0 0 1 10 0v3M9 5.5V4h6v1.5"/><path d="M6 11v3a6 6 0 0 0 12 0v-3"/></svg>`;
+ if(type==='truck')return `<svg ${a}><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>`;
+ if(type==='box')return `<svg ${a}><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>`;
+ if(type==='site')return `<svg ${a}><path d="M5 20V8h8v12M13 6h7M16 6v14M8 8V4h8"/><path d="M2 20h20"/></svg>`;
+ if(type==='calendar')return `<svg ${a}><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>`;
+ if(type==='settings')return `<svg ${a}><path d="M4 6h10M18 6h2M4 12h3M11 12h9M4 18h7M15 18h5"/><circle cx="16" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="13" cy="18" r="2"/></svg>`;
+ return `<svg ${a}><circle cx="12" cy="12" r="8"/></svg>`;
+}
+
+function officialActivities(pid){
+ return PROJECTS[pid].defaults.map(([name,share])=>({name,share,deps:{human:ACTIVITY[name].human*100,logistics:ACTIVITY[name].logistics*100,materials:ACTIVITY[name].materials*100},open:false}));
+}
+const MEM={};
+/* پاکسازی کلیدهای سناریوی نسخه‌های قبلی؛ فقط برای جلوگیری از بازگشت ناخواسته حالت حساسیت پس از Refresh. */
+try{for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&k.startsWith('aa.cs8.scenario.'))localStorage.removeItem(k);}}catch(_e){}
+function key(pid){return 'aa.cs8.scenario.'+pid;}
+function freshState(pid){return{mode:'official',start:0,end:6,selected:2,activities:officialActivities(pid)};}
+/*
+ V8 session-state rule:
+ - سناریوی تحلیل حساسیت فقط در حافظه همین نشست نگهداری می‌شود.
+ - Refresh همیشه صفحه را با حالت رسمی و تنظیمات پایه باز می‌کند.
+ - هیچ پارامتر سناریویی این موتور در localStorage ذخیره نمی‌شود.
+*/
+function load(pid){
+ const base=freshState(pid); let cur=MEM[pid]?JSON.parse(JSON.stringify(MEM[pid])):null;
+ if(!cur)return base;
+ const s=Object.assign(base,cur);
+ if(!Array.isArray(s.activities)||!s.activities.length)s.activities=officialActivities(pid);
+ s.activities=s.activities.filter(a=>ACTIVITY[a.name]).map(a=>({name:a.name,share:clamp(a.share,0,100),deps:{human:clamp(a.deps?.human??ACTIVITY[a.name].human*100),logistics:clamp(a.deps?.logistics??ACTIVITY[a.name].logistics*100),materials:clamp(a.deps?.materials??ACTIVITY[a.name].materials*100)},open:!!a.open}));
+ s.start=Math.max(0,Math.min(6,Number(s.start)||0));s.end=Math.max(s.start,Math.min(6,Number(s.end)||6));s.selected=Math.max(s.start,Math.min(s.end,Number(s.selected)||s.start));
+ return s;
+}
+function save(pid,s){MEM[pid]=JSON.parse(JSON.stringify(s));}
+function resetSensitivityState(pid){
+ const cur=load(pid);
+ MEM[pid]={mode:'sensitivity',start:cur.start,end:cur.end,selected:cur.selected,activities:officialActivities(pid)};
+ return load(pid);
+}
+function normalizedActivities(acts){const sum=acts.reduce((a,x)=>a+Number(x.share||0),0)||1;return acts.map(a=>({...a,nshare:Number(a.share||0)/sum*100}));}
+function projectDeps(acts){const n=normalizedActivities(acts);return DOMAIN3.map(d=>n.reduce((a,x)=>a+x.nshare/100*(x.deps[d.k]||0),0));}
+function level(v){return v<=20?'کم':v<=40?'محدود':v<=60?'متوسط':v<=80?'زیاد':'حیاتی';}
+
+/* سهم فنی ثابت هر حوزه از ماهیت رسمی همان فعالیت استخراج می‌شود و در تحلیل حساسیت تغییر نمی‌کند. */
+function technicalShares(name){
+ const q=ACTIVITY[name]||{human:1,logistics:1,materials:1},sum=(q.human+q.logistics+q.materials)||1;
+ return{human:q.human/sum,logistics:q.logistics/sum,materials:q.materials/sum};
+}
+/*
+ V8 — اثر همزمان اما محدودشده به سهم فنی:
+ اثر هر حوزه = شدت دو‌مرجعی × حساسیت سناریو × سهم فنی آن حوزه در فعالیت.
+ سپس اثرها روی ظرفیت باقی‌مانده با هم ترکیب می‌شوند. بنابراین یک حوزه به‌تنهایی فقط به اندازه سهم فنی خودش اثر می‌گذارد،
+ اما همزمانی دو یا سه محدودیت اثر محسوس‌تری می‌سازد؛ هیچ حوزه منفردی کل فعالیت را به صفر تحمیل نمی‌کند.
+*/
+function activityLoss(a,j){
+ const tech=technicalShares(a.name);
+ const terms=DOMAIN3.map(d=>env(d.k,j)*(a.deps[d.k]||0)/100*tech[d.k]);
+ let remaining=1;
+ terms.forEach(v=>{remaining*=1-clamp(v,0,100)/100;});
+ return{loss:clamp((1-remaining)*100,0,100),terms,tech};
+}
+function monthCalc(pid,acts,j){
+ const p=PROJECTS[pid],active=!!p.exposure[j],n=normalizedActivities(acts),details=[];
+ let impact=0;
+ n.forEach(a=>{const q=activityLoss(a,j);const contribution=a.nshare/100*q.loss;impact+=contribution;details.push({...a,loss:q.loss,terms:q.terms,contribution});});
+ if(!active)impact=0;
+ const days=DAYS[j]*impact/100;
+ const sorted=details.slice().sort((a,b)=>b.contribution-a.contribution);
+ const domEff=DOMAIN3.map((d,di)=>details.reduce((s,a)=>s+a.nshare/100*a.terms[di],0));
+ return{j,active,impact,days,capacity:100-impact,details,top:sorted.slice(0,3),domEff,worksite:env('worksite',j),confidence:DOMAINS.reduce((s,d)=>s+CONF[d.k][j],0)/4};
+}
+function fullCalc(pid,acts,start=0,end=6){
+ const months=PERIODS.map((_,j)=>monthCalc(pid,acts,j));
+ const inRange=months.filter(m=>m.j>=start&&m.j<=end);
+ const total=inRange.reduce((s,m)=>s+m.days,0),core=inRange.filter(m=>m.j===2||m.j===3).reduce((s,m)=>s+m.days,0),avgCapacity=inRange.length?inRange.reduce((s,m)=>s+m.capacity,0)/inRange.length:100;
+ const peak=inRange.reduce((b,m)=>!b||m.days>b.days?m:b,null);
+ return{months,total,core,avgCapacity,peak};
+}
+function calcPair(pid,s){const offActs=officialActivities(pid),official=fullCalc(pid,offActs,s.start,s.end),active=s.mode==='sensitivity'?fullCalc(pid,s.activities,s.start,s.end):official;return{official,active};}
+
+function groupToggle(group){return `<div class="cs7-group-toggle" role="tablist" aria-label="نوع پروژه"><button data-cs7-group="construction" class="${group==='construction'?'is-on':''}">پروژه‌های در حال ساخت <b>۴</b></button><button data-cs7-group="operation" class="${group==='operation'?'is-on':''}">پروژه‌های در حال بهره‌برداری <b>۱۰</b></button></div>`;}
+function projectButtons(pid){const ps=window.aaCIE?.data?.projects||[];return ps.filter(p=>CPIDS.includes(p.id)).map(p=>`<button class="cs7-pbtn ${p.id===pid?'is-on':''}" data-cs7-p="${p.id}">${fa(p.id)} · ${esc(p.name)}</button>`).join('');}
+function rangeOptions(sel){return PERIODS.map((p,i)=>`<option value="${i}" ${i===sel?'selected':''}>${p}</option>`).join('');}
+
+function baseTemplate(pid,s){const p=PROJECTS[pid];return `<div class="cs7-engine" style="--cs7-accent:${p.accent}">
+ <div class="cs7-projectbar"><div class="cs7-wrap">${groupToggle('construction')}<div class="cs7-projectgrid">${projectButtons(pid)}</div></div></div>
+ <header class="cs7-head"><div class="cs7-wrap"><div class="cs7-headrow"><div><div class="cs7-kicker">مدل محاسبه روز جبرانی · V8</div><h1>${p.name}</h1><p>${p.sub} · ${p.stage}</p></div><div class="cs7-head-actions"><span>دوره رسمی: دی ۱۴۰۴ تا تیر ۱۴۰۵</span><span>مبنای دوگانه: هم‌ماه سال قبل + روند دی و بهمن</span></div></div></div></header>
+ <div class="cs7-wrap cs7-workspace">
+  <main class="cs7-main">
+   <section class="cs7-card cs7-hero"><div class="cs7-summary"><div class="cs7-total"><small>روز معادل جبرانی در بازه انتخابی</small><strong data-cs7-total>—</strong><span>روز</span><em data-cs7-range-label>—</em><div class="cs8-total-delta" data-cs8-total-delta hidden></div></div><div class="cs7-kpis" data-cs7-kpis></div></div><div class="cs7-monthcards" data-cs7-monthcards></div><div class="cs7-chartbox"><div class="cs7-chart-head"><div><b>روند روزهای جبرانی</b><span data-cs7-chart-caption></span></div><div class="cs7-compare" data-cs7-compare></div></div><div class="cs7-mainchart" data-cs7-chart></div><div class="cs7-legend" data-cs7-legend></div></div></section>
+   <section class="cs7-card"><div class="cs7-section-head"><div><small>ظرفیت اجرایی</small><h2>ظرفیت قابل تحقق پروژه در هر ماه</h2><p>ستون سبز ظرفیت قابل تحقق و بخش بالایی کسری ظرفیت را نشان می‌دهد.</p></div></div><div class="cs7-capchart" data-cs7-capacity></div></section>
+   <section class="cs7-card"><div class="cs7-section-head"><div><small>چهار حوزه اثرگذار</small><h2>فشار محیطی و کنترل فعالیت</h2><p>سه حوزه اول وارد محاسبه می‌شوند؛ قابلیت عمومی فعالیت ساختمانی شاهد مکمل و غیرجمع‌شونده است.</p></div></div><div class="cs7-domains" data-cs7-domains></div></section>
+   <section class="cs7-card cs8-calculation-card"><div class="cs7-section-head cs8-calculation-head"><div><small>ماه منتخب · مسیر محاسبه</small><h2>این عدد چگونه ساخته شده است؟</h2><p>یک مسیر مرحله‌ای از مرجع داده تا کسری ظرفیت و روز معادل؛ با انتخاب هر ماه، کل مسیر همان ماه بازسازی می‌شود.</p></div></div><div class="cs7-drill cs8-drill" data-cs7-drill></div></section>
+  </main>
+  <aside class="cs7-rail"><section class="cs7-card cs7-settings"><div class="cs7-rail-head"><div><h3>تنظیمات پروژه</h3><p>فعالیت‌ها، بازه تحلیل و سناریوی حساسیت</p></div></div><div class="cs7-period"><label>از ماه<select data-cs7-start>${rangeOptions(s.start)}</select></label><label>تا ماه<select data-cs7-end>${rangeOptions(s.end)}</select></label></div><div class="cs7-mode"><button data-cs7-mode="official" class="${s.mode==='official'?'is-on':''}">حالت رسمی</button><button data-cs7-mode="sensitivity" class="${s.mode==='sensitivity'?'is-on':''}">تحلیل حساسیت</button></div><div class="cs7-global" data-cs7-global></div><div class="cs7-act-list" data-cs7-activities></div><div class="cs7-act-total" data-cs7-act-total></div>${s.mode==='sensitivity'?`<div class="cs8-scenario-actions"><button class="cs7-reset cs8-reset-sensitivity" data-cs7-reset-sensitivity>بازنشانی تنظیمات تحلیل حساسیت</button><button class="cs7-reset cs8-return-official" data-cs7-return-official>بازگشت به حالت رسمی</button></div>`:''}</section></aside>
+ </div>
+ <div class="cs7-wrap"><details class="cs7-expert"><summary><div><b>نمای کارشناسی محاسبات</b><span>منابع، دو مرجع خط مبنا، شدت‌ها، فعالیت‌ها و فرمول ماه‌به‌ماه</span></div><span class="cs7-chev">⌄</span></summary><div class="cs7-expert-body" data-cs7-expert></div></details></div>
+ <div class="cs7-charttip" data-cs7-tooltip hidden></div>
+ </div>`;}
+
+function renderMonthCards(root,pair,s){
+ const {official,active}=pair;
+ root.querySelector('[data-cs7-monthcards]').innerHTML=PERIODS.map((p,i)=>{const m=active.months[i],o=official.months[i],inR=i>=s.start&&i<=s.end,dom=DOMAIN3[m.domEff.indexOf(Math.max(...m.domEff))]?.n||'—';return `<button class="cs7-month ${s.selected===i?'is-on':''} ${inR?'':'is-out'}" data-cs7-month="${i}"><small>${p}</small><strong>${f1(m.days)} <span>روز</span></strong><em>${s.mode==='sensitivity'?'رسمی '+f1(o.days)+' · ':''}${m.active?'عامل غالب: '+dom:'پیش از شروع اجرا'}</em><i style="--mv:${Math.min(100,m.impact*2)}%"></i></button>`}).join('');
+}
+function renderKpis(root,pair,s){const {official,active}=pair,delta=active.total-official.total,peak=active.peak;const d=projectDeps(s.mode==='sensitivity'?s.activities:officialActivities(+root.dataset.pid));const dom=DOMAIN3[d.indexOf(Math.max(...d))];root.querySelector('[data-cs7-kpis]').innerHTML=`<article><small>عامل حساسیت غالب</small><b>${dom?.n||'—'}</b><span>${f0(Math.max(...d))}٪ وابستگی میانگین</span></article><article><small>هسته اسفند و فروردین</small><b>${f1(active.core)} روز</b><span>${active.total?f0(active.core/active.total*100):0}٪ از کل بازه</span></article><article><small>ماه اوج</small><b>${peak?SHORT[peak.j]:'—'}</b><span>${peak?f1(peak.days)+' روز':'—'}</span></article>`;root.querySelector('[data-cs7-compare]').innerHTML=s.mode==='sensitivity'?`<b>رسمی ${f1(official.total)}</b><b class="sc">سناریو ${f1(active.total)}</b><span class="${delta>=0?'up':'down'}">${delta>=0?'+':''}${f1(delta)} روز</span>`:`<b>رسمی ${f1(official.total)} روز</b>`;}
+
+function linePath(points){return points.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');}
+function constructionChartSvg(pair,s){
+ const {official,active}=pair,idx=[];for(let i=s.start;i<=s.end;i++)idx.push(i);
+ const W=980,H=330,m={l:50,r:58,t:34,b:48},iw=W-m.l-m.r,ih=H-m.t-m.b,n=idx.length||1;
+ const bars=s.mode==='sensitivity'?active:official;
+ const maxDay=Math.max(4,...idx.map(i=>bars.months[i].days))*1.18;
+ const x=k=>m.l+iw*(k+.5)/n,bw=Math.min(64,iw/n*.48),y=v=>m.t+ih-(v/maxDay)*ih;
+ let oc=0,sc=0;
+ const offCum=idx.map((i,k)=>{oc+=official.months[i].days;return[oc,k]});
+ const scCum=idx.map((i,k)=>{sc+=active.months[i].days;return[sc,k]});
+ const maxCum=Math.max(1,...offCum.map(x=>x[0]),...scCum.map(x=>x[0]));
+ const yc=v=>m.t+ih-(v/maxCum)*ih;
+ const offPts=offCum.map(([v,k])=>[x(k),yc(v)]),scPts=scCum.map(([v,k])=>[x(k),yc(v)]);
+ let out=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="روزهای جبرانی ماهانه و روند تجمعی">`;
+ [0,.25,.5,.75,1].forEach(q=>{const v=maxDay*q,yy=y(v);out+=`<line class="cs7-grid" x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}"/><text class="cs7-axis" x="${m.l-8}" y="${yy+4}" text-anchor="end">${f1(v)}</text>`});
+ [0,.5,1].forEach(q=>{const v=maxCum*q,yy=yc(v);out+=`<text class="cs7-axis cs7-axis-right" x="${W-m.r+8}" y="${yy+4}" text-anchor="start">${f1(v)}</text>`});
+ idx.forEach((i,k)=>{if(i===2||i===3){const bx=x(k)-iw/n*.48;out+=`<rect class="cs7-crisis" x="${bx}" y="${m.t}" width="${iw/n*.96}" height="${ih}" rx="14"/>`;}});
+ idx.forEach((i,k)=>{const a=bars.months[i],bx=x(k)-bw/2,yy=y(a.days),hh=m.t+ih-yy;out+=`<rect class="cs7-bar ${i===2||i===3?'hot':''} ${s.mode==='sensitivity'?'scenario-bar':''}" x="${bx}" y="${yy}" width="${bw}" height="${Math.max(1,hh)}" rx="9"/><text class="cs7-val" x="${x(k)}" y="${yy-8}" text-anchor="middle">${f1(a.days)}</text><text class="cs7-label" x="${x(k)}" y="${H-15}" text-anchor="middle">${SHORT[i]}</text><rect class="cs7-hit" data-chart-month="${i}" data-chart-type="days" x="${bx-10}" y="${m.t}" width="${bw+20}" height="${ih}"/>`;});
+ if(s.mode==='sensitivity'){
+   out+=`<path class="cs7-cumline cs7-cumline-official" d="${linePath(offPts)}"/>${offPts.map(p=>`<circle class="cs7-cumdot cs7-cumdot-official" cx="${p[0]}" cy="${p[1]}" r="3.1"/>`).join('')}`;
+   out+=`<path class="cs7-cumline-scenario" d="${linePath(scPts)}"/>${scPts.map(p=>`<circle class="cs7-cumdot-scenario" cx="${p[0]}" cy="${p[1]}" r="3.8"/>`).join('')}`;
+ }else{
+   out+=`<path class="cs7-cumline" d="${linePath(offPts)}"/>${offPts.map(p=>`<circle class="cs7-cumdot" cx="${p[0]}" cy="${p[1]}" r="3.3"/>`).join('')}`;
+ }
+ return out+'</svg>';
+}
+function capacitySvg(pair,s){
+ const {official,active}=pair,idx=[];for(let i=s.start;i<=s.end;i++)idx.push(i);const W=920,H=245,m={l:26,r:24,t:24,b:40},iw=W-m.l-m.r,ih=H-m.t-m.b,n=idx.length||1,x=k=>m.l+iw*(k+.5)/n,bw=Math.min(72,iw/n*.56),y=v=>m.t+ih-(v/100)*ih;
+ let out=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="ظرفیت قابل تحقق"><line class="cs7-capbase" x1="${m.l}" x2="${W-m.r}" y1="${y(100)}" y2="${y(100)}"/>`;
+ idx.forEach((i,k)=>{const a=active.months[i],o=official.months[i],bx=x(k)-bw/2,fy=y(a.capacity),bot=m.t+ih;out+=`<rect class="cs7-capbg" x="${bx}" y="${m.t}" width="${bw}" height="${ih}" rx="12"/><rect class="cs7-caploss" x="${bx}" y="${m.t}" width="${bw}" height="${Math.max(0,fy-m.t)}" rx="12"/><path class="cs7-capfill" d="M${bx},${fy} H${bx+bw} V${bot-12} Q${bx+bw},${bot} ${bx+bw-12},${bot} H${bx+12} Q${bx},${bot} ${bx},${bot-12} Z"/>`;if(s.mode==='sensitivity'){const oy=y(o.capacity);out+=`<line class="cs7-capofficial" x1="${bx-4}" x2="${bx+bw+4}" y1="${oy}" y2="${oy}"/>`;}out+=`<text class="cs7-caplossval" x="${x(k)}" y="${m.t+16}" text-anchor="middle">${f0(100-a.capacity)}٪ کسری</text><text class="cs7-capval" x="${x(k)}" y="${bot-16}" text-anchor="middle">${f0(a.capacity)}٪ تحقق</text><text class="cs7-label" x="${x(k)}" y="${H-12}" text-anchor="middle">${SHORT[i]}</text><rect class="cs7-hit" data-chart-month="${i}" data-chart-type="capacity" x="${bx-6}" y="${m.t}" width="${bw+12}" height="${ih}"/>`;});return out+'</svg>';
+}
+function renderDomains(root,pair,s){const i=s.selected,m=pair.active.months[i],off=pair.official.months[i],vals=[...m.domEff,m.worksite];root.querySelector('[data-cs7-domains]').innerHTML=DOMAINS.map((d,di)=>`<article class="cs7-domain" style="--dc:${d.c}"><div><span class="ico">${icon(di===0?'human':di===1?'truck':di===2?'box':'site')}</span><b>${d.n}</b></div><strong>${f1(vals[di])}٪</strong><small>${di===3?'شاهد مکمل؛ روز مستقل اضافه نمی‌کند':`شدت دو‌مرجعی ${f1(env(d.k,i))}٪ · وابستگی مؤثر پروژه`}</small>${s.mode==='sensitivity'&&di<3?`<em>رسمی ${f1(off.domEff[di])}٪</em>`:''}</article>`).join('');}
+function dominantTerm(detail){const mx=Math.max(...detail.terms),i=detail.terms.indexOf(mx);return DOMAIN3[i].n;}
+function renderDrill(root,pair,s){
+ const i=s.selected,m=pair.active.months[i],o=pair.official.months[i],top=m.top;
+ const refs=DOMAIN3.map(d=>({name:d.n,color:d.c,yoy:YOY[d.k][i],trend:trendExcess(d.k,i),env:env(d.k,i)}));
+ const delta=m.days-o.days;
+ const status=s.mode==='sensitivity'?'سناریوی حساسیت':'محاسبه رسمی';
+ const resultNote=m.active?`کسری ظرفیت ${f1(m.impact)}٪ از ${DAYS[i]} روز تقویمی`:'پروژه در این ماه هنوز وارد دوره اجرا نشده بود';
+ const flow=[
+  {step:'۰۱',title:'مرجع هم‌ماه سال قبل',value:refs.map(r=>`${r.name} ${f1(r.yoy)}٪`).join(' · '),note:`مقایسه ${PERIODS[i]} با ${BASE_PERIODS[i]}`},
+  {step:'۰۲',title:'کنترل روند پیش از بحران',value:refs.map(r=>`${f1(r.trend)}٪`).join(' · '),note:'انحراف از مسیر دی و بهمن'},
+  {step:'۰۳',title:'شدت دو‌مرجعی',value:refs.map(r=>`${f1(r.env)}٪`).join(' · '),note:'بزرگ‌ترِ انحراف تأییدشده در هر حوزه'},
+  {step:'۰۴',title:'کسری ظرفیت پروژه',value:`${f1(m.impact)}٪`,note:'پس از اعمال سهم فنی و حساسیت فعالیت‌ها'},
+  {step:'۰۵',title:'روز معادل ماه',value:`${f1(m.days)} روز`,note:resultNote,final:true}
+ ];
+ root.querySelector('[data-cs7-drill]').innerHTML=`
+ <div class="cs8-drill-shell">
+  <div class="cs8-drill-hero">
+   <div class="cs8-drill-context"><span class="cs8-month-pill">${PERIODS[i]}</span><span class="cs8-mode-pill ${s.mode==='sensitivity'?'scenario':''}">${status}</span><small>مبنای مقایسه: ${BASE_PERIODS[i]} + روند دی و بهمن</small></div>
+   <div class="cs8-drill-result"><small>خروجی این ماه</small><strong>${f1(m.days)}<span> روز</span></strong>${s.mode==='sensitivity'?`<em class="${delta>=0?'up':'down'}">${delta>=0?'+':''}${f1(delta)} روز نسبت به رسمی ${f1(o.days)}</em>`:`<em>کسری ظرفیت ${f1(m.impact)}٪</em>`}</div>
+  </div>
+  <div class="cs8-process" aria-label="مراحل محاسبه روز جبرانی">
+   ${flow.map((x,idx)=>`<article class="cs8-step ${x.final?'is-final':''}"><div class="cs8-step-top"><span>${x.step}</span><b>${x.title}</b></div><strong>${x.value}</strong><small>${x.note}</small>${idx<flow.length-1?'<i aria-hidden="true">←</i>':''}</article>`).join('')}
+  </div>
+  <div class="cs8-activity-zone">
+   <div class="cs8-activity-head"><div><small>فعالیت‌های مؤثر ماه</small><b>${top.length?'سه فعالیت با بیشترین سهم در روز معادل':'فاقد فعالیت در معرض'}</b></div><span>${m.active?`ظرفیت قابل تحقق ${f1(m.capacity)}٪`:'پیش از شروع اجرا'}</span></div>
+   <div class="cs8-activity-cards">${top.map((a,idx)=>{const day=a.contribution*DAYS[i]/100;const w=Math.min(100,Math.max(4,a.loss));return `<article><div><span class="rank">${fa(idx+1)}</span><b>${a.name}</b><em>${f1(day)} روز</em></div><div class="cs8-actbar"><i style="width:${w}%"></i></div><small>کسری فعالیت ${f1(a.loss)}٪ · فشار غالب: ${dominantTerm(a)}</small></article>`}).join('')||'<div class="cs8-noactivity">در این ماه فعالیتی برای محاسبه روز در معرض ثبت نشده است.</div>'}</div>
+  </div>
+  ${s.mode==='sensitivity'?`<div class="cs8-scenario-strip"><span>مقایسه خروجی ماه</span><b>رسمی ${f1(o.days)} روز</b><i>←</i><b class="scenario">سناریو ${f1(m.days)} روز</b><em class="${delta>=0?'up':'down'}">${delta>=0?'+':''}${f1(delta)} روز</em></div>`:''}
+ </div>`;
+}
+function renderGlobal(root,s,pid){const off=projectDeps(officialActivities(pid)),cur=projectDeps(s.activities),disabled=s.mode!=='sensitivity';root.querySelector('[data-cs7-global]').innerHTML=`<div class="cs7-global-head"><b>وابستگی پروژه</b><span>${disabled?'مبنای رسمی':'سناریوی آزمایشی'}</span></div>${DOMAIN3.map((d,i)=>`<div class="cs7-global-row" style="--dc:${d.c}"><div><b>${d.n}</b><strong data-cs7-global-val="${d.k}">${f0(cur[i])}٪ <small>${level(cur[i])}</small></strong></div><input class="cs7-range" type="range" min="0" max="100" step="1" value="${cur[i]}" data-cs7-global-range="${d.k}" ${disabled?'disabled':''} style="--rv:${cur[i]}%"><div class="cs7-scale"><span>کم</span><span>محدود</span><span>متوسط</span><span>زیاد</span><span>حیاتی</span></div>${s.mode==='sensitivity'?`<em>مبنای رسمی ${f0(off[i])}٪</em>`:''}</div>`).join('')}`;}
+function activityOptions(sel){return Object.keys(ACTIVITY).map(n=>`<option ${n===sel?'selected':''}>${n}</option>`).join('');}
+function renderActivities(root,s){const disabled=s.mode!=='sensitivity';root.querySelector('[data-cs7-activities]').innerHTML=s.activities.map((a,i)=>`<article class="cs7-act" style="--ac:${ACOL[i%ACOL.length]}"><div class="cs7-act-main"><button class="cs7-expand" data-cs7-expand="${i}">${a.open?'⌃':'⌄'}</button><select data-cs7-act-name="${i}" ${disabled?'disabled':''}>${activityOptions(a.name)}</select><strong>${f1(a.share)}٪</strong></div><div class="cs7-act-share"><input class="cs7-range" type="range" min="0" max="100" step="0.1" value="${a.share}" data-cs7-share="${i}" ${disabled?'disabled':''} style="--rv:${a.share}%"></div>${a.open?`<div class="cs7-dep-panel">${DOMAIN3.map(d=>`<label style="--dc:${d.c}"><span>${d.n}</span><b data-cs7-dep-val="${i}-${d.k}">${f0(a.deps[d.k])}٪</b><input class="cs7-range" type="range" min="0" max="100" step="1" value="${a.deps[d.k]}" data-cs7-dep="${i}-${d.k}" ${disabled?'disabled':''} style="--rv:${a.deps[d.k]}%"></label>`).join('')}<p>${ACTIVITY[a.name].note}</p></div>`:''}</article>`).join('');const sum=s.activities.reduce((x,a)=>x+Number(a.share||0),0);root.querySelector('[data-cs7-act-total]').innerHTML=`<span>جمع سهم فعالیت‌ها</span><b class="${Math.abs(sum-100)>.2?'warn':''}">${f1(sum)}٪</b><div><i style="width:${Math.min(100,sum)}%"></i></div><small>${Math.abs(sum-100)>.2?'در محاسبه به‌طور خودکار نرمال می‌شود.':'ترکیب فعالیت‌ها کامل است.'}</small>`;}
+function renderExpert(root,pair,s,pid){const rows=pair.active.months.filter(m=>m.j>=s.start&&m.j<=s.end);root.querySelector('[data-cs7-expert]').innerHTML=`<div class="cs7-expert-grid"><section><h3>قاعده خط مبنا</h3><p>برای هر ماه، دو شاهد همزمان کنترل می‌شوند: شکاف نسبت به ماه مشابه سال قبل و انحراف نسبت به روند پیش از بحران که از دی و بهمن استخراج شده است. برای جلوگیری از وزن‌دهی آزاد، شدت مرکزی برابر بزرگ‌ترِ دو انحراف تأییدشده است.</p></section><section><h3>قاعده اثر همزمان سه حوزه</h3><p>برای هر فعالیت، ابتدا سهم فنی ثابت نیروی انسانی، حمل و تأمین از نسبت وابستگی‌های رسمی همان فعالیت نرمال می‌شود. اثر هر حوزه برابر شدت ماه × حساسیت × سهم فنی است و سه اثر روی ظرفیت باقی‌مانده ترکیب می‌شوند. یک عامل به‌تنهایی فقط به اندازه سهم فنی خودش اثر دارد؛ همزمانی چند محدودیت اثر را تشدید می‌کند.</p></section><section><h3>عدم صفرشدن خودکار فعالیت</h3><p>در V8 حذف یک حوزه به‌تنهایی کل فعالیت را صفر نمی‌کند و دیگر کف ظرفیت مصنوعی نیز وجود ندارد. ظرفیت باقیمانده از ساختار سهم‌های فنی و همزمانی واقعی سه حوزه حاصل می‌شود.</p></section><section><h3>قابلیت عمومی فعالیت</h3><p>شامخ ساختمان و سرعت فعالیت به‌عنوان شاهد مکمل برای کنترل جهت اختلال و بازیابی استفاده می‌شود و دوباره به سه حوزه اصلی اضافه نمی‌شود.</p></section></div><div class="cs7-expert-table"><div class="head"><span>ماه</span><span>سال قبل / روند</span><span>نیروی انسانی</span><span>حمل</span><span>تأمین</span><span>کسری پروژه</span><span>روز</span><span>اطمینان</span></div>${rows.map(m=>`<div><span>${PERIODS[m.j]}</span><span>${f1(Math.max(YOY.human[m.j],trendExcess('human',m.j)))} / ${f1(trendExcess('human',m.j))}</span><span>${f1(env('human',m.j))}٪</span><span>${f1(env('logistics',m.j))}٪</span><span>${f1(env('materials',m.j))}٪</span><span>${f1(m.impact)}٪</span><span><b>${f1(m.days)}</b></span><span>${f0(m.confidence)}٪</span></div>`).join('')}</div><div class="cs7-source-grid">${DOMAINS.map(d=>`<article style="--dc:${d.c}"><b>${d.n}</b><p>${SOURCES[d.k].join(' · ')}</p></article>`).join('')}</div>`;}
+
+function cumulativeTo(calc,start,i){let x=0;for(let j=start;j<=i;j++)x+=calc.months[j]?.days||0;return x;}
+function chartTipHTML(pair,s,i,type){
+ const a=pair.active.months[i],o=pair.official.months[i],dom=DOMAIN3[a.domEff.indexOf(Math.max(...a.domEff))]?.n||'—';
+ if(type==='capacity')return `<b>${PERIODS[i]}</b><span>ظرفیت قابل تحقق <strong>${f1(a.capacity)}٪</strong></span><span>کسری ظرفیت <strong>${f1(a.impact)}٪</strong></span>${s.mode==='sensitivity'?`<span>ظرفیت رسمی <strong>${f1(o.capacity)}٪</strong></span>`:''}`;
+ const oc=cumulativeTo(pair.official,s.start,i),ac=cumulativeTo(pair.active,s.start,i);
+ return `<b>${PERIODS[i]}</b><span>${s.mode==='sensitivity'?'روز سناریو':'روز رسمی'} <strong>${f1(s.mode==='sensitivity'?a.days:o.days)}</strong></span><span>تجمع رسمی <strong>${f1(oc)}</strong></span>${s.mode==='sensitivity'?`<span>تجمع سناریو <strong>${f1(ac)}</strong></span><span>تغییر ماه <strong>${a.days-o.days>=0?'+':''}${f1(a.days-o.days)}</strong></span>`:''}<span>عامل غالب <strong>${dom}</strong></span>`;
+}
+function positionTip(tt,e){const pad=12,r=tt.getBoundingClientRect(),w=r.width||230,h=r.height||110;let x=e.clientX+14,y=e.clientY+14;if(x+w>innerWidth-pad)x=e.clientX-w-14;if(y+h>innerHeight-pad)y=e.clientY-h-14;tt.style.left=Math.max(pad,x)+'px';tt.style.top=Math.max(pad,y)+'px';}
+
+function updateDynamic(pid,root,s,light=false){
+ root.dataset.pid=pid;root.dataset.mode=s.mode;const pair=calcPair(pid,s),delta=pair.active.total-pair.official.total;
+ root.querySelector('[data-cs7-total]').textContent=f1(pair.active.total);
+ root.querySelector('[data-cs7-range-label]').textContent=s.start===s.end?PERIODS[s.start]:`${PERIODS[s.start]} تا ${PERIODS[s.end]}`;
+ const totalDelta=root.querySelector('[data-cs8-total-delta]');
+ if(totalDelta){
+   if(s.mode==='sensitivity'){
+     totalDelta.hidden=false;totalDelta.className='cs8-total-delta '+(delta>=0?'up':'down');
+     totalDelta.innerHTML=`<b>${delta>=0?'↑':'↓'} ${f1(Math.abs(delta))} روز ${delta>=0?'بیشتر':'کمتر'} از مبنای رسمی</b><span>مبنای رسمی: ${f1(pair.official.total)} روز</span>`;
+   }else{totalDelta.hidden=true;totalDelta.innerHTML='';}
+ }
+ root.querySelector('[data-cs7-chart-caption]').textContent=s.mode==='sensitivity'?'میله‌ها روز ماهانه سناریو هستند؛ تجمع رسمی خط‌چین و تجمع سناریو خط اصلی است.':'میله‌ها روز ماهانه رسمی و تنها خط نمودار، تجمع رسمی است.';
+ const lg=root.querySelector('[data-cs7-legend]');if(lg)lg.innerHTML=s.mode==='sensitivity'?'<span><i class="bar scenario"></i>روز ماهانه سناریو</span><span><i class="cum official-dash"></i>تجمع رسمی</span><span><i class="scenario-line"></i>تجمع سناریو</span>':'<span><i class="bar"></i>روز ماهانه رسمی</span><span><i class="cum"></i>تجمع رسمی</span>';
+ renderKpis(root,pair,s);renderMonthCards(root,pair,s);root.querySelector('[data-cs7-chart]').innerHTML=constructionChartSvg(pair,s);root.querySelector('[data-cs7-capacity]').innerHTML=capacitySvg(pair,s);renderDomains(root,pair,s);renderDrill(root,pair,s);root.querySelectorAll('[title]').forEach(el=>el.removeAttribute('title'));if(!light){renderExpert(root,pair,s,pid);updateProjectPage(pid,pair.official);}return pair;
+}
+function render(pid){const root=document.querySelector('#aa-cie-model-host .cs7-engine');if(!root)return;const s=load(pid);renderGlobal(root,s,pid);renderActivities(root,s);updateDynamic(pid,root,s);}
+
+let RAF=0;
+function schedule(pid,full=false,light=false){if(RAF)cancelAnimationFrame(RAF);RAF=requestAnimationFrame(()=>{RAF=0;const root=document.querySelector('#aa-cie-model-host .cs7-engine');if(!root)return;const s=load(pid);if(full){renderGlobal(root,s,pid);renderActivities(root,s);}updateDynamic(pid,root,s,light);});}
+function applyGlobalTarget(s,key,target){const acts=normalizedActivities(s.activities),cur=acts.reduce((sum,a)=>sum+a.nshare/100*(a.deps[key]||0),0);if(cur<=0){s.activities.forEach(a=>a.deps[key]=target);return;}let scale=target/cur;s.activities.forEach(a=>a.deps[key]=clamp(a.deps[key]*scale));}
+
+function bind(pid){const root=document.querySelector('#aa-cie-model-host .cs7-engine');if(!root||root.dataset.bound==='1')return;root.dataset.bound='1';const tt=root.querySelector('[data-cs7-tooltip]');
+ root.addEventListener('click',e=>{
+  const pb=e.target.closest('[data-cs7-p]');if(pb){mount(+pb.dataset.cs7P);return;}
+  const gb=e.target.closest('[data-cs7-group]');if(gb){if(gb.dataset.cs7Group==='operation'){restoreLegacy(firstOperationId(),'operation')}return;}
+  const mb=e.target.closest('[data-cs7-mode]');if(mb){const s=load(pid);s.mode=mb.dataset.cs7Mode;save(pid,s);mount(pid);return;}
+  const mon=e.target.closest('[data-cs7-month]');if(mon){const s=load(pid);s.selected=+mon.dataset.cs7Month;save(pid,s);schedule(pid);root.querySelector('[data-cs7-drill]')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  const hit=e.target.closest('[data-chart-month]');if(hit){const s=load(pid);s.selected=+hit.dataset.chartMonth;save(pid,s);schedule(pid);return;}
+  const ex=e.target.closest('[data-cs7-expand]');if(ex){const s=load(pid);const i=+ex.dataset.cs7Expand;s.activities[i].open=!s.activities[i].open;save(pid,s);renderActivities(root,s);return;}
+  if(e.target.closest('[data-cs7-reset-sensitivity]')){resetSensitivityState(pid);mount(pid);return;}
+  if(e.target.closest('[data-cs7-return-official]')){const s=load(pid);s.mode='official';save(pid,s);mount(pid);return;}
+ });
+ root.addEventListener('change',e=>{const s=load(pid);
+  if(e.target.matches('[data-cs7-start]')){s.start=Math.min(+e.target.value,s.end);s.selected=Math.max(s.selected,s.start);save(pid,s);mount(pid);return;}
+  if(e.target.matches('[data-cs7-end]')){s.end=Math.max(+e.target.value,s.start);s.selected=Math.min(s.selected,s.end);save(pid,s);mount(pid);return;}
+  if(e.target.matches('[data-cs7-share],[data-cs7-dep],[data-cs7-global-range]')){renderGlobal(root,s,pid);renderActivities(root,s);updateDynamic(pid,root,s,false);return;}
+  if(e.target.matches('[data-cs7-act-name]')){const i=+e.target.dataset.cs7ActName,s=load(pid),n=e.target.value;s.activities[i].name=n;s.activities[i].deps={human:ACTIVITY[n].human*100,logistics:ACTIVITY[n].logistics*100,materials:ACTIVITY[n].materials*100};save(pid,s);render(pid);return;}
+ });
+ root.addEventListener('input',e=>{const s=load(pid);if(s.mode!=='sensitivity')return;
+  if(e.target.matches('[data-cs7-share]')){const i=+e.target.dataset.cs7Share;s.activities[i].share=clamp(+e.target.value);e.target.style.setProperty('--rv',e.target.value+'%');save(pid,s);const card=e.target.closest('.cs7-act');const lab=card?.querySelector('.cs7-act-main>strong');if(lab)lab.textContent=f1(e.target.value)+'٪';schedule(pid,false,true);return;}
+  if(e.target.matches('[data-cs7-dep]')){const [ii,k]=e.target.dataset.cs7Dep.split('-'),i=+ii;s.activities[i].deps[k]=clamp(+e.target.value);e.target.style.setProperty('--rv',e.target.value+'%');const lab=root.querySelector(`[data-cs7-dep-val="${i}-${k}"]`);if(lab)lab.textContent=f0(e.target.value)+'٪';save(pid,s);schedule(pid,false,true);return;}
+  if(e.target.matches('[data-cs7-global-range]')){const k=e.target.dataset.cs7GlobalRange,v=clamp(+e.target.value);applyGlobalTarget(s,k,v);e.target.style.setProperty('--rv',v+'%');const lab=root.querySelector(`[data-cs7-global-val="${k}"]`);if(lab)lab.innerHTML=f0(v)+'٪ <small>'+level(v)+'</small>';save(pid,s);schedule(pid,false,true);return;}
+ });
+ /* فقط نمودارها Tooltip دارند. */
+ root.addEventListener('pointermove',e=>{const hit=e.target.closest('[data-chart-month]');if(!hit){if(tt)tt.hidden=true;return;}const s=load(pid),pair=calcPair(pid,s),i=+hit.dataset.chartMonth;if(tt){tt.innerHTML=chartTipHTML(pair,s,i,hit.dataset.chartType);tt.hidden=false;positionTip(tt,e);}});
+ root.addEventListener('pointerleave',()=>{if(tt)tt.hidden=true});
+}
+
+function firstOperationId(){const ps=window.aaCIE?.data?.projects||[];return ps.find(p=>!CPIDS.includes(p.id))?.id||2;}
+function decorateLegacyProjects(group='operation'){
+ const host=document.getElementById('aa-cie-projects');if(!host)return false;
+ let wrap=document.getElementById('aa-cie-group-toggle-v7');if(!wrap){wrap=document.createElement('div');wrap.id='aa-cie-group-toggle-v7';wrap.innerHTML=groupToggle(group);host.parentNode.insertBefore(wrap,host);wrap.addEventListener('click',e=>{const b=e.target.closest('[data-cs7-group]');if(!b)return;if(b.dataset.cs7Group==='construction'){mount(CPIDS[0]);}else{decorateLegacyProjects('operation');}});}
+ wrap.innerHTML=groupToggle(group);
+ host.querySelectorAll('[data-aa-cie-p]').forEach(b=>{const id=+b.dataset.aaCieP;b.hidden=group==='construction'?!CPIDS.includes(id):CPIDS.includes(id);});
+ return true;
+}
+function retryDecorate(group='operation'){let tries=0;const id=setInterval(()=>{tries++;if(decorateLegacyProjects(group)||tries>20)clearInterval(id)},80);}
+
+function mount(pid){
+ if(!CPIDS.includes(pid))return restoreLegacy(pid,'operation');
+ const host=document.getElementById('aa-cie-model-host'),shell=host?.querySelector('.aa-cie-host-shell');if(!shell||!window.aaCIE)return;
+ window.aaCIE.state.pid=pid;const s=load(pid);shell.innerHTML=baseTemplate(pid,s);host.dataset.cs7='1';bind(pid);render(pid);
+}
+function restoreLegacy(pid,group='operation'){
+ const host=document.getElementById('aa-cie-model-host'),shell=host?.querySelector('.aa-cie-host-shell');if(!shell||!window.aaCIE)return;
+ delete host.dataset.cs7;window.aaCIE.state.pid=pid;shell.innerHTML='';window.aaCIE.ui.mount();retryDecorate(group);
+}
+function updateProjectPage(pid,calc){const view=document.getElementById('view-project-'+pid);if(!view)return;const exp=view.querySelector('[data-pp-role="exp-days"]'),scn=view.querySelector('[data-pp-role="scn-days"]');if(exp)exp.textContent=f1(calc.total);if(scn)scn.textContent=f1(calc.total);const main=view.querySelector('.op-result-main');if(main){const b=main.querySelector('b'),p=main.querySelector('p');if(b)b.textContent='روز معادل جبرانی دی تا تیر';if(p)p.textContent='خروجی موتور V8 با مبنای هم‌ماه سال قبل، روند دی/بهمن و سهم فنی همزمان';}}
+function refreshProjectPage(){const m=location.hash.match(/^#\/project\/(\d+)/);if(!m)return;const pid=+m[1];if(!CPIDS.includes(pid))return;updateProjectPage(pid,fullCalc(pid,officialActivities(pid),0,6));}
+function boot(){const h=location.hash.replace('#','')||'/';if(h==='/aa-cie'){setTimeout(()=>{const pid=+window.aaCIE?.state?.pid||1;if(CPIDS.includes(pid))mount(pid);else retryDecorate('operation')},120)}else setTimeout(refreshProjectPage,180);}
+document.addEventListener('click',e=>{const b=e.target.closest?.('[data-aa-cie-p]');if(!b)return;const id=+b.dataset.aaCieP;if(CPIDS.includes(id))setTimeout(()=>mount(id),0);});
+window.addEventListener('hashchange',boot);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+window.aaConstructionV8={mount,fullCalc,env,trendExcess,officialActivities,config:{periods:PERIODS,projects:PROJECTS}};
+})();
+
+</script>
+
+<style id="aa-env-v131-style">
+/* ===== Environment page V1.31: data parity + seven standardized domain accordions ===== */
+#view-environment{--env-rec:#7A5AA6;--env-transport:#1F7A8C;--env-pay:#2C67B1;--env-net:#168B91;--env-labor:#B17A25;--env-materials:#B5651D;--env-inflation:#A62F53}
+#view-environment .env-domain-overview{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:4px 0 18px}
+#view-environment .env-overview-btn{--dc:var(--accent);position:relative;min-width:0;min-height:78px;padding:11px 11px 10px;border:1px solid color-mix(in srgb,var(--dc) 24%,var(--border));border-radius:14px;background:linear-gradient(150deg,color-mix(in srgb,var(--dc) 8%,var(--surface)),var(--surface));text-align:right;box-shadow:0 10px 24px -25px var(--dc);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+#view-environment .env-overview-btn:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--dc) 52%,var(--border));box-shadow:0 14px 28px -22px color-mix(in srgb,var(--dc) 50%,transparent)}
+#view-environment .env-overview-btn.is-open{border-color:color-mix(in srgb,var(--dc) 68%,var(--border));background:linear-gradient(150deg,color-mix(in srgb,var(--dc) 15%,var(--surface)),var(--surface));box-shadow:0 12px 30px -20px color-mix(in srgb,var(--dc) 56%,transparent)}
+#view-environment .env-overview-btn small{display:block;font-size:8.5px;font-weight:900;color:var(--dc);letter-spacing:.15px}.env-overview-btn b{display:block;margin-top:3px;font-size:10.5px;line-height:1.4;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.env-overview-btn span{display:block;margin-top:5px;font-size:8.5px;color:var(--ink-muted);line-height:1.45}
+#view-environment .env-domain-accordion{--dc:var(--accent);margin:0 0 12px;border:1px solid color-mix(in srgb,var(--dc) 24%,var(--border));border-radius:18px;background:var(--surface);overflow:hidden;box-shadow:0 10px 30px -28px color-mix(in srgb,var(--dc) 55%,transparent);transition:border-color .2s ease,box-shadow .2s ease}
+#view-environment .env-domain-accordion[open]{border-color:color-mix(in srgb,var(--dc) 50%,var(--border));box-shadow:0 18px 40px -30px color-mix(in srgb,var(--dc) 70%,transparent)}
+#view-environment .env-domain-summary{list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr) auto auto auto;gap:12px;align-items:center;min-height:78px;padding:13px 16px;cursor:pointer;background:linear-gradient(105deg,color-mix(in srgb,var(--dc) 15%,var(--surface)),color-mix(in srgb,var(--dc) 4%,var(--surface)) 55%,var(--surface));border-inline-start:5px solid var(--dc)}
+#view-environment .env-domain-summary::-webkit-details-marker{display:none}.env-domain-summary::marker{display:none}
+#view-environment .env-domain-no{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--dc) 16%,var(--surface));color:var(--dc);font-size:13px;font-weight:950;border:1px solid color-mix(in srgb,var(--dc) 26%,transparent)}
+#view-environment .env-domain-copy{min-width:0}.env-domain-copy b{display:block;font-size:14.5px;font-weight:950;color:var(--ink);line-height:1.45}.env-domain-copy span{display:block;margin-top:3px;font-size:9.5px;line-height:1.55;color:var(--ink-muted)}
+#view-environment .env-domain-kpi{min-width:145px;padding:7px 11px;border-radius:12px;background:color-mix(in srgb,var(--dc) 7%,var(--surface));border:1px solid color-mix(in srgb,var(--dc) 18%,var(--border));text-align:center}.env-domain-kpi b{display:block;color:var(--dc);font-size:13px;font-weight:950}.env-domain-kpi span{display:block;margin-top:2px;font-size:8px;color:var(--ink-faint);font-weight:800}
+#view-environment .env-domain-state{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:9px;font-weight:900;color:var(--ink-muted)}.env-domain-state i{width:8px;height:8px;border-radius:50%;background:var(--dc);box-shadow:0 0 0 4px color-mix(in srgb,var(--dc) 10%,transparent)}
+#view-environment .env-domain-chevron{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);color:var(--dc);font-size:15px;font-weight:900;transition:transform .2s ease}.env-domain-accordion[open] .env-domain-chevron{transform:rotate(180deg)}
+#view-environment .env-domain-content{padding:18px 18px 20px;border-top:1px solid var(--border-soft);animation:envV131Open .28s cubic-bezier(.22,.61,.36,1) both}
+@keyframes envV131Open{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+#view-environment .env-inner-static{margin-top:14px!important}.env-inner-static>.analysis-summary,.env-inner-static>summary{cursor:default!important;pointer-events:none}.env-inner-static .analysis-summary-cta{display:none!important}
+#view-environment .env-parity{--dc:var(--accent);margin-top:16px;border:1px solid color-mix(in srgb,var(--dc) 22%,var(--border));border-radius:17px;background:linear-gradient(180deg,color-mix(in srgb,var(--dc) 4%,var(--surface)),var(--surface));overflow:hidden;box-shadow:var(--shadow-sm)}
+#view-environment .env-parity-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 15px;border-bottom:1px solid var(--border-soft)}.env-parity-head h4{margin:0;font-size:13.5px;font-weight:950;color:var(--ink)}.env-parity-head p{margin:3px 0 0;font-size:9.5px;line-height:1.6;color:var(--ink-muted)}.env-parity-badge{flex:none;padding:4px 8px;border-radius:999px;background:color-mix(in srgb,var(--dc) 11%,var(--surface));color:var(--dc);font-size:8.5px;font-weight:900;border:1px solid color-mix(in srgb,var(--dc) 20%,transparent)}
+#view-environment .env-parity-tabs{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border-soft);overflow-x:auto;background:color-mix(in srgb,var(--dc) 2%,var(--surface-2))}.env-parity-tab{flex:0 0 auto;padding:6px 10px;border-radius:9px;font-size:9px;font-weight:900;color:var(--ink-muted);border:1px solid transparent}.env-parity-tab.is-on{background:var(--surface);color:var(--dc);border-color:color-mix(in srgb,var(--dc) 28%,var(--border));box-shadow:var(--shadow-sm)}
+#view-environment .env-parity-panel{padding:13px 14px}.env-parity-panel[hidden]{display:none!important}.env-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:11px}.env-kpi-mini{padding:10px 11px;border:1px solid var(--border-soft);border-radius:12px;background:var(--surface);min-width:0}.env-kpi-mini small{display:block;font-size:8px;color:var(--ink-faint);font-weight:800}.env-kpi-mini b{display:block;margin-top:3px;font-size:16px;color:var(--dc);font-weight:950;line-height:1.2}.env-kpi-mini span{display:block;margin-top:3px;font-size:8.5px;line-height:1.45;color:var(--ink-muted)}
+#view-environment .env-chart-shell{position:relative;border:1px solid var(--border-soft);border-radius:14px;background:var(--surface);padding:10px;overflow:hidden}.env-parity-chart{width:100%;min-height:250px;direction:ltr}.env-parity-chart svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y;cursor:crosshair}.env-v131-grid{stroke:var(--border-soft);stroke-width:1;stroke-dasharray:2 5;vector-effect:non-scaling-stroke}.env-v131-axis{fill:var(--ink-faint);font:9.5px var(--font-body);direction:rtl;unicode-bidi:isolate}.env-v131-line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;animation:envV131Draw .8s ease forwards}.env-v131-dot{stroke:var(--surface);stroke-width:2;vector-effect:non-scaling-stroke}.env-v131-cross{stroke:var(--ink-muted);stroke-width:1;stroke-dasharray:3 4;vector-effect:non-scaling-stroke;pointer-events:none}.env-v131-hit{fill:transparent;pointer-events:all;cursor:crosshair}@keyframes envV131Draw{to{stroke-dashoffset:0}}
+#view-environment .env-chart-tip{position:absolute;z-index:8;pointer-events:none;min-width:170px;max-width:240px;padding:9px 10px;border-radius:11px;background:color-mix(in srgb,var(--ink) 95%,transparent);color:#fff;box-shadow:0 14px 32px rgba(0,0,0,.22);font-size:9px;line-height:1.55;opacity:0;transform:translateY(4px);transition:opacity .08s ease,transform .08s ease}.env-chart-tip.is-on{opacity:1;transform:none}.env-chart-tip b{display:block;font-size:10.5px;margin-bottom:3px}.env-chart-tip span{display:block;color:rgba(255,255,255,.78)}
+#view-environment .env-bar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.env-bar-card{padding:11px;border:1px solid var(--border-soft);border-radius:12px;background:var(--surface)}.env-bar-card small{font-size:8px;color:var(--ink-faint);font-weight:800}.env-bar-card b{display:block;margin-top:4px;font-size:14px;color:var(--dc);font-weight:950}.env-bar-track{height:7px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:7px}.env-bar-track i{display:block;height:100%;border-radius:inherit;background:var(--dc);transform-origin:right;animation:envV131Bar .65s cubic-bezier(.22,.61,.36,1) both}@keyframes envV131Bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+#view-environment .env-heatmap-wrap{overflow-x:auto}.env-heatmap{display:grid;grid-template-columns:170px repeat(7,minmax(72px,1fr));gap:5px;min-width:760px;direction:rtl}.env-hcell{min-height:42px;padding:6px;border-radius:9px;border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;font-weight:900}.env-hlabel{justify-content:flex-start;background:var(--surface);color:var(--ink)}.env-hhead{min-height:30px;background:var(--surface-2);color:var(--ink-faint)}.env-hv{color:#fff}.env-hv.low{background:#5C896D}.env-hv.mid{background:#C69B3D;color:#2E291E}.env-hv.high{background:#C06E3C}.env-hv.severe{background:#984232}
+#view-environment .env-note{margin-top:10px;padding:9px 11px;border-radius:10px;background:var(--surface-2);font-size:9px;line-height:1.7;color:var(--ink-muted)}.env-note strong{color:var(--ink)}
+#view-environment .env-confidence-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.env-conf{padding:4px 7px;border-radius:999px;border:1px solid var(--border-soft);font-size:8px;font-weight:900;color:var(--ink-muted);background:var(--surface)}.env-conf.low{border-color:color-mix(in srgb,var(--status-bad) 35%,var(--border));color:var(--status-bad)}.env-conf.medium{border-color:color-mix(in srgb,var(--gold) 40%,var(--border));color:var(--gold-strong)}
+#view-environment .env-matrix-section{margin-top:22px}.env-matrix-section:before{content:'جمع‌بندی نهایی';display:block;margin:0 0 8px;font-size:10px;font-weight:950;color:var(--status-info)}
+#view-environment .env-pmi-matrix-label{background:color-mix(in srgb,var(--env-labor) 8%,var(--surface))!important;border-color:color-mix(in srgb,var(--env-labor) 28%,var(--border))!important}
+#view-environment .env-pmi-matrix-cell{min-height:50px!important}.env-pmi-matrix-last{font-size:8.5px!important;line-height:1.55!important}
+@media(max-width:1180px){#view-environment .env-domain-overview{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:760px){#view-environment .env-domain-overview{grid-template-columns:repeat(2,1fr)}#view-environment .env-domain-summary{grid-template-columns:auto 1fr auto;padding:12px}.env-domain-kpi{display:none}.env-domain-state{display:none}.env-kpi-grid{grid-template-columns:repeat(2,1fr)}.env-bar-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px){#view-environment .env-domain-overview{grid-template-columns:1fr}.env-kpi-grid,.env-bar-grid{grid-template-columns:1fr}}
+</style>
+<script id="aa-env-v131-script">
+(function(){
+'use strict';
+if(window.__AA_ENV_V131__)return;window.__AA_ENV_V131__=true;
+const faNum=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const f1=n=>faNum((+n).toFixed(1));
+const fi=n=>faNum(Math.round(+n).toLocaleString('en-US'));
+const pct=n=>(n>0?'+':'')+f1(n)+'٪';
+const DATA={
+ cinemaWeekly:[['۱–۷ فروردین',37879],['۸–۱۴ فروردین',31803],['۱۵–۲۱ فروردین',42141],['۲۲–۲۸ فروردین',79163],['۲۹ فروردین–۴ اردیبهشت',140055],['۵–۱۱ اردیبهشت',203061],['۱۲–۱۸ اردیبهشت',214063],['۱۹–۲۵ اردیبهشت',209750],['۲۶ اردیبهشت–۱ خرداد',270400],['۲–۸ خرداد',297239],['۹–۱۵ خرداد',284928],['۱۶–۲۲ خرداد',249225],['۲۳–۲۹ خرداد',176506],['۳۰ خرداد–۵ تیر',12607],['۶–۱۲ تیر',142288],['۱۳–۱۹ تیر',39073],['۲۰–۲۶ تیر',204788],['۲۷ تیر–۲ مرداد',363320],['۳–۹ مرداد',448870],['۱۰–۱۶ مرداد',290628],['۱۷–۲۳ مرداد',251271],['۲۴–۳۰ مرداد',327731],['۳۱ مرداد–۶ شهریور',352163]],
+ cinemaAnnual:{a1403:13328490,a1404:9233558,s1403:327097,s1404:294263,sales1403:8289875892500,sales1404:7931344325245},
+ cinemaCrisis:[['۱۴۰۱–۱۴۰۲',3003389],['۱۴۰۲–۱۴۰۳',3563036],['۱۴۰۳–۱۴۰۴',3949296],['۱۴۰۴–۱۴۰۵',257676]],
+ metro:{cum:18828927,daily:[['۱۶ فروردین',1041606],['۲۰ فروردین',1064054],['۲۲ فروردین',1423187]]},
+ sports:{open:140,total:160},
+ pmi:{labels:['دی','بهمن','اسفند','فروردین','اردیبهشت','خرداد','تیر'],values:[40.5071428571,43.0071428571,24.3071428571,36.4071428571,40.2071428571,45.0071428571,46.4071428571],conf:['پایین','متوسط','بسیار پایین','پایین','پایین','متوسط','متوسط']},
+ permits:{permits1404:5976,permits1403:7460.6741573,area1404:11112120,area1403:10101927.2727,units1404:61649,units1403:57241.4113},
+ materials:{labels:['دی','بهمن','اسفند','فروردین','اردیبهشت','خرداد','تیر'],names:['میلگرد ساختمانی','تیرآهن استاندارد','سیمان تیپ ۲ پاکتی'],gap:[[-9.0586,-5.4735,-0.5177,12.6931,23.3811,24.1501,23.3837],[-1.4420,2.7490,3.0586,19.4252,33.6526,41.5311,34.2795],[-8.5872,-3.7381,-0.1212,13.4282,56.1290,58.6163,58.0396]],competition:[[5.0909,2.8118,5.2677,15.6996,14.4573,6.5755,7.5607],[12.2998,8.2665,3.6596,13.0120,9.5915,4.0672,6.5253],[9.7602,9.9744,10.8669,19.7449,31.0315,4.2471,4.1422]],vol:[[0.7628,0.4075,0.5221,1.1745,1.4920,1.3395,0.7566],[1.0985,1.0382,1.0615,3.2184,2.6043,0.6264,0.9641],[2.6262,3.0615,3.6097,3.5915,5.7710,2.0934,1.1254]]},
+ adjust:[['ابنیه',13.104],['تأسیسات مکانیکی',12.744],['تأسیسات برقی',25.524],['راه و باند',9.936]],
+ constructionGroups:[['پاییز ۱۴۰۴','بیشترین','تأسیسات مکانیکی و عایق حرارتی',36.4],['پاییز ۱۴۰۴','کمترین','سیمان، بتن و شن و ماسه',-1.8],['زمستان ۱۴۰۴','بیشترین','چوب',73.3],['زمستان ۱۴۰۴','کمترین','بلوک سفالی و آجر',7.4],['بهار ۱۴۰۵','بیشترین','نقاشی ساختمان',64.9],['بهار ۱۴۰۵','کمترین','کرایه ماشین‌آلات',10.8]]
+};
+const domains=[
+ {k:'rec',num:'۰۱',title:'تقاضای تفریحی و حضور شهری',sub:'سینما، بازیابی هفتگی و کنترل بازگشایی ورزش',kpi:'۳۰٫۷٪− مخاطب تهران',state:'بازیابی نوسانی',color:'var(--env-rec)',nodes:['analysis-recreation-demand']},
+ {k:'transport',num:'۰۲',title:'تردد، حمل‌ونقل و دسترسی',sub:'تردد جاده‌ای، حمل بار و نقاط واقعی مترو تهران',kpi:'۶۵٫۳٪− اوج حمل بار',state:'داده جاده‌ای تا فروردین',color:'var(--env-transport)',nodes:['ind-transport','analysis-transport']},
+ {k:'pay',num:'۰۳',title:'تراکنش و پرداخت',sub:'شاپرک تهران؛ تعداد، مبلغ و سهم از کشور',kpi:'۹٫۸٪+ تیر',state:'بازگشت مثبت',color:'var(--env-pay)',nodes:['ind-payments']},
+ {k:'net',num:'۰۴',title:'اینترنت و زیرساخت دیجیتال',sub:'Cloudflare Radar؛ شوک، بازیابی و تمرکز تهران',kpi:'≈۵۹٪ تثبیت',state:'بازیابی ناقص',color:'var(--env-net)',nodes:['ind-internet']},
+ {k:'labor',num:'۰۵',title:'نیروی انسانی و فعالیت اقتصادی',sub:'شامخ، بازار کار، فعالیت ساختمان و پروانه تهران',kpi:'شامخ ساختمان ۴۶٫۴',state:'بازیابی تدریجی',color:'var(--env-labor)',nodes:['ind-labor','analysis-labor']},
+ {k:'materials',num:'۰۶',title:'بازار و تأمین مصالح',sub:'حجم، قیمت، فاصله پیش‌بحران، رقابت و نوسان',kpi:'سیمان تیر ۵۸٪+',state:'فشار قیمت باقی است',color:'var(--env-materials)',nodes:['ind-materials','analysis-materials']},
+ {k:'inflation',num:'۰۷',title:'تورم و هزینه ساخت',sub:'تورم عمومی، نهاده ساخت و تعدیل قراردادی',kpi:'۸۹٪ نقطه‌ای مرداد',state:'فشار هزینه بالا',color:'var(--env-inflation)',nodes:['ind-inflation','analysis-inflation']}
+];
+function el(tag,cls,html){const x=document.createElement(tag);if(cls)x.className=cls;if(html!=null)x.innerHTML=html;return x}
+function staticizeDetails(root){root.querySelectorAll('details').forEach(d=>{if(d.classList.contains('env-domain-accordion'))return;if(d.dataset.envFixed==='1')return;d.dataset.envFixed='1';d.classList.add('env-inner-static');d.open=true;const sum=d.querySelector(':scope > summary');if(sum){sum.setAttribute('aria-disabled','true');sum.addEventListener('click',e=>e.preventDefault())}d.addEventListener('toggle',()=>{if(!d.open)requestAnimationFrame(()=>{d.open=true})})})}
+function summaryHtml(d){return `<span class="env-domain-no">${d.num}</span><span class="env-domain-copy"><b>${d.title}</b><span>${d.sub}</span></span><span class="env-domain-kpi"><b>${d.kpi}</b><span>شاخص کلیدی بانک موجود</span></span><span class="env-domain-state"><i></i>${d.state}</span><span class="env-domain-chevron">⌄</span>`}
+function buildOverview(stack){let o=document.getElementById('env-domain-overview');if(o)return o;o=el('nav','env-domain-overview');o.id='env-domain-overview';o.setAttribute('aria-label','خلاصه هفت حوزه شاخص‌های محیطی');o.innerHTML=domains.map(d=>`<button class="env-overview-btn" style="--dc:${d.color}" data-env-open="${d.k}"><small>${d.num}</small><b>${d.title}</b><span>${d.kpi} · ${d.state}</span></button>`).join('');stack.insertBefore(o,stack.firstChild);o.addEventListener('click',e=>{const b=e.target.closest('[data-env-open]');if(!b)return;const a=document.querySelector(`.env-domain-accordion[data-domain="${b.dataset.envOpen}"]`);if(a){a.open=true;a.scrollIntoView({behavior:'smooth',block:'start'})}});return o}
+function buildStructure(){const stack=document.querySelector('#view-environment .ind-groups-stack');if(!stack)return false;const matrix=stack.querySelector('.aa-full-matrix');staticizeDetails(stack);buildOverview(stack);domains.forEach(d=>{let acc=stack.querySelector(`.env-domain-accordion[data-domain="${d.k}"]`);if(!acc){acc=el('details','env-domain-accordion');acc.dataset.domain=d.k;acc.style.setProperty('--dc',d.color);const sum=el('summary','env-domain-summary',summaryHtml(d));const content=el('div','env-domain-content');acc.append(sum,content);if(matrix)stack.insertBefore(acc,matrix);else stack.appendChild(acc)}const content=acc.querySelector('.env-domain-content');d.nodes.forEach(id=>{const n=document.getElementById(id);if(n&&n.parentElement!==content)content.appendChild(n)});});if(matrix){matrix.classList.add('env-matrix-section');stack.appendChild(matrix)}wireAccordion(stack);return true}
+function wireAccordion(stack){if(stack.dataset.envV131Wire==='1')return;stack.dataset.envV131Wire='1';stack.addEventListener('toggle',e=>{const a=e.target;if(!a.classList?.contains('env-domain-accordion'))return;if(a.open){stack.querySelectorAll('.env-domain-accordion[open]').forEach(x=>{if(x!==a)x.open=false});document.querySelectorAll('.env-overview-btn').forEach(b=>b.classList.toggle('is-open',b.dataset.envOpen===a.dataset.domain));requestAnimationFrame(()=>animateOpen(a))}else document.querySelector(`.env-overview-btn[data-env-open="${a.dataset.domain}"]`)?.classList.remove('is-open')},true)}
+function addParity(){recreationParity();transportParity();laborParity();materialsParity();inflationParity()}
+function parityHost(domain,id,title,desc,badge){const acc=document.querySelector(`.env-domain-accordion[data-domain="${domain}"] .env-domain-content`);if(!acc||document.getElementById(id))return null;const m=el('section','env-parity');m.id=id;m.style.setProperty('--dc',domains.find(x=>x.k===domain)?.color||'var(--accent)');m.innerHTML=`<div class="env-parity-head"><div><h4>${title}</h4><p>${desc}</p></div><span class="env-parity-badge">تکمیل از بانک موجود</span></div><div class="env-parity-tabs"></div><div class="env-parity-body"></div>`;acc.appendChild(m);return m}
+function tabs(module,items){const tb=module.querySelector('.env-parity-tabs'),body=module.querySelector('.env-parity-body');tb.innerHTML=items.map((x,i)=>`<button class="env-parity-tab ${i?'':'is-on'}" data-p-tab="${x.k}">${x.t}</button>`).join('');body.innerHTML=items.map((x,i)=>`<div class="env-parity-panel" data-p-panel="${x.k}" ${i?'hidden':''}>${x.html}</div>`).join('');tb.addEventListener('click',e=>{const b=e.target.closest('[data-p-tab]');if(!b)return;tb.querySelectorAll('.env-parity-tab').forEach(x=>x.classList.toggle('is-on',x===b));body.querySelectorAll('[data-p-panel]').forEach(p=>p.hidden=p.dataset.pPanel!==b.dataset.pTab);requestAnimationFrame(()=>{body.querySelectorAll('[data-env-chart]').forEach(renderChartNode)})})}
+function chartBox(id){return `<div class="env-chart-shell"><div class="env-parity-chart" id="${id}" data-env-chart></div><div class="env-chart-tip"></div></div>`}
+function recreationParity(){const m=parityHost('rec','env-parity-recreation','تکمیل بانک تقاضای تفریحی','داده‌های هفتگی بازیابی، مقایسه سالانه تهران، دوره هم‌تاریخ بحران و بازگشایی ورزش.','');if(!m)return;const a=DATA.cinemaAnnual,drop=(a.a1404/a.a1403-1)*100;tabs(m,[
+ {k:'weekly',t:'بازیابی هفتگی',html:`${chartBox('env-chart-cinema-weekly')}<div class="env-note"><strong>آخرین نقطه بانک:</strong> ۳۱ مرداد تا ۶ شهریور ۱۴۰۵ · ${fi(352163)} مخاطب. این سری در سطح ملی است و نقش Yardstick تقاضای تفریح پولی دارد.</div>`},
+ {k:'annual',t:'سالانه تهران',html:`<div class="env-kpi-grid"><article class="env-kpi-mini"><small>مخاطب ۱۴۰۳</small><b>${fi(a.a1403)}</b><span>استان تهران</span></article><article class="env-kpi-mini"><small>مخاطب ۱۴۰۴</small><b>${fi(a.a1404)}</b><span>${pct(drop)} نسبت به ۱۴۰۳</span></article><article class="env-kpi-mini"><small>سانس</small><b>${fi(a.s1404)}</b><span>${pct((a.s1404/a.s1403-1)*100)} سالانه</span></article><article class="env-kpi-mini"><small>فروش اسمی ۱۴۰۴</small><b>${f1(a.sales1404/1e12)} همت</b><span>قیمت جاری؛ بدون تعدیل تورم</span></article></div><div class="env-note">منبع: داده مستقیم سمفا برای استان تهران. افت سالانه مخاطب ≈ ۳۰٫۷٪ است؛ فروش اسمی به‌علت تورم جداگانه تفسیر می‌شود.</div>`},
+ {k:'crisis',t:'هم‌تاریخ بحران',html:`${chartBox('env-chart-cinema-crisis')}<div class="env-note"><strong>دوره ۹ اسفند تا ۳۱ فروردین، سطح ملی:</strong> ۲۵۷٬۶۷۶ مخاطب در ۱۴۰۴–۱۴۰۵ در برابر متوسط سه دوره قبل ≈ ۳٬۵۰۵٬۲۴۰؛ افت ≈ ۹۲٫۶٪. این داده تهران نیست و به‌عنوان کنترل مستقل شدت شوک استفاده می‌شود.</div>`},
+ {k:'sports',t:'بازگشایی ورزش',html:`<div class="env-kpi-grid"><article class="env-kpi-mini"><small>کل مجموعه‌های مبنا</small><b>${fi(DATA.sports.total)}</b><span>تهران · ۳۱ فروردین</span></article><article class="env-kpi-mini"><small>بازگشایی‌شده</small><b>${fi(DATA.sports.open)}</b><span>۸۷٫۵٪ از کل</span></article><article class="env-kpi-mini"><small>بازگشایی‌نشده</small><b>${fi(DATA.sports.total-DATA.sports.open)}</b><span>۱۲٫۵٪ از کل</span></article></div><div class="env-note">شاهد عملیاتی مکمل برای بازگشت ظرفیت تفریح و ورزش شهری؛ به روز جبرانی تبدیل نمی‌شود.</div>`}
+]);requestAnimationFrame(()=>m.querySelectorAll('[data-env-chart]').forEach(renderChartNode))}
+function transportParity(){const m=parityHost('transport','env-parity-transport','تکمیل داده حمل‌ونقل عمومی','نقاط واقعی مترو و شفاف‌سازی دامنه پنل ترددشمار.','');if(!m)return;tabs(m,[
+ {k:'metro',t:'مترو تهران',html:`<div class="env-kpi-grid"><article class="env-kpi-mini"><small>سفر تجمعی ۱–۲۲ فروردین</small><b>${f1(DATA.metro.cum/1e6)} میلیون</b><span>تهران</span></article>${DATA.metro.daily.map(x=>`<article class="env-kpi-mini"><small>${x[0]}</small><b>${f1(x[1]/1e6)} میلیون</b><span>سفر روزانه</span></article>`).join('')}</div>${chartBox('env-chart-metro')}<div class="env-note">سه نقطه روزانه بدون میان‌یابی نمایش داده می‌شوند. حمل‌ونقل عمومی در بخشی از دوره رایگان بوده؛ بنابراین این سری فقط شاهد بازگشت حضور شهری است.</div>`},
+ {k:'panel',t:'دامنه پنل جاده‌ای',html:`<div class="env-kpi-grid"><article class="env-kpi-mini"><small>کل ترددشمارهای فایل</small><b>۱۲۰</b><span>بانک راهداری</span></article><article class="env-kpi-mini"><small>پنل ثابت قابل مقایسه</small><b>۹۱</b><span>مبنای تحلیل زمانی اصلی</span></article><article class="env-kpi-mini"><small>پوشش اسفند</small><b>۹۹٫۶٪</b><span>رکوردهای پنل ثابت</span></article><article class="env-kpi-mini"><small>پوشش فروردین</small><b>۹۷٫۳٪</b><span>رکوردهای پنل ثابت</span></article></div><div class="env-note"><strong>قاعده:</strong> مقایسه زمانی اصلی روی پنل ثابت ۹۱ ترددشمار انجام می‌شود؛ صفرهای ثبت‌شده راهداری حذف یا اصلاح نشده‌اند. هیت‌مپ ۱۵ محور پرتردد باری، زیرمجموعه نمایشی منتخب است و جایگزین پنل ثابت نیست.</div>`}
+]);requestAnimationFrame(()=>m.querySelectorAll('[data-env-chart]').forEach(renderChartNode));const old=document.querySelector('.aa-metro-update');if(old&&old.closest('.env-domain-accordion'))old.remove()}
+function laborParity(){const m=parityHost('labor','env-parity-labor','فعالیت ساختمانی تهران و شامخ تخصصی بازسازی‌شده','افزوده از فایل بازسازی شامخ ساختمان و آمار پروانه‌های ساختمانی تهران ۱۴۰۴.','');if(!m)return;const p=DATA.permits;tabs(m,[
+ {k:'pmi',t:'شامخ ساختمان',html:`${chartBox('env-chart-pmi')}<div class="env-confidence-row">${DATA.pmi.labels.map((x,i)=>`<span class="env-conf ${DATA.pmi.conf[i].includes('پایین')?'low':'medium'}">${x}: ${DATA.pmi.conf[i]}</span>`).join('')}</div><div class="env-note"><strong>حد تفسیر:</strong> سری از اردیبهشت ۱۴۰۴ بازسازی تحلیلی است؛ اسفند ۱۴۰۴ «بسیار پایین» و تیر ۱۴۰۵ «متوسط» ارزیابی شده است. شامخ درصد ظرفیت نیست.</div>`},
+ {k:'permits',t:'پروانه تهران ۱۴۰۴',html:`<div class="env-kpi-grid"><article class="env-kpi-mini"><small>پروانه احداث بنا</small><b>${fi(p.permits1404)}</b><span>۱۹٫۹٪− نسبت به ۱۴۰۳</span></article><article class="env-kpi-mini"><small>زیربنای پروانه‌شده</small><b>${f1(p.area1404/1e6)} میلیون م²</b><span>۱۰٫۰٪+ سالانه</span></article><article class="env-kpi-mini"><small>واحد مسکونی پیش‌بینی‌شده</small><b>${fi(p.units1404)}</b><span>۷٫۷٪+ سالانه</span></article></div><div class="env-note">تعداد پروانه کاهش یافته اما زیربنا و واحدهای پیش‌بینی‌شده افزایش یافته‌اند؛ بنابراین این داده «زمینه بازار ساخت» است، نه درصد فعالیت واقعی کارگاه و نه مولد روز.</div>`}
+]);requestAnimationFrame(()=>m.querySelectorAll('[data-env-chart]').forEach(renderChartNode))}
+function heatClass(v,mode){const a=Math.abs(v);if(mode==='gap'){if(a>=45)return'severe';if(a>=25)return'high';if(a>=10)return'mid';return'low'}if(a>=25)return'severe';if(a>=15)return'high';if(a>=7)return'mid';return'low'}
+function heatmap(mode){const arr=DATA.materials[mode],labs=DATA.materials.labels;return `<div class="env-heatmap-wrap"><div class="env-heatmap"><div class="env-hcell env-hhead">مصالح</div>${labs.map(x=>`<div class="env-hcell env-hhead">${x}</div>`).join('')}${DATA.materials.names.map((n,r)=>`<div class="env-hcell env-hlabel">${n}</div>${arr[r].map(v=>`<div class="env-hcell env-hv ${heatClass(v,mode)}">${pct(v)}</div>`).join('')}`).join('')}</div></div>`}
+function materialsParity(){const m=parityHost('materials','env-parity-materials','تکمیل لایه‌های بازار مصالح','فاصله قیمت از پیش‌بحران، فشار رقابت ماهانه و دامنه نوسان قیمت.','');if(!m)return;tabs(m,[
+ {k:'gap',t:'فاصله از پیش‌بحران',html:`${heatmap('gap')}<div class="env-note">مبنا: متوسط موزون قیمت در ۱ تا ۸ اسفند ۱۴۰۴. تیر: میلگرد +۲۳٫۴٪، تیرآهن +۳۴٫۳٪، سیمان +۵۸٫۰٪.</div>`},
+ {k:'competition',t:'فشار رقابت',html:`${heatmap('competition')}<div class="env-note">فشار رقابت = فاصله قیمت معامله از قیمت پایه. اوج در بانک: سیمان اردیبهشت ≈ ۳۱٫۰٪.</div>`},
+ {k:'vol',t:'نوسان بازار',html:`${chartBox('env-chart-volatility')}<div class="env-note">دامنه قیمت / میانگین موزون ماهانه؛ مقیاس درصدی. بیشترین نوسان سیمان در اردیبهشت ≈ ۵٫۸٪ ثبت شده است.</div>`}
+]);requestAnimationFrame(()=>m.querySelectorAll('[data-env-chart]').forEach(renderChartNode))}
+function inflationParity(){const m=parityHost('inflation','env-parity-inflation','تکمیل کنترل قراردادی هزینه ساخت','شاخص تعدیل سازمان برنامه و گروه‌های اجرایی منتخب نهاده‌های ساختمان تهران.','');if(!m)return;tabs(m,[
+ {k:'adjust',t:'تعدیل قراردادی',html:`<div class="env-bar-grid">${DATA.adjust.map(x=>`<article class="env-bar-card"><small>${x[0]}</small><b>${pct(x[1])}</b><span>رشد قطعی Q4 نسبت به Q3</span><div class="env-bar-track"><i style="width:${Math.min(100,x[1]/30*100)}%"></i></div></article>`).join('')}</div><div class="env-kpi-grid" style="margin-top:10px"><article class="env-kpi-mini"><small>ضریب موقت Q1-1405</small><b>۱٫۱۵۳</b><span>رشد موقت ≈ ۱۵٫۳٪</span></article><article class="env-kpi-mini"><small>وضعیت</small><b style="font-size:13px">موقت / علی‌الحساب</b><span>تا اعلام شاخص قطعی</span></article></div><div class="env-note"><strong>هشدار:</strong> شاخص تعدیل «تورم عمومی» نیست و مستقیماً روز ایجاد نمی‌کند؛ ابزار تعدیل آحادبهای پیمان است.</div>`},
+ {k:'groups',t:'گروه‌های اجرایی',html:`<div class="env-bar-grid">${DATA.constructionGroups.map(x=>`<article class="env-bar-card"><small>${x[0]} · ${x[1]}</small><b>${pct(x[3])}</b><span>${x[2]}</span><div class="env-bar-track"><i style="width:${Math.min(100,Math.abs(x[3])/75*100)}%"></i></div></article>`).join('')}</div><div class="env-note">این ردیف‌ها برای نشان‌دادن ناهمگنی فشار هزینه بین گروه‌های اجرایی‌اند؛ شاخص کل نهاده ساخت همچنان مرجع اصلی بخش تورم ساخت است.</div>`}
+])}
+function renderChartNode(root){if(!root||root.dataset.rendered==='1')return;const id=root.id;let cfg=null;if(id==='env-chart-cinema-weekly')cfg={labels:DATA.cinemaWeekly.map(x=>x[0]),series:[{name:'مخاطب هفتگی',values:DATA.cinemaWeekly.map(x=>x[1]),color:'var(--env-rec)'}],fmt:v=>fi(v)};else if(id==='env-chart-cinema-crisis')cfg={labels:DATA.cinemaCrisis.map(x=>x[0]),series:[{name:'مخاطب دوره هم‌تاریخ',values:DATA.cinemaCrisis.map(x=>x[1]),color:'var(--env-rec)'}],fmt:v=>fi(v),bars:true};else if(id==='env-chart-metro')cfg={labels:DATA.metro.daily.map(x=>x[0]),series:[{name:'سفر روزانه مترو',values:DATA.metro.daily.map(x=>x[1]),color:'var(--env-transport)'}],fmt:v=>fi(v)};else if(id==='env-chart-pmi')cfg={labels:DATA.pmi.labels,series:[{name:'شامخ ساختمان SA نهایی',values:DATA.pmi.values,color:'var(--env-labor)'}],fmt:v=>f1(v),ref:50};else if(id==='env-chart-volatility')cfg={labels:DATA.materials.labels,series:DATA.materials.names.map((n,i)=>({name:n,values:DATA.materials.vol[i],color:['#39745A','#B4901F','#A62F53'][i]})),fmt:v=>f1(v)+'٪'};if(cfg){renderChart(root,cfg);root.dataset.rendered='1'}}
+function renderChart(root,cfg){const W=900,H=280,m={l:55,r:18,t:22,b:46},iw=W-m.l-m.r,ih=H-m.t-m.b,n=cfg.labels.length,min=cfg.ref!=null?Math.min(cfg.ref,...cfg.series.flatMap(s=>s.values)):Math.min(...cfg.series.flatMap(s=>s.values)),max=Math.max(...cfg.series.flatMap(s=>s.values));let lo=Math.min(0,min),hi=max;if(cfg.ref!=null){lo=Math.min(lo,cfg.ref);hi=Math.max(hi,cfg.ref)}if(hi===lo)hi=lo+1;const pad=(hi-lo)*.1;lo-=pad;hi+=pad;const x=i=>m.l+(n<=1?.5:i/(n-1))*iw,y=v=>m.t+ih-(v-lo)/(hi-lo)*ih;let svg=`<svg viewBox="0 0 ${W} ${H}" role="img">`;for(let q=0;q<=4;q++){const v=lo+(hi-lo)*q/4,yy=y(v);svg+=`<line class="env-v131-grid" x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}"/><text class="env-v131-axis" x="${m.l-7}" y="${yy+3}" text-anchor="end">${cfg.fmt?cfg.fmt(v):f1(v)}</text>`}if(cfg.ref!=null){const yy=y(cfg.ref);svg+=`<line x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}" stroke="var(--gold-strong)" stroke-dasharray="6 5"/><text class="env-v131-axis" x="${W-m.r}" y="${yy-6}" text-anchor="end">مرز ${f1(cfg.ref)}</text>`}const tickEvery=Math.max(1,Math.ceil(n/8));cfg.labels.forEach((lab,i)=>{if(i%tickEvery===0||i===n-1)svg+=`<text class="env-v131-axis" x="${x(i)}" y="${H-13}" text-anchor="middle">${lab}</text>`});if(cfg.bars){const bw=Math.min(80,iw/n*.55),s=cfg.series[0];s.values.forEach((v,i)=>{const yy=y(v),base=y(lo),h=Math.max(1,base-yy);svg+=`<rect x="${x(i)-bw/2}" y="${yy}" width="${bw}" height="${h}" rx="8" fill="${s.color}" opacity=".86"/><rect class="env-v131-hit" data-i="${i}" x="${x(i)-bw/2-8}" y="${m.t}" width="${bw+16}" height="${ih}"/>`})}else cfg.series.forEach((s,si)=>{const pts=s.values.map((v,i)=>[x(i),y(v)]),d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');svg+=`<path class="env-v131-line" pathLength="1" d="${d}" stroke="${s.color}"/>${pts.map((p,i)=>`<circle class="env-v131-dot" cx="${p[0]}" cy="${p[1]}" r="3.5" fill="${s.color}"/>`).join('')}`});if(!cfg.bars){for(let i=0;i<n;i++)svg+=`<rect class="env-v131-hit" data-i="${i}" x="${x(i)-Math.max(10,iw/n/2)}" y="${m.t}" width="${Math.max(20,iw/n)}" height="${ih}"/>`}svg+=`<line class="env-v131-cross" data-cross x1="${m.l}" x2="${m.l}" y1="${m.t}" y2="${m.t+ih}" opacity="0"/></svg>`;root.innerHTML=svg;const shell=root.closest('.env-chart-shell'),tip=shell?.querySelector('.env-chart-tip'),cross=root.querySelector('[data-cross]');root.addEventListener('pointermove',e=>{const hit=e.target.closest('.env-v131-hit');if(!hit||!tip)return;const i=+hit.dataset.i,rect=root.getBoundingClientRect(),xx=x(i)/W*rect.width;if(cross){cross.setAttribute('x1',x(i));cross.setAttribute('x2',x(i));cross.setAttribute('opacity','1')}tip.innerHTML=`<b>${cfg.labels[i]}</b>${cfg.series.map(s=>`<span>${s.name}: <strong>${cfg.fmt?cfg.fmt(s.values[i]):f1(s.values[i])}</strong></span>`).join('')}`;tip.classList.add('is-on');tip.style.left=Math.min(rect.width-245,Math.max(8,xx+12))+'px';tip.style.top='18px'});root.addEventListener('pointerleave',()=>{tip?.classList.remove('is-on');if(cross)cross.setAttribute('opacity','0')})}
+function animateOpen(acc){acc.querySelectorAll('[data-env-chart]').forEach(r=>{r.dataset.rendered='';renderChartNode(r)});acc.querySelectorAll('path.chartline,path.rchart-line,path.aa-line').forEach(p=>{try{const len=p.getTotalLength();p.style.transition='none';p.style.strokeDasharray=len;p.style.strokeDashoffset=len;requestAnimationFrame(()=>{p.style.transition='stroke-dashoffset .75s cubic-bezier(.22,.61,.36,1)';p.style.strokeDashoffset='0'})}catch(_){}})}
+function addPmiMatrixRow(){const full=document.querySelector('#view-environment .aa-full-matrix .aa-matrix');if(!full||full.querySelector('.env-pmi-matrix-label'))return;const label=el('div','aa-matrix-label env-pmi-matrix-label','<span>قابلیت عمومی فعالیت ساختمان</span><small>ساختمان · بازسازی تحلیلی</small>');full.appendChild(label);const vals=DATA.pmi.values;vals.forEach((v,i)=>{let st=v<30?'severe':v<40?'high':v<45?'pressure':v<50?'recover':'near';const c=el('div','aa-matrix-cell env-pmi-matrix-cell',`<span class="value-text">${f1(v)}</span><span class="state-text">${st==='severe'?'اختلال شدید':st==='high'?'فشار بالا':st==='pressure'?'فاصله از عادی':st==='recover'?'در حال بازگشت':'نزدیک عادی'}</span>`);c.dataset.state=st;c.dataset.matrixRow='قابلیت عمومی فعالیت ساختمان';c.dataset.matrixMonth=DATA.pmi.labels[i];full.appendChild(c)});const last=el('div','aa-matrix-last env-pmi-matrix-last',`تیر ۱۴۰۵: ${f1(vals[6])} · اطمینان متوسط<br>اسفند: اطمینان بسیار پایین`);full.appendChild(last)}
+function repair(){if(!buildStructure())return;addParity();addPmiMatrixRow()}
+function boot(attempt=0){const need=['ind-payments','ind-internet','ind-transport','ind-labor','ind-materials','ind-inflation'];if(need.every(id=>document.getElementById(id))){repair();setTimeout(repair,450);return}if(attempt<14)setTimeout(()=>boot(attempt+1),180)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>boot(),900),{once:true});else setTimeout(()=>boot(),900);
+window.addEventListener('hashchange',()=>{if(location.hash==='#/environment')setTimeout(repair,70)});
+/* Bounded structural guard: earlier legacy environment ordering scripts may run once after DOMContentLoaded. */
+setTimeout(()=>{const stack=document.querySelector('#view-environment .ind-groups-stack');if(!stack)return;let pending=false;const mo=new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;const stray=domains.some(d=>d.nodes.some(id=>{const n=document.getElementById(id);return n&&n.closest('.ind-groups-stack')===stack&&!n.closest('.env-domain-accordion')}));if(stray)repair()})});mo.observe(stack,{childList:true,subtree:false});setTimeout(()=>mo.disconnect(),9000)},1200);
+})();
+</script>
+
+
+<style id="aa-env-v132-polish">
+/* ===== V1.32 — Environment page polish only: compact top navigation + readability ===== */
+#view-environment .env-domain-overview{
+  display:flex;
+  align-items:stretch;
+  gap:6px;
+  margin:2px 0 12px;
+  padding:5px;
+  border:1px solid var(--border-soft);
+  border-radius:14px;
+  background:color-mix(in srgb,var(--surface-2) 82%,transparent);
+  overflow-x:auto;
+  scrollbar-width:none;
+  box-shadow:0 8px 24px -28px rgba(20,36,42,.28);
+}
+#view-environment .env-domain-overview::-webkit-scrollbar{display:none}
+#view-environment .env-overview-btn{
+  --dc:var(--accent);
+  flex:1 1 0;
+  min-width:132px;
+  min-height:46px;
+  padding:6px 9px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  text-align:right;
+  background:transparent;
+  border:1px solid transparent;
+  box-shadow:none;
+  transform:none!important;
+}
+#view-environment .env-overview-btn::after{
+  content:"";
+  position:absolute;
+  inset-inline:9px;
+  bottom:3px;
+  height:2px;
+  border-radius:999px;
+  background:var(--dc);
+  opacity:0;
+  transform:scaleX(.42);
+  transition:opacity .18s ease,transform .18s ease;
+}
+#view-environment .env-overview-btn:hover{
+  background:color-mix(in srgb,var(--dc) 5%,var(--surface));
+  border-color:color-mix(in srgb,var(--dc) 18%,var(--border));
+  box-shadow:none;
+}
+#view-environment .env-overview-btn.is-open{
+  background:linear-gradient(145deg,color-mix(in srgb,var(--dc) 12%,var(--surface)),var(--surface));
+  border-color:color-mix(in srgb,var(--dc) 34%,var(--border));
+  box-shadow:0 8px 20px -18px color-mix(in srgb,var(--dc) 58%,transparent);
+}
+#view-environment .env-overview-btn.is-open::after{opacity:1;transform:scaleX(1)}
+#view-environment .env-overview-btn small{
+  flex:0 0 25px;
+  width:25px;
+  height:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  border-radius:8px;
+  background:color-mix(in srgb,var(--dc) 12%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--dc) 20%,transparent);
+  color:var(--dc);
+  font-size:9.5px;
+  font-weight:950;
+  line-height:1;
+}
+#view-environment .env-overview-btn b{
+  display:block;
+  min-width:0;
+  margin:0;
+  color:var(--ink);
+  font-size:11.5px;
+  line-height:1.35;
+  font-weight:900;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+}
+#view-environment .env-overview-btn span{display:none!important}
+
+/* Slight readability lift — scoped to the environment page only. */
+#view-environment .env-domain-copy b{font-size:15.5px}
+#view-environment .env-domain-copy span{font-size:10.5px;line-height:1.65}
+#view-environment .env-domain-kpi b{font-size:14px}
+#view-environment .env-domain-kpi span{font-size:9px}
+#view-environment .env-domain-state{font-size:10px}
+#view-environment .env-parity-head h4{font-size:14.5px}
+#view-environment .env-parity-head p{font-size:10.5px;line-height:1.68}
+#view-environment .env-parity-badge{font-size:9.5px}
+#view-environment .env-parity-tab{font-size:10px;padding:7px 11px}
+#view-environment .env-kpi-mini small{font-size:9px}
+#view-environment .env-kpi-mini b{font-size:17px}
+#view-environment .env-kpi-mini span{font-size:9.5px;line-height:1.55}
+#view-environment .env-v131-axis{font-size:10.5px}
+#view-environment .env-chart-tip{font-size:10px;line-height:1.6}
+#view-environment .env-chart-tip b{font-size:11.5px}
+#view-environment .env-bar-card small{font-size:9px}
+#view-environment .env-bar-card b{font-size:15px}
+#view-environment .env-hcell{font-size:10px}
+#view-environment .env-note{font-size:10.5px!important;line-height:1.72!important}
+#view-environment .analysis-summary-title{font-size:16px}
+#view-environment .analysis-summary-message{font-size:12.3px;line-height:1.75}
+#view-environment .analysis-kicker{font-size:11px}
+#view-environment .analysis-tab{font-size:11px}
+#view-environment .analysis-insight{font-size:11.5px;line-height:1.75}
+#view-environment .analysis-source-note{font-size:10.5px;line-height:1.7}
+#view-environment .chart-legend-inline span{font-size:11px}
+#view-environment .rchart-axis{font-size:11px}
+
+@media (max-width:1100px){
+  #view-environment .env-overview-btn{flex:0 0 auto;min-width:150px}
+}
+@media (max-width:700px){
+  #view-environment .env-domain-overview{margin-bottom:10px;padding:4px}
+  #view-environment .env-overview-btn{min-width:142px;min-height:44px;padding:6px 8px}
+  #view-environment .env-overview-btn b{font-size:11px}
+}
+</style>
+<script id="aa-env-v132-placement">
+(function(){
+  'use strict';
+  function placeRecreationParity(){
+    var anchor=document.getElementById('analysis-recreation-demand');
+    var parity=document.getElementById('env-parity-recreation');
+    if(!anchor||!parity||!anchor.parentElement||anchor.parentElement!==parity.parentElement)return false;
+    if(anchor.nextElementSibling!==parity)anchor.insertAdjacentElement('afterend',parity);
+    return true;
+  }
+  function boot(){
+    placeRecreationParity();
+    setTimeout(placeRecreationParity,250);
+    setTimeout(placeRecreationParity,900);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.addEventListener('hashchange',function(){if(location.hash==='#/environment')setTimeout(placeRecreationParity,120)});
+})();
+</script>
+
+<style id="aa-env-v135-glass-tabs">
+/* ===== V1.35 — standalone glass domain tabs; no shared visible container ===== */
+#view-environment .env-domain-overview{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  align-content:flex-start !important;
+  gap:7px !important;
+  width:100% !important;
+  max-width:100% !important;
+  margin:0 0 14px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+#view-environment .env-overview-btn{
+  --dc:var(--accent);
+  position:relative !important;
+  isolation:isolate;
+  flex:0 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:165px !important;
+  min-height:40px !important;
+  margin:0 !important;
+  padding:7px 11px 7px 8px !important;
+  border-radius:14px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:7px !important;
+  overflow:hidden;
+  text-align:right !important;
+  border:1px solid color-mix(in srgb,var(--dc) 28%,rgba(255,255,255,.92)) !important;
+  background:
+    radial-gradient(110% 145% at 88% -38%,color-mix(in srgb,var(--dc) 15%,transparent),transparent 58%),
+    linear-gradient(145deg,rgba(255,255,255,.78),rgba(255,255,255,.48)) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.18);
+  backdrop-filter:blur(16px) saturate(1.18);
+  box-shadow:
+    0 9px 24px -21px color-mix(in srgb,var(--dc) 72%,transparent),
+    0 2px 7px -6px rgba(24,41,48,.18),
+    inset 0 1px 0 rgba(255,255,255,.88),
+    inset 0 -1px 0 rgba(255,255,255,.26) !important;
+  transform:translate3d(0,0,0) !important;
+  transition:transform .17s cubic-bezier(.22,.61,.36,1),border-color .18s ease,box-shadow .2s ease,background .2s ease,filter .18s ease !important;
+  cursor:pointer;
+}
+#view-environment .env-overview-btn::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  top:-45%;
+  bottom:-45%;
+  left:-34%;
+  width:34%;
+  transform:skewX(-18deg) translateX(-145%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .42s cubic-bezier(.22,.61,.36,1),opacity .18s ease;
+}
+#view-environment .env-overview-btn::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset-inline:12px;
+  bottom:4px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--dc) 80%,white 10%),color-mix(in srgb,var(--dc) 54%,white 28%));
+  opacity:0;
+  transform:scaleX(.35);
+  transform-origin:center;
+  transition:opacity .18s ease,transform .18s ease;
+}
+#view-environment .env-overview-btn > *{position:relative;z-index:2}
+#view-environment .env-overview-btn:hover{
+  transform:translate3d(0,-2px,0) !important;
+  border-color:color-mix(in srgb,var(--dc) 52%,rgba(255,255,255,.95)) !important;
+  background:
+    radial-gradient(110% 145% at 88% -38%,color-mix(in srgb,var(--dc) 22%,transparent),transparent 58%),
+    linear-gradient(145deg,rgba(255,255,255,.88),rgba(255,255,255,.56)) !important;
+  box-shadow:
+    0 16px 30px -20px color-mix(in srgb,var(--dc) 66%,transparent),
+    0 5px 13px -10px rgba(24,41,48,.24),
+    inset 0 1px 0 rgba(255,255,255,.96) !important;
+  filter:saturate(1.07);
+}
+#view-environment .env-overview-btn:hover::before{opacity:.78;transform:skewX(-18deg) translateX(510%)}
+#view-environment .env-overview-btn:active{transform:translate3d(0,-1px,0) scale(.978) !important;transition-duration:.08s !important}
+#view-environment .env-overview-btn:focus-visible{
+  outline:none !important;
+  border-color:color-mix(in srgb,var(--dc) 68%,white 12%) !important;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--dc) 16%,transparent),0 14px 28px -20px color-mix(in srgb,var(--dc) 68%,transparent) !important;
+}
+#view-environment .env-overview-btn.is-open{
+  transform:translate3d(0,-1px,0) !important;
+  border-color:color-mix(in srgb,var(--dc) 66%,rgba(255,255,255,.98)) !important;
+  background:
+    radial-gradient(118% 150% at 88% -38%,color-mix(in srgb,var(--dc) 27%,transparent),transparent 60%),
+    linear-gradient(145deg,color-mix(in srgb,var(--dc) 9%,rgba(255,255,255,.92)),rgba(255,255,255,.58)) !important;
+  box-shadow:
+    0 17px 32px -21px color-mix(in srgb,var(--dc) 76%,transparent),
+    0 5px 13px -10px rgba(24,41,48,.20),
+    inset 0 1px 0 rgba(255,255,255,.98) !important;
+}
+#view-environment .env-overview-btn.is-open::after{opacity:1;transform:scaleX(1)}
+#view-environment .env-overview-btn small{
+  flex:0 0 24px !important;
+  width:24px !important;
+  height:24px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:9px !important;
+  background:color-mix(in srgb,var(--dc) 13%,rgba(255,255,255,.76)) !important;
+  border:1px solid color-mix(in srgb,var(--dc) 28%,rgba(255,255,255,.66)) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78) !important;
+  color:var(--dc) !important;
+  font-size:9px !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+}
+#view-environment .env-overview-btn b{
+  display:block !important;
+  min-width:0 !important;
+  margin:0 !important;
+  color:var(--ink) !important;
+  font-size:11.35px !important;
+  line-height:1.38 !important;
+  font-weight:900 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  overflow-wrap:anywhere;
+}
+#view-environment .env-overview-btn span{display:none !important}
+
+/* keep the tabs inside the exact content width of the accordions, without a visible shared frame */
+#view-environment .ind-groups-stack > .env-domain-overview{order:-100}
+
+@media (max-width:1180px){
+  #view-environment .env-domain-overview{gap:8px !important}
+  #view-environment .env-overview-btn{max-width:160px !important}
+}
+@media (max-width:860px){
+  #view-environment .env-overview-btn{max-width:164px !important;min-height:38px !important;padding:6px 10px 6px 7px !important}
+  #view-environment .env-overview-btn b{font-size:11px !important}
+}
+@media (max-width:620px){
+  #view-environment .env-domain-overview{
+    flex-wrap:wrap !important;
+    gap:7px !important;
+    margin-bottom:12px !important;
+    overflow:visible !important;
+  }
+  #view-environment .env-overview-btn{
+    flex:0 1 auto !important;
+    max-width:calc(50% - 3.5px) !important;
+    min-height:38px !important;
+    padding:6px 9px 6px 7px !important;
+  }
+  #view-environment .env-overview-btn b{font-size:10.7px !important;line-height:1.34 !important}
+  #view-environment .env-overview-btn small{flex-basis:22px !important;width:22px !important;height:22px !important;font-size:8.5px !important}
+}
+@media (max-width:390px){
+  #view-environment .env-domain-overview{gap:6px !important}
+  #view-environment .env-overview-btn{max-width:calc(50% - 3px) !important;padding-inline:7px !important}
+  #view-environment .env-overview-btn b{font-size:10.25px !important}
+}
+[data-theme="dark"] #view-environment .env-overview-btn{
+  border-color:color-mix(in srgb,var(--dc) 34%,rgba(255,255,255,.15)) !important;
+  background:radial-gradient(110% 145% at 88% -38%,color-mix(in srgb,var(--dc) 18%,transparent),transparent 58%),linear-gradient(145deg,rgba(35,48,51,.82),rgba(25,37,40,.66)) !important;
+  box-shadow:0 12px 28px -22px color-mix(in srgb,var(--dc) 72%,transparent),inset 0 1px 0 rgba(255,255,255,.10) !important;
+}
+[data-theme="dark"] #view-environment .env-overview-btn:hover,[data-theme="dark"] #view-environment .env-overview-btn.is-open{
+  background:radial-gradient(110% 145% at 88% -38%,color-mix(in srgb,var(--dc) 28%,transparent),transparent 58%),linear-gradient(145deg,rgba(45,61,64,.88),rgba(28,42,45,.72)) !important;
+}
+@media (prefers-reduced-motion:reduce){
+  #view-environment .env-overview-btn,#view-environment .env-overview-btn::before,#view-environment .env-overview-btn::after{transition:none !important}
+  #view-environment .env-overview-btn:hover,#view-environment .env-overview-btn:active{transform:none !important}
+}
+</style>
